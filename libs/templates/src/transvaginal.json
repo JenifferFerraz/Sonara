@@ -37,6 +37,7 @@
         {
           "id": "dum",
           "tipo": "text",
+          "mascara": "data",
           "rotulo": "DUM (data ou \"há X dias\")",
           "showIf": {
             "==": [

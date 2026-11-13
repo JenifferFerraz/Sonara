@@ -25,6 +25,8 @@ export interface Campo {
   /** Condição de exibição em JSON Logic. Nunca código executável. */
   showIf?: unknown;
   unidade?: string;
+  /** Máscara de digitação do campo texto. */
+  mascara?: 'data';
   casas?: number;
   opcoes?: Opcao[];
   /** Frase do laudo (check, num, dims, text). Aceita {id}, {id.a}, {id.vol}. */

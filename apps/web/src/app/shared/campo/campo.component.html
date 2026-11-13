@@ -63,7 +63,7 @@
           [class.faltando]="comAlerta()"
           [disabled]="naoCitar()"
           [value]="texto()"
-          (input)="emitir(valorEm($event))" />
+          (input)="emitir(decimalEm($event))" />
         @if (c.unidade) {
           <span class="unidade">{{ c.unidade }}</span>
         }
@@ -90,7 +90,7 @@
           aria-label="Comprimento"
           [class.faltando]="comAlerta() && !dims().a"
           [value]="dims().a"
-          (input)="mudarDims('a', valorEm($event))" />
+          (input)="mudarDims('a', decimalEm($event))" />
         <span>×</span>
         <input
           class="curto"
@@ -98,7 +98,7 @@
           aria-label="Anteroposterior"
           [class.faltando]="comAlerta() && !dims().b"
           [value]="dims().b"
-          (input)="mudarDims('b', valorEm($event))" />
+          (input)="mudarDims('b', decimalEm($event))" />
         <span>×</span>
         <input
           class="curto"
@@ -106,7 +106,7 @@
           aria-label="Transverso"
           [class.faltando]="comAlerta() && !dims().c"
           [value]="dims().c"
-          (input)="mudarDims('c', valorEm($event))" />
+          (input)="mudarDims('c', decimalEm($event))" />
         <span class="unidade">cm</span>
         @if (volume() !== null) {
           <span class="volume">= {{ volume()!.toFixed(1).replace('.', ',') }} cm³</span>
@@ -118,7 +118,13 @@
   @case ('text') {
     <label class="linha">
       <span class="rotulo">{{ c.rotulo }}</span>
-      <input class="largo" [value]="texto()" (input)="emitir(valorEm($event))" />
+      <input
+        class="largo"
+        [attr.inputmode]="c.mascara === 'data' ? 'numeric' : null"
+        [attr.maxlength]="c.mascara === 'data' ? 30 : null"
+        [placeholder]="c.mascara === 'data' ? 'dd/mm/aaaa' : ''"
+        [value]="texto()"
+        (input)="emitir(c.mascara === 'data' ? dataEm($event) : valorEm($event))" />
     </label>
   }
 
@@ -140,7 +146,7 @@
             aria-label="Maior medida"
             [class.faltando]="comAlerta()"
             [value]="lista().maior"
-            (input)="mudarMaior(valorEm($event))" />
+            (input)="mudarMaior(decimalEm($event))" />
           <span class="unidade">cm</span>
         }
       </div>
@@ -158,7 +164,7 @@
                     inputmode="decimal"
                     [class.faltando]="itemSemMedida($index, sub.id)"
                     [value]="item[sub.id]"
-                    (input)="mudarItem($index, sub.id, valorEm($event))" />
+                    (input)="mudarItem($index, sub.id, decimalEm($event))" />
                 </label>
               } @else {
                 <label class="sub">

@@ -13,6 +13,7 @@ import {
 import { ClipboardService } from '../../core/services/clipboard.service';
 import { MascaraService } from '../../core/services/mascara.service';
 import { CampoComponent, MudancaCampo } from '../../shared/campo/campo.component';
+import { aplicarMascara, mascaraInteiro } from '../../shared/mascaras';
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -121,6 +122,11 @@ export class LaudoPage {
   mudou({ id, valor }: MudancaCampo): void {
     this.estado.update(e => aplicar(e, { tipo: 'campo', id, valor }));
     this.copiado.set(false);
+  }
+
+  mudouIdade(evento: Event): void {
+    const valor = aplicarMascara(evento, mascaraInteiro);
+    this.estado.update(e => aplicar(e, { tipo: 'cabecalho', campo: 'idade', valor }));
   }
 
   mudouCabecalho(campo: keyof Cabecalho, evento: Event): void {

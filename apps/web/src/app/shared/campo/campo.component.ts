@@ -1,6 +1,8 @@
 import { Component, computed, input, output } from '@angular/core';
 import { Alerta, Campo, Dims, ItemLista, ListaValor } from '@sonara/laudo-engine';
 
+import { aplicarMascara, mascaraData, mascaraDecimal } from '../mascaras';
+
 export interface MudancaCampo {
   id: string;
   valor: unknown;
@@ -108,6 +110,14 @@ export class CampoComponent {
 
   valorEm(evento: Event): string {
     return (evento.target as HTMLInputElement).value;
+  }
+
+  decimalEm(evento: Event): string {
+    return aplicarMascara(evento, mascaraDecimal);
+  }
+
+  dataEm(evento: Event): string {
+    return aplicarMascara(evento, mascaraData);
   }
 
   checadoEm(evento: Event): boolean {

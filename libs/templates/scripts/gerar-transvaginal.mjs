@@ -83,7 +83,7 @@ const t = {
           id: 'status', tipo: 'seg', rotulo: 'Status', padrao: 'fertil',
           opcoes: [op('fertil', 'Idade fértil', ''), op('pos', 'Pós-menopausa', 'Paciente em pós-menopausa.')],
         },
-        { id: 'dum', tipo: 'text', rotulo: 'DUM (data ou "há X dias")', showIf: e('status', 'fertil'), laudo: 'Data da última menstruação: {valor}.' },
+        { id: 'dum', tipo: 'text', mascara: 'data', rotulo: 'DUM (data ou "há X dias")', showIf: e('status', 'fertil'), laudo: 'Data da última menstruação: {valor}.' },
         { id: 'gestacoes', tipo: 'text', rotulo: 'Gestações', laudo: 'Antecedentes obstétricos: {valor}.' },
       ],
     },
