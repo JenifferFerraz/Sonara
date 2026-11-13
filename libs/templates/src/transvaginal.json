@@ -1,0 +1,1105 @@
+{
+  "id": "transvaginal",
+  "versao": "0.1.0",
+  "titulo": "ULTRASSONOGRAFIA PÉLVICA TRANSVAGINAL",
+  "mudancas": {
+    "url": "https://sonara.example/mudancas/transvaginal/0.1.0",
+    "resumo": "Primeira versão da máscara."
+  },
+  "referencias": {
+    "orads": "ACR O-RADS US v2022",
+    "endometrio": "ACOG 2026 (somente aviso)"
+  },
+  "fatorVolume": 0.523,
+  "secoes": [
+    {
+      "id": "hormonal",
+      "titulo": "Status hormonal",
+      "campos": [
+        {
+          "id": "status",
+          "tipo": "seg",
+          "rotulo": "Status",
+          "padrao": "fertil",
+          "opcoes": [
+            {
+              "valor": "fertil",
+              "rotulo": "Idade fértil",
+              "laudo": ""
+            },
+            {
+              "valor": "pos",
+              "rotulo": "Pós-menopausa",
+              "laudo": "Paciente em pós-menopausa."
+            }
+          ]
+        },
+        {
+          "id": "dum",
+          "tipo": "text",
+          "rotulo": "DUM (data ou \"há X dias\")",
+          "showIf": {
+            "==": [
+              {
+                "var": "status"
+              },
+              "fertil"
+            ]
+          },
+          "laudo": "Data da última menstruação: {valor}."
+        },
+        {
+          "id": "gestacoes",
+          "tipo": "text",
+          "rotulo": "Gestações",
+          "laudo": "Antecedentes obstétricos: {valor}."
+        }
+      ]
+    },
+    {
+      "id": "utero",
+      "titulo": "Útero",
+      "campos": [
+        {
+          "id": "posicao",
+          "tipo": "seg",
+          "rotulo": "Posição",
+          "padrao": "antev",
+          "showIf": {
+            "==": [
+              {
+                "var": "cirurgia"
+              },
+              "nenhuma"
+            ]
+          },
+          "opcoes": [
+            {
+              "valor": "antev",
+              "rotulo": "anteversoflexão",
+              "laudo": ""
+            },
+            {
+              "valor": "retrov",
+              "rotulo": "retroversoflexão",
+              "laudo": ""
+            },
+            {
+              "valor": "medio",
+              "rotulo": "mediversão",
+              "laudo": ""
+            }
+          ]
+        },
+        {
+          "id": "utero",
+          "tipo": "dims",
+          "rotulo": "Útero (L × AP × T, cm)",
+          "obrigatorio": true,
+          "showIf": {
+            "==": [
+              {
+                "var": "cirurgia"
+              },
+              "nenhuma"
+            ]
+          },
+          "laudo": "Útero em {posicao}, de contornos regulares, medindo {utero.a} x {utero.b} x {utero.c} cm, com volume estimado em {utero.vol} cm³."
+        },
+        {
+          "id": "utero_aumentado",
+          "tipo": "check",
+          "rotulo": "Marcar útero aumentado",
+          "showIf": {
+            "==": [
+              {
+                "var": "cirurgia"
+              },
+              "nenhuma"
+            ]
+          },
+          "laudo": "Útero com dimensões aumentadas.",
+          "impressao": "Útero de dimensões aumentadas."
+        }
+      ]
+    },
+    {
+      "id": "endometrio",
+      "titulo": "Endométrio e cavidade",
+      "campos": [
+        {
+          "id": "endo_nid",
+          "tipo": "check",
+          "rotulo": "Endométrio não identificado",
+          "showIf": {
+            "==": [
+              {
+                "var": "cirurgia"
+              },
+              "nenhuma"
+            ]
+          },
+          "laudo": "Endométrio não identificado."
+        },
+        {
+          "id": "endo_mm",
+          "tipo": "num",
+          "rotulo": "Espessura endometrial (mm)",
+          "unidade": "mm",
+          "obrigatorio": true,
+          "permiteNaoCitar": true,
+          "showIf": {
+            "and": [
+              {
+                "==": [
+                  {
+                    "var": "cirurgia"
+                  },
+                  "nenhuma"
+                ]
+              },
+              {
+                "!": [
+                  {
+                    "var": "endo_nid"
+                  }
+                ]
+              }
+            ]
+          },
+          "laudo": "Espessura endometrial de {endo_mm} mm."
+        },
+        {
+          "id": "endo_aspecto",
+          "tipo": "seg",
+          "rotulo": "Aspecto",
+          "padrao": "nc",
+          "showIf": {
+            "and": [
+              {
+                "==": [
+                  {
+                    "var": "cirurgia"
+                  },
+                  "nenhuma"
+                ]
+              },
+              {
+                "!": [
+                  {
+                    "var": "endo_nid"
+                  }
+                ]
+              }
+            ]
+          },
+          "opcoes": [
+            {
+              "valor": "nc",
+              "rotulo": "Não citar",
+              "laudo": ""
+            },
+            {
+              "valor": "linear",
+              "rotulo": "Linear",
+              "laudo": "Endométrio de aspecto linear."
+            },
+            {
+              "valor": "trilaminar",
+              "rotulo": "Trilaminar",
+              "laudo": "Endométrio de aspecto trilaminar."
+            },
+            {
+              "valor": "homogeneo",
+              "rotulo": "Homogêneo",
+              "laudo": "Endométrio de aspecto homogêneo."
+            },
+            {
+              "valor": "heterogeneo",
+              "rotulo": "Heterogêneo",
+              "laudo": "Endométrio de aspecto heterogêneo, com áreas císticas."
+            }
+          ]
+        },
+        {
+          "id": "lamina",
+          "tipo": "check",
+          "rotulo": "Lâmina líquida",
+          "showIf": {
+            "==": [
+              {
+                "var": "cirurgia"
+              },
+              "nenhuma"
+            ]
+          },
+          "laudo": "Lâmina líquida na cavidade endometrial.",
+          "impressao": "Lâmina líquida endometrial."
+        },
+        {
+          "id": "polipo",
+          "tipo": "check",
+          "rotulo": "Pólipo endometrial",
+          "showIf": {
+            "==": [
+              {
+                "var": "cirurgia"
+              },
+              "nenhuma"
+            ]
+          },
+          "impressao": "Pólipo endometrial."
+        },
+        {
+          "id": "polipo_local",
+          "tipo": "seg",
+          "rotulo": "Local do pólipo",
+          "padrao": "fundo",
+          "showIf": {
+            "and": [
+              {
+                "==": [
+                  {
+                    "var": "cirurgia"
+                  },
+                  "nenhuma"
+                ]
+              },
+              {
+                "var": "polipo"
+              }
+            ]
+          },
+          "opcoes": [
+            {
+              "valor": "fundo",
+              "rotulo": "no fundo uterino"
+            },
+            {
+              "valor": "ant",
+              "rotulo": "na parede anterior"
+            },
+            {
+              "valor": "post",
+              "rotulo": "na parede posterior"
+            }
+          ]
+        },
+        {
+          "id": "polipo_mm",
+          "tipo": "num",
+          "rotulo": "Medida do pólipo (cm)",
+          "unidade": "cm",
+          "obrigatorio": true,
+          "showIf": {
+            "and": [
+              {
+                "==": [
+                  {
+                    "var": "cirurgia"
+                  },
+                  "nenhuma"
+                ]
+              },
+              {
+                "var": "polipo"
+              }
+            ]
+          },
+          "laudo": "Imagem nodular hiperecogênica, sugestiva de pólipo endometrial {polipo_local}, medindo {polipo_mm} cm."
+        },
+        {
+          "id": "polipo_endocervical",
+          "tipo": "check",
+          "rotulo": "Pólipo endocervical",
+          "showIf": {
+            "==": [
+              {
+                "var": "cirurgia"
+              },
+              "nenhuma"
+            ]
+          },
+          "laudo": "Imagem sugestiva de pólipo endocervical.",
+          "impressao": "Pólipo endocervical."
+        },
+        {
+          "id": "espessamento_endocervice",
+          "tipo": "check",
+          "rotulo": "Espessamento da endocérvice",
+          "showIf": {
+            "==": [
+              {
+                "var": "cirurgia"
+              },
+              "nenhuma"
+            ]
+          },
+          "laudo": "Espessamento da endocérvice."
+        }
+      ]
+    },
+    {
+      "id": "diu",
+      "titulo": "DIU",
+      "campos": [
+        {
+          "id": "diu",
+          "tipo": "seg",
+          "rotulo": "DIU",
+          "padrao": "ausente",
+          "showIf": {
+            "==": [
+              {
+                "var": "cirurgia"
+              },
+              "nenhuma"
+            ]
+          },
+          "opcoes": [
+            {
+              "valor": "ausente",
+              "rotulo": "Ausente",
+              "laudo": ""
+            },
+            {
+              "valor": "normo",
+              "rotulo": "Bem posicionado",
+              "laudo": "Dispositivo intrauterino (DIU) normoposicionado na cavidade endometrial.",
+              "impressao": "DIU normoposicionado."
+            },
+            {
+              "valor": "desloc",
+              "rotulo": "Deslocado / com distâncias",
+              "laudo": "Dispositivo intrauterino (DIU) a {diu_fundo} cm do fundo da cavidade e a {diu_serosa} cm da serosa.",
+              "impressao": "DIU deslocado."
+            }
+          ]
+        },
+        {
+          "id": "diu_fundo",
+          "tipo": "num",
+          "rotulo": "Distância do fundo da cavidade (cm)",
+          "obrigatorio": true,
+          "showIf": {
+            "==": [
+              {
+                "var": "diu"
+              },
+              "desloc"
+            ]
+          }
+        },
+        {
+          "id": "diu_serosa",
+          "tipo": "num",
+          "rotulo": "Distância da serosa (cm)",
+          "obrigatorio": true,
+          "showIf": {
+            "==": [
+              {
+                "var": "diu"
+              },
+              "desloc"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "colo",
+      "titulo": "Colo",
+      "campos": [
+        {
+          "id": "colo",
+          "tipo": "seg",
+          "rotulo": "Colo",
+          "padrao": "normal",
+          "showIf": {
+            "!=": [
+              {
+                "var": "cirurgia"
+              },
+              "total"
+            ]
+          },
+          "opcoes": [
+            {
+              "valor": "normal",
+              "rotulo": "Normal",
+              "laudo": "Colo uterino de aspecto ecográfico habitual."
+            },
+            {
+              "valor": "naboth",
+              "rotulo": "Cistos de Naboth",
+              "laudo": "Cistos de retenção (Naboth) no colo uterino, o maior com {naboth_maior} cm.",
+              "impressao": "Cistos de Naboth."
+            }
+          ]
+        },
+        {
+          "id": "naboth_maior",
+          "tipo": "num",
+          "rotulo": "Maior cisto de Naboth (cm)",
+          "obrigatorio": true,
+          "showIf": {
+            "and": [
+              {
+                "!=": [
+                  {
+                    "var": "cirurgia"
+                  },
+                  "total"
+                ]
+              },
+              {
+                "==": [
+                  {
+                    "var": "colo"
+                  },
+                  "naboth"
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "miometrio",
+      "titulo": "Miométrio",
+      "campos": [
+        {
+          "id": "miometrio",
+          "tipo": "seg",
+          "rotulo": "Miométrio",
+          "padrao": "homogeneo",
+          "showIf": {
+            "==": [
+              {
+                "var": "cirurgia"
+              },
+              "nenhuma"
+            ]
+          },
+          "opcoes": [
+            {
+              "valor": "homogeneo",
+              "rotulo": "Homogêneo",
+              "laudo": "Miométrio de textura homogênea."
+            },
+            {
+              "valor": "heterogeneo",
+              "rotulo": "Heterogêneo, sem nódulos",
+              "laudo": "Miométrio de textura heterogênea, sem nódulos definidos."
+            },
+            {
+              "valor": "adenomiose",
+              "rotulo": "Sinais de adenomiose",
+              "laudo": "Miométrio com sinais ecográficos de adenomiose, acometendo a parede {adeno_parede}.",
+              "impressao": "Sinais de adenomiose."
+            }
+          ]
+        },
+        {
+          "id": "adeno_parede",
+          "tipo": "seg",
+          "rotulo": "Parede acometida",
+          "padrao": "posterior",
+          "showIf": {
+            "and": [
+              {
+                "==": [
+                  {
+                    "var": "cirurgia"
+                  },
+                  "nenhuma"
+                ]
+              },
+              {
+                "==": [
+                  {
+                    "var": "miometrio"
+                  },
+                  "adenomiose"
+                ]
+              }
+            ]
+          },
+          "opcoes": [
+            {
+              "valor": "anterior",
+              "rotulo": "anterior"
+            },
+            {
+              "valor": "posterior",
+              "rotulo": "posterior"
+            },
+            {
+              "valor": "difusa",
+              "rotulo": "difusamente (anterior e posterior)"
+            }
+          ]
+        },
+        {
+          "id": "miomas",
+          "tipo": "list",
+          "rotulo": "Nódulos miometriais",
+          "showIf": {
+            "==": [
+              {
+                "var": "cirurgia"
+              },
+              "nenhuma"
+            ]
+          },
+          "itens": [
+            {
+              "id": "medida",
+              "tipo": "num",
+              "rotulo": "Medida (cm)",
+              "obrigatorio": true,
+              "unidade": "cm"
+            },
+            {
+              "id": "tipo",
+              "tipo": "select",
+              "rotulo": "Tipo (FIGO simplificado)",
+              "padrao": "intramural",
+              "opcoes": [
+                {
+                  "valor": "subseroso",
+                  "rotulo": "subseroso"
+                },
+                {
+                  "valor": "intramural",
+                  "rotulo": "intramural"
+                },
+                {
+                  "valor": "submucoso",
+                  "rotulo": "submucoso"
+                }
+              ]
+            },
+            {
+              "id": "local",
+              "tipo": "select",
+              "rotulo": "Localização",
+              "padrao": "anterior",
+              "opcoes": [
+                {
+                  "valor": "anterior",
+                  "rotulo": "na parede anterior"
+                },
+                {
+                  "valor": "posterior",
+                  "rotulo": "na parede posterior"
+                },
+                {
+                  "valor": "fundica",
+                  "rotulo": "na região fúndica"
+                },
+                {
+                  "valor": "lateral_d",
+                  "rotulo": "na parede lateral direita"
+                },
+                {
+                  "valor": "lateral_e",
+                  "rotulo": "na parede lateral esquerda"
+                }
+              ]
+            }
+          ],
+          "laudoItem": "Nódulo miometrial sólido, hipoecogênico, {tipo}, {local}, medindo {medida} cm.",
+          "impressaoItem": "Mioma uterino {tipo}, medindo {medida} cm.",
+          "laudoMultiplos": "Múltiplos nódulos miometriais sólidos, o maior com {miomas.maior} cm.",
+          "impressaoMultiplos": "Útero miomatoso."
+        }
+      ]
+    },
+    {
+      "id": "cirurgias",
+      "titulo": "Cirurgias",
+      "campos": [
+        {
+          "id": "cirurgia",
+          "tipo": "seg",
+          "rotulo": "Cirurgia uterina",
+          "padrao": "nenhuma",
+          "opcoes": [
+            {
+              "valor": "nenhuma",
+              "rotulo": "Nenhuma",
+              "laudo": ""
+            },
+            {
+              "valor": "total",
+              "rotulo": "Histerectomia total",
+              "laudo": "Útero e colo não visualizados (status pós-histerectomia total).",
+              "impressao": "Status pós-histerectomia total."
+            },
+            {
+              "valor": "parcial",
+              "rotulo": "Histerectomia parcial",
+              "laudo": "Coto cervical medindo {coto.a} x {coto.b} x {coto.c} cm (status pós-histerectomia parcial).",
+              "impressao": "Status pós-histerectomia parcial."
+            }
+          ]
+        },
+        {
+          "id": "coto",
+          "tipo": "dims",
+          "rotulo": "Coto (L × AP × T, cm)",
+          "obrigatorio": true,
+          "showIf": {
+            "==": [
+              {
+                "var": "cirurgia"
+              },
+              "parcial"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "ov_d",
+      "titulo": "Ovário direito",
+      "campos": [
+        {
+          "id": "ovd_aspecto",
+          "tipo": "seg",
+          "rotulo": "Aspecto do ovário direito",
+          "padrao": "normal",
+          "opcoes": [
+            {
+              "valor": "normal",
+              "rotulo": "Normal",
+              "laudo": ""
+            },
+            {
+              "valor": "naocar",
+              "rotulo": "Não caracterizado",
+              "laudo": "Ovário direito não caracterizado."
+            },
+            {
+              "valor": "multifolicular",
+              "rotulo": "Multifolicular",
+              "laudo": "Ovário direito com aspecto multifolicular."
+            },
+            {
+              "valor": "policistico",
+              "rotulo": "Policístico",
+              "laudo": "Ovário direito com padrão policístico.",
+              "impressao": "Padrão policístico no ovário direito."
+            }
+          ]
+        },
+        {
+          "id": "ovd",
+          "tipo": "dims",
+          "rotulo": "Ovário direito (L × AP × T, cm)",
+          "obrigatorio": true,
+          "showIf": {
+            "!=": [
+              {
+                "var": "ovd_aspecto"
+              },
+              "naocar"
+            ]
+          },
+          "laudo": "Ovário direito de contornos regulares, medindo {ovd.a} x {ovd.b} x {ovd.c} cm, com volume estimado em {ovd.vol} cm³."
+        },
+        {
+          "id": "ovd_cistos",
+          "tipo": "list",
+          "rotulo": "Cistos no ovário direito",
+          "showIf": {
+            "!=": [
+              {
+                "var": "ovd_aspecto"
+              },
+              "naocar"
+            ]
+          },
+          "itens": [
+            {
+              "id": "medida",
+              "tipo": "num",
+              "rotulo": "Medida (cm)",
+              "obrigatorio": true,
+              "unidade": "cm"
+            },
+            {
+              "id": "tipo",
+              "tipo": "select",
+              "rotulo": "Tipo",
+              "padrao": "simples",
+              "opcoes": [
+                {
+                  "valor": "simples",
+                  "rotulo": "simples"
+                },
+                {
+                  "valor": "hemorragico",
+                  "rotulo": "com aspecto hemorrágico"
+                },
+                {
+                  "valor": "endometrioma",
+                  "rotulo": "com aspecto de endometrioma"
+                },
+                {
+                  "valor": "dermoide",
+                  "rotulo": "com aspecto de dermoide"
+                },
+                {
+                  "valor": "complexo",
+                  "rotulo": "complexa, com componente sólido ou septos"
+                }
+              ]
+            },
+            {
+              "id": "orads",
+              "tipo": "select",
+              "rotulo": "O-RADS (manual)",
+              "padrao": "nc",
+              "opcoes": [
+                {
+                  "valor": "nc",
+                  "rotulo": "Não citar",
+                  "laudo": ""
+                },
+                {
+                  "valor": "1",
+                  "rotulo": "O-RADS 1",
+                  "laudo": ", O-RADS 1"
+                },
+                {
+                  "valor": "2",
+                  "rotulo": "O-RADS 2",
+                  "laudo": ", O-RADS 2"
+                },
+                {
+                  "valor": "3",
+                  "rotulo": "O-RADS 3",
+                  "laudo": ", O-RADS 3"
+                },
+                {
+                  "valor": "4",
+                  "rotulo": "O-RADS 4",
+                  "laudo": ", O-RADS 4"
+                },
+                {
+                  "valor": "5",
+                  "rotulo": "O-RADS 5",
+                  "laudo": ", O-RADS 5"
+                }
+              ]
+            }
+          ],
+          "laudoItem": "Formação cística {tipo} no ovário direito, medindo {medida} cm{orads}.",
+          "impressaoItem": "Cisto ovariano direito {tipo}, medindo {medida} cm{orads}.",
+          "laudoMultiplos": "Múltiplos cistos simples no ovário direito, o maior com {ovd_cistos.maior} cm.",
+          "impressaoMultiplos": "Cistos ovarianos direito."
+        }
+      ]
+    },
+    {
+      "id": "ov_e",
+      "titulo": "Ovário esquerdo",
+      "campos": [
+        {
+          "id": "ove_aspecto",
+          "tipo": "seg",
+          "rotulo": "Aspecto do ovário esquerdo",
+          "padrao": "normal",
+          "opcoes": [
+            {
+              "valor": "normal",
+              "rotulo": "Normal",
+              "laudo": ""
+            },
+            {
+              "valor": "naocar",
+              "rotulo": "Não caracterizado",
+              "laudo": "Ovário esquerdo não caracterizado."
+            },
+            {
+              "valor": "multifolicular",
+              "rotulo": "Multifolicular",
+              "laudo": "Ovário esquerdo com aspecto multifolicular."
+            },
+            {
+              "valor": "policistico",
+              "rotulo": "Policístico",
+              "laudo": "Ovário esquerdo com padrão policístico.",
+              "impressao": "Padrão policístico no ovário esquerdo."
+            }
+          ]
+        },
+        {
+          "id": "ove",
+          "tipo": "dims",
+          "rotulo": "Ovário esquerdo (L × AP × T, cm)",
+          "obrigatorio": true,
+          "showIf": {
+            "!=": [
+              {
+                "var": "ove_aspecto"
+              },
+              "naocar"
+            ]
+          },
+          "laudo": "Ovário esquerdo de contornos regulares, medindo {ove.a} x {ove.b} x {ove.c} cm, com volume estimado em {ove.vol} cm³."
+        },
+        {
+          "id": "ove_cistos",
+          "tipo": "list",
+          "rotulo": "Cistos no ovário esquerdo",
+          "showIf": {
+            "!=": [
+              {
+                "var": "ove_aspecto"
+              },
+              "naocar"
+            ]
+          },
+          "itens": [
+            {
+              "id": "medida",
+              "tipo": "num",
+              "rotulo": "Medida (cm)",
+              "obrigatorio": true,
+              "unidade": "cm"
+            },
+            {
+              "id": "tipo",
+              "tipo": "select",
+              "rotulo": "Tipo",
+              "padrao": "simples",
+              "opcoes": [
+                {
+                  "valor": "simples",
+                  "rotulo": "simples"
+                },
+                {
+                  "valor": "hemorragico",
+                  "rotulo": "com aspecto hemorrágico"
+                },
+                {
+                  "valor": "endometrioma",
+                  "rotulo": "com aspecto de endometrioma"
+                },
+                {
+                  "valor": "dermoide",
+                  "rotulo": "com aspecto de dermoide"
+                },
+                {
+                  "valor": "complexo",
+                  "rotulo": "complexa, com componente sólido ou septos"
+                }
+              ]
+            },
+            {
+              "id": "orads",
+              "tipo": "select",
+              "rotulo": "O-RADS (manual)",
+              "padrao": "nc",
+              "opcoes": [
+                {
+                  "valor": "nc",
+                  "rotulo": "Não citar",
+                  "laudo": ""
+                },
+                {
+                  "valor": "1",
+                  "rotulo": "O-RADS 1",
+                  "laudo": ", O-RADS 1"
+                },
+                {
+                  "valor": "2",
+                  "rotulo": "O-RADS 2",
+                  "laudo": ", O-RADS 2"
+                },
+                {
+                  "valor": "3",
+                  "rotulo": "O-RADS 3",
+                  "laudo": ", O-RADS 3"
+                },
+                {
+                  "valor": "4",
+                  "rotulo": "O-RADS 4",
+                  "laudo": ", O-RADS 4"
+                },
+                {
+                  "valor": "5",
+                  "rotulo": "O-RADS 5",
+                  "laudo": ", O-RADS 5"
+                }
+              ]
+            }
+          ],
+          "laudoItem": "Formação cística {tipo} no ovário esquerdo, medindo {medida} cm{orads}.",
+          "impressaoItem": "Cisto ovariano esquerdo {tipo}, medindo {medida} cm{orads}.",
+          "laudoMultiplos": "Múltiplos cistos simples no ovário esquerdo, o maior com {ove_cistos.maior} cm.",
+          "impressaoMultiplos": "Cistos ovarianos esquerdo."
+        }
+      ]
+    },
+    {
+      "id": "anexos",
+      "titulo": "Anexos",
+      "campos": [
+        {
+          "id": "paraovariano",
+          "tipo": "check",
+          "rotulo": "Cisto paraovariano",
+          "laudo": "Imagem cística paraovariana.",
+          "impressao": "Cisto paraovariano."
+        },
+        {
+          "id": "inclusao",
+          "tipo": "check",
+          "rotulo": "Cisto de inclusão peritoneal",
+          "laudo": "Imagem cística compatível com cisto de inclusão peritoneal.",
+          "impressao": "Cisto de inclusão peritoneal."
+        },
+        {
+          "id": "hidro_d",
+          "tipo": "check",
+          "rotulo": "Hidrossalpinge D",
+          "laudo": "Imagem tubular anecogênica à direita, compatível com hidrossalpinge.",
+          "impressao": "Hidrossalpinge à direita."
+        },
+        {
+          "id": "hidro_e",
+          "tipo": "check",
+          "rotulo": "Hidrossalpinge E",
+          "laudo": "Imagem tubular anecogênica à esquerda, compatível com hidrossalpinge.",
+          "impressao": "Hidrossalpinge à esquerda."
+        },
+        {
+          "id": "orads",
+          "tipo": "seg",
+          "rotulo": "O-RADS final (manual)",
+          "padrao": "nc",
+          "opcoes": [
+            {
+              "valor": "nc",
+              "rotulo": "Não citar",
+              "laudo": ""
+            },
+            {
+              "valor": "1",
+              "rotulo": "O-RADS 1",
+              "laudo": "Classificação O-RADS US: 1.",
+              "impressao": "O-RADS 1."
+            },
+            {
+              "valor": "2",
+              "rotulo": "O-RADS 2",
+              "laudo": "Classificação O-RADS US: 2.",
+              "impressao": "O-RADS 2."
+            },
+            {
+              "valor": "3",
+              "rotulo": "O-RADS 3",
+              "laudo": "Classificação O-RADS US: 3.",
+              "impressao": "O-RADS 3."
+            },
+            {
+              "valor": "4",
+              "rotulo": "O-RADS 4",
+              "laudo": "Classificação O-RADS US: 4.",
+              "impressao": "O-RADS 4."
+            },
+            {
+              "valor": "5",
+              "rotulo": "O-RADS 5",
+              "laudo": "Classificação O-RADS US: 5.",
+              "impressao": "O-RADS 5."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "liquido",
+      "titulo": "Líquido livre",
+      "campos": [
+        {
+          "id": "liquido",
+          "tipo": "seg",
+          "rotulo": "Líquido livre",
+          "padrao": "ausente",
+          "opcoes": [
+            {
+              "valor": "ausente",
+              "rotulo": "Ausente",
+              "laudo": "Ausência de líquido livre na pelve."
+            },
+            {
+              "valor": "pequena",
+              "rotulo": "Pequena",
+              "laudo": "Pequena quantidade de líquido livre na pelve.",
+              "impressao": "Líquido livre na pelve."
+            },
+            {
+              "valor": "moderada",
+              "rotulo": "Moderada",
+              "laudo": "Moderada quantidade de líquido livre na pelve.",
+              "impressao": "Líquido livre na pelve."
+            },
+            {
+              "valor": "grande",
+              "rotulo": "Grande",
+              "laudo": "Grande quantidade de líquido livre na pelve.",
+              "impressao": "Líquido livre na pelve."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "avisos": [
+    {
+      "id": "aviso_endometrio_pos",
+      "mensagem": "Endométrio acima de 4 mm na pós-menopausa. O sistema não sugere conduta: avalie conforme seu critério (ACOG 2026).",
+      "se": {
+        "and": [
+          {
+            "==": [
+              {
+                "var": "status"
+              },
+              "pos"
+            ]
+          },
+          {
+            "==": [
+              {
+                "var": "cirurgia"
+              },
+              "nenhuma"
+            ]
+          },
+          {
+            "!": [
+              {
+                "var": "endo_mm__nc"
+              }
+            ]
+          },
+          {
+            ">": [
+              {
+                "var": "endo_mm"
+              },
+              4
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
