@@ -14,6 +14,9 @@ const op = (valor, rotulo, laudo, impressao) => ({
 });
 const semCirurgia = e('cirurgia', 'nenhuma');
 
+const ovarioVisivel = (k) =>
+  and({ '!=': [v(`ov${k}_aspecto`), 'naocar'] }, { '!=': [v(`ov${k}_aspecto`), 'ausente'] });
+
 const ovario = (k, lado) => ({
   id: `ov_${k}`,
   titulo: `Ovário ${lado}`,
@@ -23,18 +26,19 @@ const ovario = (k, lado) => ({
       opcoes: [
         op('normal', 'Normal', ''),
         op('naocar', 'Não caracterizado', `Ovário ${lado} não caracterizado.`),
+        op('ausente', 'Ausente (ooforectomia)', `Ovário ${lado} não visualizado (status pós-ooforectomia).`, `Status pós-ooforectomia ${lado.replace(/o$/, 'a')}.`),
         op('multifolicular', 'Multifolicular', `Ovário ${lado} com aspecto multifolicular.`),
         op('policistico', 'Policístico', `Ovário ${lado} com padrão policístico.`, `Padrão policístico no ovário ${lado}.`),
       ],
     },
     {
       id: `ov${k}`, tipo: 'dims', rotulo: `Ovário ${lado} (L × AP × T, cm)`, obrigatorio: true,
-      showIf: { '!=': [v(`ov${k}_aspecto`), 'naocar'] },
+      showIf: ovarioVisivel(k),
       laudo: `Ovário ${lado} de contornos regulares, medindo {ov${k}.a} x {ov${k}.b} x {ov${k}.c} cm, com volume estimado em {ov${k}.vol} cm³.`,
     },
     {
       id: `ov${k}_cistos`, tipo: 'list', rotulo: `Cistos no ovário ${lado}`,
-      showIf: { '!=': [v(`ov${k}_aspecto`), 'naocar'] },
+      showIf: ovarioVisivel(k),
       itens: [
         { id: 'medida', tipo: 'num', rotulo: 'Medida (cm)', obrigatorio: true, unidade: 'cm' },
         {
@@ -83,8 +87,22 @@ const t = {
           id: 'status', tipo: 'seg', rotulo: 'Status', padrao: 'fertil',
           opcoes: [op('fertil', 'Idade fértil', ''), op('pos', 'Pós-menopausa', 'Paciente em pós-menopausa.')],
         },
-        { id: 'dum', tipo: 'text', mascara: 'data', rotulo: 'DUM (data ou "há X dias")', showIf: e('status', 'fertil'), laudo: 'Data da última menstruação: {valor}.' },
+        { id: 'dum', tipo: 'text', mascara: 'data', rotulo: 'DUM (data ou "há X dias")', showIf: and(e('status', 'fertil'), semCirurgia), laudo: 'Data da última menstruação: {valor}.' },
         { id: 'gestacoes', tipo: 'text', rotulo: 'Gestações', laudo: 'Antecedentes obstétricos: {valor}.' },
+      ],
+    },
+    {
+      id: 'cirurgias', titulo: 'Cirurgias',
+      campos: [
+        {
+          id: 'cirurgia', tipo: 'seg', rotulo: 'Cirurgia uterina', padrao: 'nenhuma',
+          opcoes: [
+            op('nenhuma', 'Nenhuma', ''),
+            op('total', 'Histerectomia total', 'Útero e colo não visualizados (status pós-histerectomia total).', 'Status pós-histerectomia total.'),
+            op('parcial', 'Histerectomia parcial', 'Coto cervical medindo {coto.a} x {coto.b} x {coto.c} cm (status pós-histerectomia parcial).', 'Status pós-histerectomia parcial.'),
+          ],
+        },
+        { id: 'coto', tipo: 'dims', rotulo: 'Coto (L × AP × T, cm)', obrigatorio: true, showIf: e('cirurgia', 'parcial') },
       ],
     },
     {
@@ -155,13 +173,13 @@ const t = {
       id: 'colo', titulo: 'Colo',
       campos: [
         {
-          id: 'colo', tipo: 'seg', rotulo: 'Colo', padrao: 'normal', showIf: { '!=': [v('cirurgia'), 'total'] },
+          id: 'colo', tipo: 'seg', rotulo: 'Colo', padrao: 'normal', showIf: semCirurgia,
           opcoes: [
             op('normal', 'Normal', 'Colo uterino de aspecto ecográfico habitual.'),
             op('naboth', 'Cistos de Naboth', 'Cistos de retenção (Naboth) no colo uterino, o maior com {naboth_maior} cm.', 'Cistos de Naboth.'),
           ],
         },
-        { id: 'naboth_maior', tipo: 'num', rotulo: 'Maior cisto de Naboth (cm)', obrigatorio: true, showIf: and({ '!=': [v('cirurgia'), 'total'] }, e('colo', 'naboth')) },
+        { id: 'naboth_maior', tipo: 'num', rotulo: 'Maior cisto de Naboth (cm)', obrigatorio: true, showIf: and(semCirurgia, e('colo', 'naboth')) },
       ],
     },
     {
@@ -200,20 +218,6 @@ const t = {
           laudoMultiplos: 'Múltiplos nódulos miometriais sólidos, o maior com {miomas.maior} cm.',
           impressaoMultiplos: 'Útero miomatoso.',
         },
-      ],
-    },
-    {
-      id: 'cirurgias', titulo: 'Cirurgias',
-      campos: [
-        {
-          id: 'cirurgia', tipo: 'seg', rotulo: 'Cirurgia uterina', padrao: 'nenhuma',
-          opcoes: [
-            op('nenhuma', 'Nenhuma', ''),
-            op('total', 'Histerectomia total', 'Útero e colo não visualizados (status pós-histerectomia total).', 'Status pós-histerectomia total.'),
-            op('parcial', 'Histerectomia parcial', 'Coto cervical medindo {coto.a} x {coto.b} x {coto.c} cm (status pós-histerectomia parcial).', 'Status pós-histerectomia parcial.'),
-          ],
-        },
-        { id: 'coto', tipo: 'dims', rotulo: 'Coto (L × AP × T, cm)', obrigatorio: true, showIf: e('cirurgia', 'parcial') },
       ],
     },
     ovario('d', 'direito'),

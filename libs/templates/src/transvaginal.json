@@ -40,11 +40,23 @@
           "mascara": "data",
           "rotulo": "DUM (data ou \"há X dias\")",
           "showIf": {
-            "==": [
+            "and": [
               {
-                "var": "status"
+                "==": [
+                  {
+                    "var": "status"
+                  },
+                  "fertil"
+                ]
               },
-              "fertil"
+              {
+                "==": [
+                  {
+                    "var": "cirurgia"
+                  },
+                  "nenhuma"
+                ]
+              }
             ]
           },
           "laudo": "Data da última menstruação: {valor}."
@@ -54,6 +66,51 @@
           "tipo": "text",
           "rotulo": "Gestações",
           "laudo": "Antecedentes obstétricos: {valor}."
+        }
+      ]
+    },
+    {
+      "id": "cirurgias",
+      "titulo": "Cirurgias",
+      "campos": [
+        {
+          "id": "cirurgia",
+          "tipo": "seg",
+          "rotulo": "Cirurgia uterina",
+          "padrao": "nenhuma",
+          "opcoes": [
+            {
+              "valor": "nenhuma",
+              "rotulo": "Nenhuma",
+              "laudo": ""
+            },
+            {
+              "valor": "total",
+              "rotulo": "Histerectomia total",
+              "laudo": "Útero e colo não visualizados (status pós-histerectomia total).",
+              "impressao": "Status pós-histerectomia total."
+            },
+            {
+              "valor": "parcial",
+              "rotulo": "Histerectomia parcial",
+              "laudo": "Coto cervical medindo {coto.a} x {coto.b} x {coto.c} cm (status pós-histerectomia parcial).",
+              "impressao": "Status pós-histerectomia parcial."
+            }
+          ]
+        },
+        {
+          "id": "coto",
+          "tipo": "dims",
+          "rotulo": "Coto (L × AP × T, cm)",
+          "obrigatorio": true,
+          "showIf": {
+            "==": [
+              {
+                "var": "cirurgia"
+              },
+              "parcial"
+            ]
+          }
         }
       ]
     },
@@ -417,11 +474,11 @@
           "rotulo": "Colo",
           "padrao": "normal",
           "showIf": {
-            "!=": [
+            "==": [
               {
                 "var": "cirurgia"
               },
-              "total"
+              "nenhuma"
             ]
           },
           "opcoes": [
@@ -446,11 +503,11 @@
           "showIf": {
             "and": [
               {
-                "!=": [
+                "==": [
                   {
                     "var": "cirurgia"
                   },
-                  "total"
+                  "nenhuma"
                 ]
               },
               {
@@ -619,51 +676,6 @@
       ]
     },
     {
-      "id": "cirurgias",
-      "titulo": "Cirurgias",
-      "campos": [
-        {
-          "id": "cirurgia",
-          "tipo": "seg",
-          "rotulo": "Cirurgia uterina",
-          "padrao": "nenhuma",
-          "opcoes": [
-            {
-              "valor": "nenhuma",
-              "rotulo": "Nenhuma",
-              "laudo": ""
-            },
-            {
-              "valor": "total",
-              "rotulo": "Histerectomia total",
-              "laudo": "Útero e colo não visualizados (status pós-histerectomia total).",
-              "impressao": "Status pós-histerectomia total."
-            },
-            {
-              "valor": "parcial",
-              "rotulo": "Histerectomia parcial",
-              "laudo": "Coto cervical medindo {coto.a} x {coto.b} x {coto.c} cm (status pós-histerectomia parcial).",
-              "impressao": "Status pós-histerectomia parcial."
-            }
-          ]
-        },
-        {
-          "id": "coto",
-          "tipo": "dims",
-          "rotulo": "Coto (L × AP × T, cm)",
-          "obrigatorio": true,
-          "showIf": {
-            "==": [
-              {
-                "var": "cirurgia"
-              },
-              "parcial"
-            ]
-          }
-        }
-      ]
-    },
-    {
       "id": "ov_d",
       "titulo": "Ovário direito",
       "campos": [
@@ -684,6 +696,12 @@
               "laudo": "Ovário direito não caracterizado."
             },
             {
+              "valor": "ausente",
+              "rotulo": "Ausente (ooforectomia)",
+              "laudo": "Ovário direito não visualizado (status pós-ooforectomia).",
+              "impressao": "Status pós-ooforectomia direita."
+            },
+            {
               "valor": "multifolicular",
               "rotulo": "Multifolicular",
               "laudo": "Ovário direito com aspecto multifolicular."
@@ -702,11 +720,23 @@
           "rotulo": "Ovário direito (L × AP × T, cm)",
           "obrigatorio": true,
           "showIf": {
-            "!=": [
+            "and": [
               {
-                "var": "ovd_aspecto"
+                "!=": [
+                  {
+                    "var": "ovd_aspecto"
+                  },
+                  "naocar"
+                ]
               },
-              "naocar"
+              {
+                "!=": [
+                  {
+                    "var": "ovd_aspecto"
+                  },
+                  "ausente"
+                ]
+              }
             ]
           },
           "laudo": "Ovário direito de contornos regulares, medindo {ovd.a} x {ovd.b} x {ovd.c} cm, com volume estimado em {ovd.vol} cm³."
@@ -716,11 +746,23 @@
           "tipo": "list",
           "rotulo": "Cistos no ovário direito",
           "showIf": {
-            "!=": [
+            "and": [
               {
-                "var": "ovd_aspecto"
+                "!=": [
+                  {
+                    "var": "ovd_aspecto"
+                  },
+                  "naocar"
+                ]
               },
-              "naocar"
+              {
+                "!=": [
+                  {
+                    "var": "ovd_aspecto"
+                  },
+                  "ausente"
+                ]
+              }
             ]
           },
           "itens": [
@@ -826,6 +868,12 @@
               "laudo": "Ovário esquerdo não caracterizado."
             },
             {
+              "valor": "ausente",
+              "rotulo": "Ausente (ooforectomia)",
+              "laudo": "Ovário esquerdo não visualizado (status pós-ooforectomia).",
+              "impressao": "Status pós-ooforectomia esquerda."
+            },
+            {
               "valor": "multifolicular",
               "rotulo": "Multifolicular",
               "laudo": "Ovário esquerdo com aspecto multifolicular."
@@ -844,11 +892,23 @@
           "rotulo": "Ovário esquerdo (L × AP × T, cm)",
           "obrigatorio": true,
           "showIf": {
-            "!=": [
+            "and": [
               {
-                "var": "ove_aspecto"
+                "!=": [
+                  {
+                    "var": "ove_aspecto"
+                  },
+                  "naocar"
+                ]
               },
-              "naocar"
+              {
+                "!=": [
+                  {
+                    "var": "ove_aspecto"
+                  },
+                  "ausente"
+                ]
+              }
             ]
           },
           "laudo": "Ovário esquerdo de contornos regulares, medindo {ove.a} x {ove.b} x {ove.c} cm, com volume estimado em {ove.vol} cm³."
@@ -858,11 +918,23 @@
           "tipo": "list",
           "rotulo": "Cistos no ovário esquerdo",
           "showIf": {
-            "!=": [
+            "and": [
               {
-                "var": "ove_aspecto"
+                "!=": [
+                  {
+                    "var": "ove_aspecto"
+                  },
+                  "naocar"
+                ]
               },
-              "naocar"
+              {
+                "!=": [
+                  {
+                    "var": "ove_aspecto"
+                  },
+                  "ausente"
+                ]
+              }
             ]
           },
           "itens": [
