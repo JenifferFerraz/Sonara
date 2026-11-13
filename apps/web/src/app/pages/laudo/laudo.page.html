@@ -1,0 +1,151 @@
+@let t = template();
+@let est = estado();
+
+<!-- Versão nova da máscara: o médico decide. A antiga continua instalada. -->
+@for (p of pendencias(); track p.id) {
+  <div class="nova-versao" role="status">
+    <div>
+      <strong>Nova versão da máscara {{ p.nova.titulo }}</strong>
+      (em uso: {{ p.atual.versao }} → nova: {{ p.nova.versao }}).
+      @if (p.nova.mudancas) {
+        {{ p.nova.mudancas.resumo }}
+        <a [href]="p.nova.mudancas.url" target="_blank" rel="noopener">Ver mudanças aprovadas</a>
+      }
+    </div>
+    <div class="acoes">
+      <button type="button" class="btn pequeno primario" (click)="adotarNova(p.id, p.nova.versao)">
+        Usar a nova
+      </button>
+      <button type="button" class="btn pequeno" (click)="manterAtual(p.id)">Manter a atual</button>
+    </div>
+  </div>
+}
+
+<section class="cabecalho" aria-label="Cabeçalho do exame">
+  <label class="paciente">
+    <span>Paciente</span>
+    <input [value]="est.cabecalho.paciente" (input)="mudouCabecalho('paciente', $event)" />
+  </label>
+  <label>
+    <span>Sexo</span>
+    <select (change)="mudouCabecalho('sexo', $event)">
+      <option value="" [selected]="!est.cabecalho.sexo">—</option>
+      @for (s of sexos; track s.valor) {
+        <option [value]="s.valor" [selected]="est.cabecalho.sexo === s.valor">{{ s.rotulo }}</option>
+      }
+    </select>
+  </label>
+  <label class="curto">
+    <span>Idade</span>
+    <input inputmode="numeric" [value]="est.cabecalho.idade" (input)="mudouCabecalho('idade', $event)" />
+  </label>
+  <label class="solicitante">
+    <span>Médico solicitante</span>
+    <input [value]="est.cabecalho.solicitante" (input)="mudouCabecalho('solicitante', $event)" />
+  </label>
+  <label>
+    <span>Data do exame</span>
+    <input type="date" [value]="est.cabecalho.data" (input)="mudouCabecalho('data', $event)" />
+  </label>
+</section>
+
+<nav class="abas" aria-label="Exames">
+  @for (aba of abas(); track aba.id) {
+    <button type="button" [class.ativa]="aba.id === abaAtiva()" (click)="abaAtiva.set(aba.id)">
+      {{ aba.titulo }}
+    </button>
+  }
+  <span class="espaco"></span>
+  <label class="versao" title="Versões instaladas da máscara">
+    Máscara
+    <select (change)="escolherVersao($event)">
+      @for (v of versoes(); track v) {
+        <option [value]="v" [selected]="v === t.versao">v{{ v }}</option>
+      }
+    </select>
+  </label>
+  @if (t.mudancas) {
+    <a class="link-mudancas" [href]="t.mudancas.url" target="_blank" rel="noopener">mudanças aprovadas</a>
+  }
+</nav>
+
+<div class="colunas">
+  <!-- Formulário -->
+  <main class="formulario">
+    @for (secao of t.secoes; track secao.id) {
+      <section class="secao" [class.alterada]="!normal(secao)">
+        <header>
+          @if (fixa(secao)) {
+            <h2>{{ secao.titulo }}</h2>
+          } @else {
+            <label class="normal">
+              <input
+                type="checkbox"
+                [checked]="normal(secao)"
+                (change)="alternarNormal(secao, $any($event.target).checked)" />
+              <h2>{{ secao.titulo }}</h2>
+              @if (normal(secao)) {
+                <span class="selo">normal</span>
+              }
+            </label>
+          }
+        </header>
+
+        @if (aberta(secao)) {
+          <div class="campos">
+            @for (campo of campos(secao); track campo.id) {
+              <app-campo
+                [campo]="campo"
+                [valores]="est.valores"
+                [alertas]="resultado().alertas"
+                [volume]="volume(campo.id)"
+                (mudou)="mudou($event)" />
+            }
+          </div>
+        }
+      </section>
+    }
+  </main>
+
+  <!-- Laudo ao vivo -->
+  <aside class="laudo" aria-label="Laudo">
+    <div class="laudo-topo">
+      <h2>Laudo</h2>
+      @if (textoEditado() === null) {
+        <button type="button" class="btn pequeno" (click)="editar()">Editar texto</button>
+      }
+    </div>
+
+    @if (textoEditado() !== null) {
+      <div class="editado" role="status">
+        Texto editado. <button type="button" class="link" (click)="voltarAoAutomatico()">Voltar ao automático?</button>
+      </div>
+      <textarea class="editor" [value]="textoEditado()" (input)="editando($event)"></textarea>
+    } @else {
+      <article class="papel" [innerHTML]="htmlLaudo()"></article>
+    }
+
+    @for (a of avisos(); track a.campo) {
+      <p class="aviso">{{ a.mensagem }}</p>
+    }
+  </aside>
+</div>
+
+<footer class="rodape">
+  <div class="status">
+    @if (mensagem()) {
+      <span class="toast" role="status">{{ mensagem() }}</span>
+    } @else if (vazios().length) {
+      <details>
+        <summary class="alerta">{{ vazios().length }} {{ vazios().length === 1 ? 'alerta' : 'alertas' }}</summary>
+        <ul>
+          @for (a of vazios(); track a.campo) {
+            <li>{{ a.mensagem }}</li>
+          }
+        </ul>
+      </details>
+    }
+  </div>
+  <button type="button" class="btn" (click)="novoLaudo()">Novo laudo</button>
+  <button type="button" class="btn primario" (click)="copiar()">{{ rotuloCopiar() }}</button>
+</footer>

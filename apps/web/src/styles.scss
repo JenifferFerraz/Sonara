@@ -1,0 +1,66 @@
+// Tokens a partir da logo. Produto específico: sem biblioteca de design system.
+:root {
+  --sn-primaria: #0b6b66;
+  --sn-primaria-escura: #08504c;
+  --sn-secundaria: #5fd6c6;
+  --sn-suave: #93ddd3;
+  --sn-fundo: #f6fbfa;
+  --sn-superficie: #ffffff;
+  --sn-borda: #d3e5e2;
+  --sn-texto: #10302e;
+  --sn-texto-suave: #53706d;
+  --sn-alerta: #b3261e;
+  --sn-alerta-fundo: #fdecea;
+  --sn-aviso: #8a5a00;
+  --sn-aviso-fundo: #fff4d6;
+  --sn-raio: 10px;
+  --sn-fonte: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--sn-fonte);
+  color: var(--sn-texto);
+  background: var(--sn-fundo);
+  font-size: 14px;
+}
+
+button { font: inherit; cursor: pointer; }
+
+input, select, textarea {
+  font: inherit;
+  color: inherit;
+  background: var(--sn-superficie);
+  border: 1px solid var(--sn-borda);
+  border-radius: 6px;
+  padding: 6px 8px;
+
+  &:focus-visible {
+    outline: 2px solid var(--sn-secundaria);
+    outline-offset: 0;
+  }
+}
+
+.btn {
+  border: 1px solid var(--sn-borda);
+  background: var(--sn-superficie);
+  color: var(--sn-primaria);
+  border-radius: var(--sn-raio);
+  padding: 8px 14px;
+  font-weight: 600;
+
+  &:hover { background: #eef8f6; }
+
+  &.primario {
+    background: var(--sn-primaria);
+    border-color: var(--sn-primaria);
+    color: #fff;
+    &:hover { background: var(--sn-primaria-escura); }
+  }
+
+  &.pequeno { padding: 3px 9px; font-size: 12px; }
+}

@@ -1,0 +1,183 @@
+@let c = campo();
+
+@switch (c.tipo) {
+  @case ('seg') {
+    <div class="linha">
+      <span class="rotulo">{{ c.rotulo }}</span>
+      <div class="segmentos" role="radiogroup" [attr.aria-label]="c.rotulo">
+        @for (o of c.opcoes; track o.valor) {
+          <button
+            type="button"
+            role="radio"
+            [class.ativo]="texto() === o.valor"
+            [attr.aria-checked]="texto() === o.valor"
+            (click)="emitir(o.valor)">
+            {{ o.rotulo }}
+          </button>
+        }
+      </div>
+    </div>
+  }
+
+  @case ('select') {
+    <label class="linha">
+      <span class="rotulo">{{ c.rotulo }}</span>
+      <select [value]="texto()" (change)="emitir(valorEm($event))">
+        @for (o of c.opcoes; track o.valor) {
+          <option [value]="o.valor" [selected]="texto() === o.valor">{{ o.rotulo }}</option>
+        }
+      </select>
+    </label>
+  }
+
+  @case ('check') {
+    <label class="linha check">
+      <input type="checkbox" [checked]="marcado()" (change)="emitir(checadoEm($event))" />
+      <span>{{ c.rotulo }}</span>
+    </label>
+  }
+
+  @case ('multi') {
+    <div class="linha">
+      <span class="rotulo">{{ c.rotulo }}</span>
+      @for (o of c.opcoes; track o.valor) {
+        <label class="check">
+          <input
+            type="checkbox"
+            [checked]="selecionados().includes(o.valor)"
+            (change)="alternarMulti(o.valor, checadoEm($event))" />
+          <span>{{ o.rotulo }}</span>
+        </label>
+      }
+    </div>
+  }
+
+  @case ('num') {
+    <div class="linha">
+      <label class="rotulo" [for]="'campo-' + c.id">{{ c.rotulo }}</label>
+      <div class="medida">
+        <input
+          [id]="'campo-' + c.id"
+          inputmode="decimal"
+          autocomplete="off"
+          [class.faltando]="comAlerta()"
+          [disabled]="naoCitar()"
+          [value]="texto()"
+          (input)="emitir(valorEm($event))" />
+        @if (c.unidade) {
+          <span class="unidade">{{ c.unidade }}</span>
+        }
+        @if (c.permiteNaoCitar) {
+          <label class="check nc">
+            <input
+              type="checkbox"
+              [checked]="naoCitar()"
+              (change)="emitir(checadoEm($event), c.id + '__nc')" />
+            <span>não citar</span>
+          </label>
+        }
+      </div>
+    </div>
+  }
+
+  @case ('dims') {
+    <div class="linha">
+      <span class="rotulo">{{ c.rotulo }}</span>
+      <div class="medida">
+        <input
+          class="curto"
+          inputmode="decimal"
+          aria-label="Comprimento"
+          [class.faltando]="comAlerta() && !dims().a"
+          [value]="dims().a"
+          (input)="mudarDims('a', valorEm($event))" />
+        <span>×</span>
+        <input
+          class="curto"
+          inputmode="decimal"
+          aria-label="Anteroposterior"
+          [class.faltando]="comAlerta() && !dims().b"
+          [value]="dims().b"
+          (input)="mudarDims('b', valorEm($event))" />
+        <span>×</span>
+        <input
+          class="curto"
+          inputmode="decimal"
+          aria-label="Transverso"
+          [class.faltando]="comAlerta() && !dims().c"
+          [value]="dims().c"
+          (input)="mudarDims('c', valorEm($event))" />
+        <span class="unidade">cm</span>
+        @if (volume() !== null) {
+          <span class="volume">= {{ volume()!.toFixed(1).replace('.', ',') }} cm³</span>
+        }
+      </div>
+    </div>
+  }
+
+  @case ('text') {
+    <label class="linha">
+      <span class="rotulo">{{ c.rotulo }}</span>
+      <input class="largo" [value]="texto()" (input)="emitir(valorEm($event))" />
+    </label>
+  }
+
+  @case ('list') {
+    <div class="lista">
+      <div class="lista-topo">
+        <span class="rotulo">{{ c.rotulo }}</span>
+        <label class="check nc">
+          <input
+            type="checkbox"
+            [checked]="lista().multiplos"
+            (change)="mudarMultiplos(checadoEm($event))" />
+          <span>múltiplos, o maior com</span>
+        </label>
+        @if (lista().multiplos) {
+          <input
+            class="curto"
+            inputmode="decimal"
+            aria-label="Maior medida"
+            [class.faltando]="comAlerta()"
+            [value]="lista().maior"
+            (input)="mudarMaior(valorEm($event))" />
+          <span class="unidade">cm</span>
+        }
+      </div>
+
+      @if (!lista().multiplos) {
+        @for (item of lista().itens; track $index) {
+          <div class="item">
+            <span class="indice">{{ $index + 1 }}</span>
+            @for (sub of c.itens; track sub.id) {
+              @if (sub.tipo === 'num') {
+                <label class="sub">
+                  <span>{{ sub.rotulo }}</span>
+                  <input
+                    class="curto"
+                    inputmode="decimal"
+                    [class.faltando]="itemSemMedida($index, sub.id)"
+                    [value]="item[sub.id]"
+                    (input)="mudarItem($index, sub.id, valorEm($event))" />
+                </label>
+              } @else {
+                <label class="sub">
+                  <span>{{ sub.rotulo }}</span>
+                  <select (change)="mudarItem($index, sub.id, valorEm($event))">
+                    @for (o of sub.opcoes; track o.valor) {
+                      <option [value]="o.valor" [selected]="item[sub.id] === o.valor">
+                        {{ o.rotulo }}
+                      </option>
+                    }
+                  </select>
+                </label>
+              }
+            }
+            <button type="button" class="btn pequeno" (click)="remover($index)">Remover</button>
+          </div>
+        }
+        <button type="button" class="btn pequeno" (click)="adicionar()">+ adicionar</button>
+      }
+    </div>
+  }
+}
