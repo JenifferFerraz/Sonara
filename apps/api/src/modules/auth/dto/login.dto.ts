@@ -1,0 +1,25 @@
+import { IsEmail, IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
+
+export class LoginDto {
+  @IsEmail()
+  email: string;
+
+  @IsNotEmpty()
+  @IsString()
+  password: string;
+
+  /** ID guardado pelo app em logins anteriores neste dispositivo. */
+  @IsOptional()
+  @IsUUID()
+  deviceId?: string;
+
+  @IsOptional()
+  @IsString()
+  deviceName?: string;
+}
+
+export class RefreshTokenDto {
+  @IsNotEmpty()
+  @IsString()
+  refreshToken: string;
+}
