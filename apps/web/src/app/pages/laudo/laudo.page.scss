@@ -147,7 +147,30 @@ label span { font-size: 12px; color: var(--sn-texto-suave); }
     border-radius: 6px;
   }
 
-  .editor { width: 100%; min-height: 360px; line-height: 1.5; }
+  .editor {
+    min-height: 360px;
+    padding: 12px 14px;
+    background: #fff;
+    color: #111;
+    border: 1px solid var(--sn-borda);
+    border-radius: 6px;
+    outline: none;
+    &:focus { border-color: var(--sn-primaria); }
+  }
+
+  .barra {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    margin: 8px 0;
+    padding: 4px;
+    border: 1px solid var(--sn-borda);
+    border-radius: 6px;
+    button { min-width: 28px; padding: 2px 6px; }
+    select { max-width: 140px; }
+    .sep { width: 1px; align-self: stretch; background: var(--sn-borda); margin: 0 4px; }
+  }
 
   .aviso {
     margin: 8px 0 0;

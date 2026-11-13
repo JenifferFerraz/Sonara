@@ -1,5 +1,5 @@
 import { Component, HostListener, computed, inject, signal } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import {
   Cabecalho,
   Estado,
@@ -14,8 +14,6 @@ import { ClipboardService } from '../../core/services/clipboard.service';
 import { MascaraService } from '../../core/services/mascara.service';
 import { CampoComponent, MudancaCampo } from '../../shared/campo/campo.component';
 import { aplicarMascara, mascaraInteiro } from '../../shared/mascaras';
-
-const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 @Component({
   selector: 'app-laudo-page',
@@ -47,8 +45,19 @@ export class LaudoPage {
   readonly vazios = computed(() => this.resultado().alertas.filter(a => a.tipo === 'obrigatorio'));
   readonly avisos = computed(() => this.resultado().alertas.filter(a => a.tipo === 'referencia'));
 
-  /** Texto editado à mão: o laudo para de se atualizar sozinho. */
-  readonly textoEditado = signal<string | null>(null);
+  /** HTML editado à mão: o laudo para de se atualizar sozinho. */
+  readonly htmlEditado = signal<string | null>(null);
+  /** Conteúdo inicial do editor; fixo enquanto a pessoa digita, para o cursor não pular. */
+  readonly htmlInicial = signal<SafeHtml>('');
+  private _textoEditado = '';
+
+  readonly fontes = ['Times New Roman', 'Arial', 'Calibri', 'Verdana'];
+  readonly tamanhos = [
+    { rotulo: '10', valor: '2' },
+    { rotulo: '12', valor: '3' },
+    { rotulo: '14', valor: '4' },
+    { rotulo: '18', valor: '5' }
+  ];
   readonly copiado = signal(false);
   readonly mensagem = signal('');
   readonly abertas = signal<Record<string, boolean>>({});
@@ -162,43 +171,42 @@ export class LaudoPage {
       if (chave in anterior.valores) valores[chave] = anterior.valores[chave];
     }
     this.estado.set({ ...novo, cabecalho: anterior.cabecalho, valores });
-    this.textoEditado.set(null);
+    this.htmlEditado.set(null);
   }
 
   // ----- texto, edição e cópia -----
 
   editar(): void {
-    this.textoEditado.set(this.textoAutomatico());
+    const html = formatar(this.resultado(), 'html');
+    this.htmlInicial.set(this._sanitizer.bypassSecurityTrustHtml(html));
+    this.htmlEditado.set(html);
+    this._textoEditado = this.textoAutomatico();
   }
 
   editando(evento: Event): void {
-    this.textoEditado.set((evento.target as HTMLTextAreaElement).value);
+    const el = evento.target as HTMLElement;
+    this.htmlEditado.set(el.innerHTML);
+    this._textoEditado = el.innerText;
     this.copiado.set(false);
   }
 
-  voltarAoAutomatico(): void {
-    this.textoEditado.set(null);
+  /** Comando da barra (negrito, alinhamento...). O mousedown é cancelado para não perder a seleção. */
+  formatarTexto(comando: string, valor?: string): void {
+    document.execCommand(comando, false, valor);
   }
 
-  private textoParaHtml(texto: string): string {
-    return texto
-      .split(/\n{2,}/)
-      .map((bloco, i) => {
-        const linhas = esc(bloco).replace(/\n/g, '<br>');
-        if (i === 0) return `<p style="text-align:center"><b>${linhas}</b></p>`;
-        if (bloco.startsWith('IMPRESSÃO DIAGNÓSTICA:')) {
-          const [titulo, ...resto] = linhas.split('<br>');
-          return `<p><b>${titulo}</b><br>${resto.join('<br>')}</p>`;
-        }
-        return `<p style="text-align:justify">${linhas}</p>`;
-      })
-      .join('\n');
+  valorEm(evento: Event): string {
+    return (evento.target as HTMLSelectElement).value;
+  }
+
+  voltarAoAutomatico(): void {
+    this.htmlEditado.set(null);
   }
 
   async copiar(): Promise<void> {
-    const editado = this.textoEditado();
-    const texto = editado ?? this.textoAutomatico();
-    const html = editado === null ? formatar(this.resultado(), 'html') : this.textoParaHtml(editado);
+    const editado = this.htmlEditado();
+    const texto = editado === null ? this.textoAutomatico() : this._textoEditado;
+    const html = editado ?? formatar(this.resultado(), 'html');
 
     const ok = await this._clipboard.copiar(texto, html);
     this.copiado.set(ok);
@@ -210,7 +218,7 @@ export class LaudoPage {
       return;
     }
     this.estado.set(criarEstado(this.template()));
-    this.textoEditado.set(null);
+    this.htmlEditado.set(null);
     this.abertas.set({});
     this.copiado.set(false);
   }

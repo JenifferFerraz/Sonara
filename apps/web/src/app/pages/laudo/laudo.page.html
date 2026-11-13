@@ -111,16 +111,46 @@
   <aside class="laudo" aria-label="Laudo">
     <div class="laudo-topo">
       <h2>Laudo</h2>
-      @if (textoEditado() === null) {
+      @if (htmlEditado() === null) {
         <button type="button" class="btn pequeno" (click)="editar()">Editar texto</button>
       }
     </div>
 
-    @if (textoEditado() !== null) {
+    @if (htmlEditado() !== null) {
       <div class="editado" role="status">
         Texto editado. <button type="button" class="link" (click)="voltarAoAutomatico()">Voltar ao automático?</button>
       </div>
-      <textarea class="editor" [value]="textoEditado()" (input)="editando($event)"></textarea>
+      <div class="barra" role="toolbar" aria-label="Formatação" (mousedown)="$event.preventDefault()">
+        <select aria-label="Fonte" (change)="formatarTexto('fontName', valorEm($event))" (mousedown)="$event.stopPropagation()">
+          @for (f of fontes; track f) {
+            <option [value]="f">{{ f }}</option>
+          }
+        </select>
+        <select aria-label="Tamanho" (change)="formatarTexto('fontSize', valorEm($event))" (mousedown)="$event.stopPropagation()">
+          @for (t of tamanhos; track t.valor) {
+            <option [value]="t.valor" [selected]="t.valor === '3'">{{ t.rotulo }}</option>
+          }
+        </select>
+        <button type="button" title="Negrito (Ctrl+B)" (click)="formatarTexto('bold')"><b>B</b></button>
+        <button type="button" title="Itálico (Ctrl+I)" (click)="formatarTexto('italic')"><i>I</i></button>
+        <button type="button" title="Sublinhado (Ctrl+U)" (click)="formatarTexto('underline')"><u>U</u></button>
+        <span class="sep"></span>
+        <button type="button" title="Alinhar à esquerda" (click)="formatarTexto('justifyLeft')">⯇</button>
+        <button type="button" title="Centralizar" (click)="formatarTexto('justifyCenter')">≡</button>
+        <button type="button" title="Alinhar à direita" (click)="formatarTexto('justifyRight')">⯈</button>
+        <button type="button" title="Justificar" (click)="formatarTexto('justifyFull')">☰</button>
+        <span class="sep"></span>
+        <button type="button" title="Desfazer (Ctrl+Z)" (click)="formatarTexto('undo')">↶</button>
+        <button type="button" title="Refazer (Ctrl+Y)" (click)="formatarTexto('redo')">↷</button>
+      </div>
+      <div
+        class="papel editor"
+        contenteditable="true"
+        role="textbox"
+        aria-multiline="true"
+        aria-label="Laudo editável"
+        [innerHTML]="htmlInicial()"
+        (input)="editando($event)"></div>
     } @else {
       <article class="papel" [innerHTML]="htmlLaudo()"></article>
     }
