@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: sonara-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: sonara
+      POSTGRES_PASSWORD: sonara
+      POSTGRES_DB: sonara
+    ports:
+      - '55432:5432'
+    volumes:
+      - sonara-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U sonara -d sonara']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  sonara-db-data:
