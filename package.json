@@ -1,0 +1,14 @@
+﻿{
+  "name": "sonara",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": ["apps/*", "libs/*"],
+  "scripts": {
+    "templates": "node libs/templates/scripts/gerar-transvaginal.mjs",
+    "test:engine": "npm run test -w @sonara/laudo-engine",
+    "dev:web": "npm run start -w web",
+    "dev:api": "npm run start:dev -w api",
+    "build:web": "npm run build -w web",
+    "build:api": "npm run build -w api"
+  }
+}
