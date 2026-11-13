@@ -1,0 +1,10 @@
+﻿{
+  "name": "@sonara/laudo-engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": { "test": "vitest run" },
+  "dependencies": { "json-logic-js": "^2.0.5" },
+  "devDependencies": { "@types/json-logic-js": "^2.0.8", "vitest": "^3.2.4" }
+}
