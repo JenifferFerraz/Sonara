@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum StatusAssinatura {
+  TRIAL
+  ACTIVE
+  SUSPENDED
+}
+
+// Conta = 1 médico.
+model User {
+  id               String           @id @default(uuid())
+  email            String           @unique
+  passwordHash     String           @map("password_hash")
+  name             String
+  cpf              String           @unique
+  crm              String
+  crmUf            String           @map("crm_uf")
+  emailVerifiedAt  DateTime?        @map("email_verified_at")
+  modulos          String[]         @default(["transvaginal"])
+  statusAssinatura StatusAssinatura @default(TRIAL) @map("status_assinatura")
+  createdAt        DateTime         @default(now()) @map("created_at")
+
+  devices       Device[]
+  refreshTokens RefreshToken[]
+
+  @@map("usuarios")
+}
+
+// Até 2 dispositivos ativos por conta.
+model Device {
+  id            String    @id @default(uuid())
+  userId        String    @map("user_id")
+  name          String
+  active        Boolean   @default(true)
+  lastSeenAt    DateTime  @default(now()) @map("last_seen_at")
+  deactivatedAt DateTime? @map("deactivated_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  refreshTokens RefreshToken[]
+
+  @@index([userId])
+  @@map("dispositivos")
+}
+
+// Refresh token com rotação; guardado só o hash.
+model RefreshToken {
+  id        String    @id @default(uuid())
+  userId    String    @map("user_id")
+  deviceId  String    @map("device_id")
+  tokenHash String    @map("token_hash")
+  expiresAt DateTime  @map("expires_at")
+  revokedAt DateTime? @map("revoked_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  device Device @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("tokens_refresh")
+}
