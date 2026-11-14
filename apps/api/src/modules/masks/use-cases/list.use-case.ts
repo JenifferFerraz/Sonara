@@ -23,8 +23,8 @@ export class ListMasksUseCase {
     const mascaras: MascaraAssinada[] = [];
     for (const arquivo of arquivos) {
       const json = await readFile(join(dir, arquivo), 'utf8');
-      const { id, versao } = JSON.parse(json) as { id: string; versao: string };
-      if (!modulos.includes(id)) continue;
+      const { id, versao, modulo } = JSON.parse(json) as { id: string; versao: string; modulo?: string };
+      if (!modulos.includes(modulo ?? id)) continue;
       mascaras.push({ id, versao, json, assinatura: this._signature.sign(json) });
     }
     return mascaras;

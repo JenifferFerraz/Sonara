@@ -10,7 +10,7 @@ export class InMemoryUsersRepository implements UsersRepository {
       id: randomUUID(),
       ...data,
       emailVerifiedAt: null,
-      modulos: ['transvaginal'],
+      modulos: ['abdome', 'pelve', 'tireoide', 'mamas'],
       statusAssinatura: 'TRIAL',
       createdAt: new Date(),
     };

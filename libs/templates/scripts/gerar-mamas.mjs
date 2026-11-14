@@ -137,6 +137,7 @@ const ectasias = [['anecoico', 'de conteúdo anecogênico'], ['espesso', 'de con
 const t = {
   id: 'mamas',
   versao: '0.1.0',
+  modulo: 'mamas',
   exame: 'Mamas',
   subtipo: 'Mamas',
   titulo: 'ULTRASSONOGRAFIA DE MAMAS',

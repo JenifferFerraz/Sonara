@@ -95,6 +95,7 @@ const nodulo = {
 const t = {
   id: 'tireoide',
   versao: '0.1.0',
+  modulo: 'tireoide',
   exame: 'Tireoide / Cervical',
   subtipo: 'Tireoide',
   titulo: 'ULTRASSONOGRAFIA DA TIREOIDE',

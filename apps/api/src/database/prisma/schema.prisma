@@ -23,7 +23,7 @@ model User {
   crm              String
   crmUf            String           @map("crm_uf")
   emailVerifiedAt  DateTime?        @map("email_verified_at")
-  modulos          String[]         @default(["transvaginal"])
+  modulos          String[]         @default(["abdome", "pelve", "tireoide", "mamas"])
   statusAssinatura StatusAssinatura @default(TRIAL) @map("status_assinatura")
   createdAt        DateTime         @default(now()) @map("created_at")
 

@@ -59,6 +59,7 @@ const rim = (k, lado) => {
 const t = {
   id: 'abdome-total',
   versao: '0.1.0',
+  modulo: 'abdome',
   exame: 'Abdome',
   subtipo: 'Abdome total',
   titulo: 'ULTRASSONOGRAFIA DO ABDOME TOTAL',

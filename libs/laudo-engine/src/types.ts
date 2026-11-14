@@ -113,6 +113,8 @@ export interface Aviso {
 export interface Template {
   id: string;
   versao: string;
+  /** Módulo da licença que libera esta máscara (abdome, pelve, tireoide, mamas). */
+  modulo?: string;
   /** Nome da aba do exame (vários subtipos podem dividir a mesma aba). */
   exame?: string;
   /** Nome do subtipo dentro da aba (ex.: Abdome total, Pelve transvaginal). */

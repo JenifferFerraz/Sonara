@@ -1,7 +1,8 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { Template, verificarMascara } from '@sonara/laudo-engine';
 import { templates } from '@sonara/templates';
 import { config } from '../config';
+import { LicencaService } from './licenca.service';
 
 /** Versões instaladas de uma máscara. As antigas ficam guardadas: o médico decide quando trocar. */
 export interface MascaraInstalada {
@@ -24,10 +25,15 @@ export class MascaraService {
 
   readonly instaladas = this._instaladas.asReadonly();
 
-  /** Máscaras em uso, uma por exame. */
-  readonly emUso = computed(() =>
-    Object.values(this._instaladas()).map(m => m.versoes[m.emUso])
-  );
+  private readonly _licenca = inject(LicencaService);
+
+  /** Máscaras em uso, uma por exame, só dos módulos que a licença libera. */
+  readonly emUso = computed(() => {
+    const modulos = this._licenca.modulos();
+    return Object.values(this._instaladas())
+      .map(m => m.versoes[m.emUso])
+      .filter(t => !t.modulo || modulos.includes(t.modulo));
+  });
 
   /** Máscaras com versão nova esperando decisão. */
   readonly pendencias = computed(() =>

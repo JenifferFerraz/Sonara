@@ -5,5 +5,5 @@ export const config = {
    * Chave pública Ed25519 (base64url) embutida no app: confere máscaras e licença sem internet.
    * Cole aqui o valor de LICENSE_PUBLIC_KEY (npm run keys, no apps/api).
    */
-  chavePublica: '',
+  chavePublica: 'qWpRDtX1mMPRxf-Eq9HFdJZJRLK4A6Ls_-1Pc1fYstk',
 };

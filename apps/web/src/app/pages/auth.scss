@@ -1,0 +1,54 @@
+:host {
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+}
+
+.cartao {
+  width: min(400px, 100%);
+  background: var(--sn-superficie);
+  border: 1px solid var(--sn-borda);
+  border-radius: var(--sn-raio);
+  padding: 28px 24px;
+  text-align: center;
+
+  &.largo { width: min(480px, 100%); }
+
+  h1 { margin: 10px 0 4px; font-size: 22px; color: var(--sn-primaria); }
+  .intro { margin: 0 0 14px; font-size: 13px; color: var(--sn-texto-suave); }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+  text-align: left;
+
+  label { display: flex; flex-direction: column; gap: 4px; font-weight: 600; font-size: 13px; }
+  input, select { font-weight: 400; padding: 9px 10px; }
+  .par { display: flex; gap: 12px; label { flex: 1; } .uf { flex: 0 0 90px; } }
+  .btn { margin-top: 4px; }
+}
+
+.erro {
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: var(--sn-alerta-fundo);
+  color: var(--sn-alerta);
+  font-size: 13px;
+}
+
+.aviso {
+  margin: 12px 0 0;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: var(--sn-aviso-fundo);
+  color: var(--sn-aviso);
+  font-size: 13px;
+}
+
+.rodape { margin: 16px 0 0; font-size: 13px; color: var(--sn-texto-suave); a { color: var(--sn-primaria); font-weight: 600; } }

@@ -1,6 +1,7 @@
 {
   "id": "pelvico",
   "versao": "0.1.0",
+  "modulo": "pelve",
   "exame": "Pelve",
   "subtipo": "Pélvico",
   "titulo": "ULTRASSONOGRAFIA PÉLVICA",

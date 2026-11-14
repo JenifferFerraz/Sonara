@@ -1,6 +1,7 @@
 {
   "id": "abdome-superior",
   "versao": "0.1.0",
+  "modulo": "abdome",
   "exame": "Abdome",
   "subtipo": "Abdome superior",
   "titulo": "ULTRASSONOGRAFIA DO ABDOME SUPERIOR",
