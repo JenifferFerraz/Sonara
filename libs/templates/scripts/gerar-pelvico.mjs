@@ -1,4 +1,4 @@
-// Gera libs/templates/src/pelve-suprapubica.json a partir da máscara transvaginal.
+// Gera libs/templates/src/pelvico.json a partir da máscara transvaginal.
 // RASCUNHO CLÍNICO: depende de revisão e assinatura do médico revisor.
 import transvaginal from './gerar-transvaginal.mjs';
 import { e, op, opcional, salvar } from './lib.mjs';
@@ -37,12 +37,12 @@ const bexiga = {
 // A bexiga abre o laudo: é a janela acústica do exame suprapúbico.
 const t = {
   ...transvaginal,
-  id: 'pelve-suprapubica',
+  id: 'pelvico',
   versao: '0.1.0',
-  subtipo: 'Pelve feminina suprapúbica',
-  titulo: 'ULTRASSONOGRAFIA PÉLVICA (VIA SUPRAPÚBICA)',
+  subtipo: 'Pélvico',
+  titulo: 'ULTRASSONOGRAFIA PÉLVICA',
   mudancas: {
-    url: 'https://sonara.example/mudancas/pelve-suprapubica/0.1.0', // TODO: link real do changelog aprovado
+    url: 'https://sonara.example/mudancas/pelvico/0.1.0', // TODO: link real do changelog aprovado
     resumo: 'Primeira versão da máscara (rascunho, sem revisão médica).',
   },
   secoes: [secoes[0], bexiga, ...secoes.slice(1)],

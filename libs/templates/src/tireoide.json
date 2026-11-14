@@ -1,0 +1,902 @@
+{
+  "id": "tireoide",
+  "versao": "0.1.0",
+  "exame": "Tireoide / Cervical",
+  "subtipo": "Tireoide",
+  "titulo": "ULTRASSONOGRAFIA DA TIREOIDE",
+  "mudancas": {
+    "url": "https://sonara.example/mudancas/tireoide/0.1.0",
+    "resumo": "Primeira versão da máscara (rascunho, sem revisão médica)."
+  },
+  "referencias": {
+    "tirads": "ACR TI-RADS (2017), somente cálculo e aviso"
+  },
+  "secoes": [
+    {
+      "id": "cirurgias",
+      "titulo": "Cirurgias",
+      "campos": [
+        {
+          "id": "cirurgia",
+          "tipo": "seg",
+          "rotulo": "Cirurgia da tireoide",
+          "padrao": "nenhuma",
+          "opcoes": [
+            {
+              "valor": "nenhuma",
+              "rotulo": "Nenhuma",
+              "laudo": ""
+            },
+            {
+              "valor": "total",
+              "rotulo": "Tireoidectomia total",
+              "laudo": "Tireoide não visualizada (status pós-tireoidectomia total).",
+              "impressao": "Status pós-tireoidectomia total."
+            },
+            {
+              "valor": "hemi_d",
+              "rotulo": "Hemitireoidectomia direita",
+              "laudo": "Lobo direito não visualizado (status pós-hemitireoidectomia direita).",
+              "impressao": "Status pós-hemitireoidectomia direita."
+            },
+            {
+              "valor": "hemi_e",
+              "rotulo": "Hemitireoidectomia esquerda",
+              "laudo": "Lobo esquerdo não visualizado (status pós-hemitireoidectomia esquerda).",
+              "impressao": "Status pós-hemitireoidectomia esquerda."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "glandula",
+      "titulo": "Glândula",
+      "campos": [
+        {
+          "id": "tam",
+          "tipo": "seg",
+          "rotulo": "Dimensões",
+          "padrao": "normais",
+          "showIf": {
+            "==": [
+              {
+                "var": "cirurgia"
+              },
+              "nenhuma"
+            ]
+          },
+          "opcoes": [
+            {
+              "valor": "normais",
+              "rotulo": "Normais",
+              "laudo": "Tireoide tópica, com dimensões normais e contornos regulares."
+            },
+            {
+              "valor": "aumentadas",
+              "rotulo": "Aumentadas",
+              "laudo": "Tireoide tópica, com dimensões aumentadas e contornos regulares.",
+              "impressao": "Aumento volumétrico da tireoide."
+            },
+            {
+              "valor": "reduzidas",
+              "rotulo": "Reduzidas",
+              "laudo": "Tireoide tópica, com dimensões reduzidas e contornos regulares.",
+              "impressao": "Redução volumétrica da tireoide."
+            }
+          ]
+        },
+        {
+          "id": "eco",
+          "tipo": "seg",
+          "rotulo": "Ecotextura",
+          "padrao": "normal",
+          "showIf": {
+            "!=": [
+              {
+                "var": "cirurgia"
+              },
+              "total"
+            ]
+          },
+          "opcoes": [
+            {
+              "valor": "normal",
+              "rotulo": "Homogênea",
+              "laudo": "A ecotextura é homogênea."
+            },
+            {
+              "valor": "difusa",
+              "rotulo": "Alteração difusa inespecífica",
+              "laudo": "Ecotextura heterogênea, com alteração textural difusa inespecífica.",
+              "impressao": "Alteração textural difusa da tireoide."
+            },
+            {
+              "valor": "tireoidite",
+              "rotulo": "Padrão de tireoidite",
+              "laudo": "Ecotextura heterogênea difusa, com aspecto que pode corresponder a tireoidite.",
+              "impressao": "Alteração textural difusa, a correlacionar com tireoidite."
+            }
+          ]
+        },
+        {
+          "id": "doppler",
+          "tipo": "check",
+          "rotulo": "Descrever Doppler do parênquima",
+          "achado": "Descrever Doppler do parênquima",
+          "laudo": "Ao estudo Doppler, o parênquima apresenta {doppler_tipo}.",
+          "showIf": {
+            "!=": [
+              {
+                "var": "cirurgia"
+              },
+              "total"
+            ]
+          }
+        },
+        {
+          "id": "doppler_tipo",
+          "tipo": "select",
+          "rotulo": "Doppler",
+          "padrao": "normal",
+          "opcoes": [
+            {
+              "valor": "normal",
+              "rotulo": "normal",
+              "laudo": "fluxo vascular habitual"
+            },
+            {
+              "valor": "hiper",
+              "rotulo": "hiperfluxo difuso",
+              "laudo": "hiperfluxo difuso"
+            },
+            {
+              "valor": "hipo",
+              "rotulo": "hipofluxo difuso",
+              "laudo": "hipofluxo difuso"
+            }
+          ],
+          "showIf": {
+            "var": "doppler"
+          }
+        }
+      ]
+    },
+    {
+      "id": "medidas",
+      "titulo": "Medidas",
+      "campos": [
+        {
+          "id": "lobo_d",
+          "tipo": "dims",
+          "rotulo": "Lobo direito (L × AP × T, cm)",
+          "obrigatorio": true,
+          "showIf": {
+            "and": [
+              {
+                "!=": [
+                  {
+                    "var": "cirurgia"
+                  },
+                  "total"
+                ]
+              },
+              {
+                "!=": [
+                  {
+                    "var": "cirurgia"
+                  },
+                  "hemi_d"
+                ]
+              }
+            ]
+          },
+          "laudo": "O lobo direito mede {lobo_d.a} x {lobo_d.b} x {lobo_d.c} cm."
+        },
+        {
+          "id": "lobo_e",
+          "tipo": "dims",
+          "rotulo": "Lobo esquerdo (L × AP × T, cm)",
+          "obrigatorio": true,
+          "showIf": {
+            "and": [
+              {
+                "!=": [
+                  {
+                    "var": "cirurgia"
+                  },
+                  "total"
+                ]
+              },
+              {
+                "!=": [
+                  {
+                    "var": "cirurgia"
+                  },
+                  "hemi_e"
+                ]
+              }
+            ]
+          },
+          "laudo": "O lobo esquerdo mede {lobo_e.a} x {lobo_e.b} x {lobo_e.c} cm."
+        },
+        {
+          "id": "istmo",
+          "tipo": "num",
+          "rotulo": "Istmo (espessura, cm)",
+          "unidade": "cm",
+          "obrigatorio": true,
+          "showIf": {
+            "and": [
+              {
+                "==": [
+                  {
+                    "var": "cirurgia"
+                  },
+                  "nenhuma"
+                ]
+              },
+              {
+                "!": [
+                  {
+                    "var": "istmo_fil"
+                  }
+                ]
+              }
+            ]
+          },
+          "laudo": "O istmo tem espessura de {istmo} cm."
+        },
+        {
+          "id": "istmo_fil",
+          "tipo": "check",
+          "rotulo": "Istmo filiforme (não mensurável)",
+          "showIf": {
+            "==": [
+              {
+                "var": "cirurgia"
+              },
+              "nenhuma"
+            ]
+          },
+          "laudo": "O istmo é filiforme, não mensurável."
+        },
+        {
+          "id": "vol_total",
+          "tipo": "calc",
+          "rotulo": "Volume tireoidiano",
+          "casas": 1,
+          "showIf": {
+            "==": [
+              {
+                "var": "cirurgia"
+              },
+              "nenhuma"
+            ]
+          },
+          "expressao": {
+            "+": [
+              {
+                "var": "lobo_d.vol"
+              },
+              {
+                "var": "lobo_e.vol"
+              }
+            ]
+          },
+          "laudo": "Volume tireoidiano estimado em {vol_total} cm³."
+        }
+      ]
+    },
+    {
+      "id": "nodulos",
+      "titulo": "Nódulos",
+      "campos": [
+        {
+          "id": "nod_status",
+          "tipo": "seg",
+          "rotulo": "Nódulos",
+          "padrao": "ausentes",
+          "showIf": {
+            "!=": [
+              {
+                "var": "cirurgia"
+              },
+              "total"
+            ]
+          },
+          "opcoes": [
+            {
+              "valor": "ausentes",
+              "rotulo": "Ausentes",
+              "laudo": "Não se observam lesões nodulares."
+            },
+            {
+              "valor": "presentes",
+              "rotulo": "Presentes",
+              "laudo": ""
+            }
+          ]
+        },
+        {
+          "id": "nodulos",
+          "tipo": "list",
+          "rotulo": "Nódulo",
+          "obrigatorio": true,
+          "showIf": {
+            "==": [
+              {
+                "var": "nod_status"
+              },
+              "presentes"
+            ]
+          },
+          "tirads": {
+            "composicao": "composicao",
+            "ecogenicidade": "eco",
+            "forma": "forma",
+            "margem": "margem",
+            "foco": "foco",
+            "medidas": [
+              "d1",
+              "d2",
+              "d3"
+            ],
+            "modo": "modo"
+          },
+          "itens": [
+            {
+              "id": "d1",
+              "tipo": "num",
+              "rotulo": "Maior eixo (cm)",
+              "unidade": "cm",
+              "obrigatorio": true
+            },
+            {
+              "id": "d2",
+              "tipo": "num",
+              "rotulo": "Eixo 2 (cm)",
+              "unidade": "cm",
+              "obrigatorio": true
+            },
+            {
+              "id": "d3",
+              "tipo": "num",
+              "rotulo": "Eixo 3 (cm)",
+              "unidade": "cm",
+              "obrigatorio": true
+            },
+            {
+              "id": "local",
+              "tipo": "select",
+              "rotulo": "Localização",
+              "padrao": "ld_medio",
+              "opcoes": [
+                {
+                  "valor": "ld_sup",
+                  "rotulo": "Lobo direito, terço superior",
+                  "laudo": "terço superior do lobo direito"
+                },
+                {
+                  "valor": "ld_medio",
+                  "rotulo": "Lobo direito, terço médio",
+                  "laudo": "terço médio do lobo direito"
+                },
+                {
+                  "valor": "ld_inf",
+                  "rotulo": "Lobo direito, terço inferior",
+                  "laudo": "terço inferior do lobo direito"
+                },
+                {
+                  "valor": "le_sup",
+                  "rotulo": "Lobo esquerdo, terço superior",
+                  "laudo": "terço superior do lobo esquerdo"
+                },
+                {
+                  "valor": "le_medio",
+                  "rotulo": "Lobo esquerdo, terço médio",
+                  "laudo": "terço médio do lobo esquerdo"
+                },
+                {
+                  "valor": "le_inf",
+                  "rotulo": "Lobo esquerdo, terço inferior",
+                  "laudo": "terço inferior do lobo esquerdo"
+                },
+                {
+                  "valor": "istmo",
+                  "rotulo": "Istmo",
+                  "laudo": "istmo"
+                }
+              ]
+            },
+            {
+              "id": "composicao",
+              "tipo": "select",
+              "rotulo": "Composição",
+              "padrao": "solido",
+              "opcoes": [
+                {
+                  "valor": "solido",
+                  "rotulo": "Sólido",
+                  "laudo": "sólido"
+                },
+                {
+                  "valor": "misto",
+                  "rotulo": "Misto (sólido-cístico)",
+                  "laudo": "sólido-cístico"
+                },
+                {
+                  "valor": "cistico",
+                  "rotulo": "Cístico",
+                  "laudo": "cístico"
+                },
+                {
+                  "valor": "espongiforme",
+                  "rotulo": "Espongiforme",
+                  "laudo": "espongiforme"
+                }
+              ]
+            },
+            {
+              "id": "eco",
+              "tipo": "select",
+              "rotulo": "Ecogenicidade",
+              "padrao": "hipoecoico",
+              "opcoes": [
+                {
+                  "valor": "anecoico",
+                  "rotulo": "Anecogênico",
+                  "laudo": "anecogênico"
+                },
+                {
+                  "valor": "iso_hiper",
+                  "rotulo": "Iso ou hiperecogênico",
+                  "laudo": "iso ou hiperecogênico"
+                },
+                {
+                  "valor": "hipoecoico",
+                  "rotulo": "Hipoecogênico",
+                  "laudo": "hipoecogênico"
+                },
+                {
+                  "valor": "muito_hipoecoico",
+                  "rotulo": "Acentuadamente hipoecogênico",
+                  "laudo": "acentuadamente hipoecogênico"
+                }
+              ]
+            },
+            {
+              "id": "forma",
+              "tipo": "select",
+              "rotulo": "Forma",
+              "padrao": "mais_largo",
+              "opcoes": [
+                {
+                  "valor": "mais_largo",
+                  "rotulo": "Mais largo que alto",
+                  "laudo": "mais largo do que alto"
+                },
+                {
+                  "valor": "mais_alto",
+                  "rotulo": "Mais alto que largo",
+                  "laudo": "mais alto do que largo"
+                }
+              ]
+            },
+            {
+              "id": "margem",
+              "tipo": "select",
+              "rotulo": "Margens",
+              "padrao": "lisa",
+              "opcoes": [
+                {
+                  "valor": "lisa",
+                  "rotulo": "Lisas",
+                  "laudo": "contornos regulares"
+                },
+                {
+                  "valor": "mal_definida",
+                  "rotulo": "Mal definidas",
+                  "laudo": "margens mal definidas"
+                },
+                {
+                  "valor": "lobulada_irregular",
+                  "rotulo": "Lobuladas ou irregulares",
+                  "laudo": "contornos lobulados ou irregulares"
+                },
+                {
+                  "valor": "extensao",
+                  "rotulo": "Com extensão extratireoidiana",
+                  "laudo": "margens com extensão extratireoidiana"
+                }
+              ]
+            },
+            {
+              "id": "foco",
+              "tipo": "select",
+              "rotulo": "Focos ecogênicos",
+              "padrao": "nenhum",
+              "opcoes": [
+                {
+                  "valor": "nenhum",
+                  "rotulo": "Nenhum",
+                  "laudo": ""
+                },
+                {
+                  "valor": "cauda_cometa",
+                  "rotulo": "Artefato em cauda de cometa",
+                  "laudo": ", com artefato em cauda de cometa"
+                },
+                {
+                  "valor": "macro",
+                  "rotulo": "Macrocalcificações",
+                  "laudo": ", com macrocalcificações"
+                },
+                {
+                  "valor": "periferica",
+                  "rotulo": "Calcificações periféricas",
+                  "laudo": ", com calcificações periféricas"
+                },
+                {
+                  "valor": "puntiforme",
+                  "rotulo": "Focos ecogênicos puntiformes",
+                  "laudo": ", com focos ecogênicos puntiformes"
+                }
+              ]
+            },
+            {
+              "id": "modo",
+              "tipo": "select",
+              "rotulo": "TI-RADS no laudo",
+              "padrao": "nc",
+              "opcoes": [
+                {
+                  "valor": "nc",
+                  "rotulo": "Não citar",
+                  "laudo": ""
+                },
+                {
+                  "valor": "auto",
+                  "rotulo": "Citar o calculado"
+                },
+                {
+                  "valor": "TR1",
+                  "rotulo": "Citar TR1 (manual)",
+                  "laudo": ", ACR TI-RADS 1"
+                },
+                {
+                  "valor": "TR2",
+                  "rotulo": "Citar TR2 (manual)",
+                  "laudo": ", ACR TI-RADS 2"
+                },
+                {
+                  "valor": "TR3",
+                  "rotulo": "Citar TR3 (manual)",
+                  "laudo": ", ACR TI-RADS 3"
+                },
+                {
+                  "valor": "TR4",
+                  "rotulo": "Citar TR4 (manual)",
+                  "laudo": ", ACR TI-RADS 4"
+                },
+                {
+                  "valor": "TR5",
+                  "rotulo": "Citar TR5 (manual)",
+                  "laudo": ", ACR TI-RADS 5"
+                }
+              ]
+            }
+          ],
+          "laudoItem": "Nódulo {composicao}, {eco}, {forma}, com {margem}{foco}, situado no {local}, medindo {d1} x {d2} x {d3} cm{modo}.",
+          "impressaoItem": "Nódulo tireoidiano no {local}, medindo {d1} x {d2} x {d3} cm{modo}.",
+          "laudoMultiplos": "Múltiplos nódulos tireoidianos, o maior com {nodulos.maior} cm.",
+          "impressaoMultiplos": "Nódulos tireoidianos."
+        },
+        {
+          "id": "coloide",
+          "tipo": "check",
+          "rotulo": "Cistos coloides",
+          "achado": "Cistos coloides",
+          "laudo": "Cistos coloides esparsos, o maior com {coloide_max} cm.",
+          "showIf": {
+            "!=": [
+              {
+                "var": "cirurgia"
+              },
+              "total"
+            ]
+          }
+        },
+        {
+          "id": "coloide_max",
+          "tipo": "num",
+          "rotulo": "Maior (cm)",
+          "unidade": "cm",
+          "obrigatorio": true,
+          "showIf": {
+            "var": "coloide"
+          }
+        }
+      ]
+    },
+    {
+      "id": "linfonodos",
+      "titulo": "Linfonodos cervicais",
+      "campos": [
+        {
+          "id": "linf_status",
+          "tipo": "seg",
+          "rotulo": "Linfonodos",
+          "padrao": "ausentes",
+          "opcoes": [
+            {
+              "valor": "ausentes",
+              "rotulo": "Sem linfonodomegalias",
+              "laudo": "Ausência de linfonodomegalias cervicais."
+            },
+            {
+              "valor": "presentes",
+              "rotulo": "Linfonodomegalia",
+              "laudo": ""
+            }
+          ]
+        },
+        {
+          "id": "linfonodos",
+          "tipo": "list",
+          "rotulo": "Linfonodo",
+          "obrigatorio": true,
+          "showIf": {
+            "==": [
+              {
+                "var": "linf_status"
+              },
+              "presentes"
+            ]
+          },
+          "itens": [
+            {
+              "id": "d1",
+              "tipo": "num",
+              "rotulo": "Maior eixo (cm)",
+              "unidade": "cm",
+              "obrigatorio": true
+            },
+            {
+              "id": "d2",
+              "tipo": "num",
+              "rotulo": "Menor eixo (cm)",
+              "unidade": "cm",
+              "obrigatorio": true
+            },
+            {
+              "id": "nivel",
+              "tipo": "select",
+              "rotulo": "Nível",
+              "padrao": "II",
+              "opcoes": [
+                {
+                  "valor": "IA",
+                  "rotulo": "Nível IA",
+                  "laudo": "IA"
+                },
+                {
+                  "valor": "IB",
+                  "rotulo": "Nível IB",
+                  "laudo": "IB"
+                },
+                {
+                  "valor": "II",
+                  "rotulo": "Nível II",
+                  "laudo": "II"
+                },
+                {
+                  "valor": "III",
+                  "rotulo": "Nível III",
+                  "laudo": "III"
+                },
+                {
+                  "valor": "IV",
+                  "rotulo": "Nível IV",
+                  "laudo": "IV"
+                },
+                {
+                  "valor": "V",
+                  "rotulo": "Nível V",
+                  "laudo": "V"
+                },
+                {
+                  "valor": "VI",
+                  "rotulo": "Nível VI",
+                  "laudo": "VI"
+                }
+              ]
+            },
+            {
+              "id": "lado",
+              "tipo": "select",
+              "rotulo": "Lado",
+              "padrao": "direito",
+              "opcoes": [
+                {
+                  "valor": "direito",
+                  "rotulo": "Direito",
+                  "laudo": "à direita"
+                },
+                {
+                  "valor": "esquerdo",
+                  "rotulo": "Esquerdo",
+                  "laudo": "à esquerda"
+                }
+              ]
+            },
+            {
+              "id": "aspecto",
+              "tipo": "select",
+              "rotulo": "Aspecto",
+              "padrao": "habitual",
+              "opcoes": [
+                {
+                  "valor": "habitual",
+                  "rotulo": "Ovalado, hilo preservado",
+                  "laudo": "de aspecto ovalado, com hilo gorduroso preservado"
+                },
+                {
+                  "valor": "alterado",
+                  "rotulo": "Arredondado, sem hilo",
+                  "laudo": "arredondado, com perda do hilo gorduroso"
+                },
+                {
+                  "valor": "hipoecoico",
+                  "rotulo": "Hipoecogênico",
+                  "laudo": "hipoecogênico"
+                }
+              ]
+            }
+          ],
+          "laudoItem": "Linfonodo {aspecto}, no nível {nivel} {lado}, medindo {d1} x {d2} cm.",
+          "impressaoItem": "Linfonodomegalia cervical {lado}.",
+          "laudoMultiplos": "Múltiplos linfonodos cervicais, o maior com {linfonodos.maior} cm.",
+          "impressaoMultiplos": "Linfonodomegalias cervicais."
+        }
+      ]
+    },
+    {
+      "id": "paratireoides",
+      "titulo": "Paratireoides",
+      "campos": [
+        {
+          "id": "paratireoides",
+          "tipo": "check",
+          "rotulo": "Citar ausência de nódulos nas paratireoides",
+          "achado": "Citar ausência de nódulos nas paratireoides",
+          "laudo": "Ausência de nódulos na topografia das paratireoides."
+        }
+      ]
+    }
+  ],
+  "avisos": [
+    {
+      "id": "aviso_mais_de_4_nodulos",
+      "mensagem": "Mais de 4 nódulos descritos. Considere \"múltiplos nódulos, o maior com...\" para um laudo mais objetivo.",
+      "se": {
+        "and": [
+          {
+            "==": [
+              {
+                "var": "nod_status"
+              },
+              "presentes"
+            ]
+          },
+          {
+            "!": [
+              {
+                "var": "nodulos.multiplos"
+              }
+            ]
+          },
+          {
+            ">": [
+              {
+                "var": "nodulos.n"
+              },
+              4
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "aviso_volume_fora_da_faixa",
+      "mensagem": "Volume tireoidiano fora da faixa de referência usada (10 a 15 cm³ em mulheres; 12 a 18 cm³ em homens). Valores a validar com o médico revisor. O sistema não conclui nada a partir disso.",
+      "se": {
+        "and": [
+          {
+            "==": [
+              {
+                "var": "cirurgia"
+              },
+              "nenhuma"
+            ]
+          },
+          {
+            "!!": [
+              {
+                "var": "vol_total"
+              }
+            ]
+          },
+          {
+            "or": [
+              {
+                "and": [
+                  {
+                    "==": [
+                      {
+                        "var": "sexo"
+                      },
+                      "F"
+                    ]
+                  },
+                  {
+                    "or": [
+                      {
+                        "<": [
+                          {
+                            "var": "vol_total"
+                          },
+                          10
+                        ]
+                      },
+                      {
+                        ">": [
+                          {
+                            "var": "vol_total"
+                          },
+                          15
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "and": [
+                  {
+                    "==": [
+                      {
+                        "var": "sexo"
+                      },
+                      "M"
+                    ]
+                  },
+                  {
+                    "or": [
+                      {
+                        "<": [
+                          {
+                            "var": "vol_total"
+                          },
+                          12
+                        ]
+                      },
+                      {
+                        ">": [
+                          {
+                            "var": "vol_total"
+                          },
+                          18
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

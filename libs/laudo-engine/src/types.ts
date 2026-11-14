@@ -52,6 +52,21 @@ export interface Campo {
   /** Rótulo do achado no diálogo "Adicionar achado". Sem ele, o campo fica sempre na tela. */
   achado?: string;
   impressao?: string;
+  /**
+   * Só tipo list: liga os sub-campos de cada item ao cálculo ACR TI-RADS.
+   * Os valores das opções devem ser os do `tirads.ts` (ex.: solido, hipoecoico, mais_alto).
+   */
+  tirads?: {
+    composicao: string;
+    ecogenicidade: string;
+    forma: string;
+    margem: string;
+    foco: string;
+    /** Sub-campos numéricos (cm); vale o maior. */
+    medidas: string[];
+    /** Sub-campo select: nc, auto (usa o cálculo) ou TR1 a TR5 (escolha manual). */
+    modo: string;
+  };
   /** Só tipo list: sub-campos de cada item e frases. */
   itens?: Campo[];
   laudoItem?: string;

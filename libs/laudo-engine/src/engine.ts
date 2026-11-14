@@ -1,5 +1,7 @@
 import jsonLogic from 'json-logic-js';
 import { FALTA, formatarNumero, lerNumero, volume } from './numeros';
+import { calcularTirads } from './tirads';
+import type { Composicao, Ecogenicidade, Forma, Foco, Margem, Nodulo } from './tirads';
 import type {
   Alerta, Campo, Dims, Estado, ItemLista, ListaValor, Mudanca, Preferencias, Resultado, Template, Variante,
 } from './types';
@@ -172,7 +174,14 @@ export function gerar(template: Template, estado: Estado, preferencias: Preferen
   for (const secao of template.secoes) {
     const frasesSecao: string[] = [];
     for (const c of secao.campos) {
-      if (c.tipo === 'calc' || !visivel(c, logica)) continue;
+      if (c.tipo === 'calc') {
+        // Campo calculado com frase (ex.: volume total da tireoide).
+        if (visivel(c, logica) && c.laudo) {
+          frasesSecao.push(interpolar(frase(c.id, c.laudo, c.variantes, preferencias) ?? c.laudo, texto));
+        }
+        continue;
+      }
+      if (!visivel(c, logica)) continue;
       const v = estado.valores[c.id];
       const naoCitar = Boolean(estado.valores[`${c.id}__nc`]);
 
@@ -228,6 +237,25 @@ export function gerar(template: Template, estado: Estado, preferencias: Preferen
           }
           l.itens.forEach((item, i) => {
             const ictx = contextoItem(c, item);
+            if (c.tirads) {
+              const r = tiradsDoItem(c.tirads, item);
+              if (item[c.tirads.modo] === 'auto') {
+                ictx[c.tirads.modo] = r ? `, ACR TI-RADS ${r.nivel.slice(2)}` : '';
+              }
+              if (r) {
+                const conduta =
+                  r.conduta === 'paaf'
+                    ? 'a tabela indica PAAF para este tamanho'
+                    : r.conduta === 'seguimento'
+                      ? 'a tabela indica seguimento por imagem para este tamanho'
+                      : 'a tabela não indica PAAF nem seguimento para este tamanho';
+                alertas.push({
+                  campo: `${c.id}[${i}].tirads`,
+                  tipo: 'referencia',
+                  mensagem: `${c.rotulo} ${i + 1}: ACR TI-RADS calculado ${r.nivel} (${r.pontos} ponto${r.pontos === 1 ? '' : 's'}); ${conduta}. A conduta é do médico e só entra no laudo se você a escrever.`,
+                });
+              }
+            }
             for (const sub of c.itens ?? []) {
               if (sub.obrigatorio && sub.tipo === 'num' && lerNumero(item[sub.id]) === null)
                 alertas.push({
@@ -303,4 +331,24 @@ export function camposVisiveis(template: Template, estado: Estado): Set<string> 
   const ids = new Set<string>();
   for (const s of template.secoes) for (const c of s.campos) if (visivel(c, logica)) ids.add(c.id);
   return ids;
+}
+
+/** Monta o nódulo ACR a partir dos sub-campos do item; null se faltar dado ou valor inválido. */
+function tiradsDoItem(m: NonNullable<Campo['tirads']>, item: ItemLista) {
+  const medidas = m.medidas.map((id) => lerNumero(item[id])).filter((x): x is number => x !== null);
+  if (medidas.length === 0) return null;
+  const nodulo: Nodulo = {
+    composicao: item[m.composicao] as Composicao,
+    ecogenicidade: item[m.ecogenicidade] as Ecogenicidade,
+    forma: item[m.forma] as Forma,
+    margem: item[m.margem] as Margem,
+    focos: item[m.foco] ? [item[m.foco] as Foco] : [],
+    maiorCm: Math.max(...medidas),
+  };
+  try {
+    const r = calcularTirads(nodulo);
+    return Number.isFinite(r.pontos) ? r : null;
+  } catch {
+    return null;
+  }
 }

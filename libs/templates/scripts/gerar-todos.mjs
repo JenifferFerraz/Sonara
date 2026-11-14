@@ -2,4 +2,5 @@
 import './gerar-transvaginal.mjs';
 import './gerar-abdome-total.mjs';
 import './gerar-abdome-superior.mjs';
-import './gerar-pelve-suprapubica.mjs';
+import './gerar-pelvico.mjs';
+import './gerar-tireoide.mjs';

@@ -62,7 +62,7 @@ const t = {
   id: 'transvaginal',
   versao: '0.1.0',
   exame: 'Pelve',
-  subtipo: 'Pelve feminina transvaginal',
+  subtipo: 'Transvaginal',
   titulo: 'ULTRASSONOGRAFIA PÉLVICA TRANSVAGINAL',
   mudancas: {
     url: 'https://sonara.example/mudancas/transvaginal/0.1.0', // TODO: link real do changelog aprovado

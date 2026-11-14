@@ -4,13 +4,13 @@ import { aplicar, camposVazios, criarEstado, formatar, gerar } from '../src';
 import type { Estado, Template } from '../src';
 
 const t = JSON.parse(
-  readFileSync(new URL('../../templates/src/pelve-suprapubica.json', import.meta.url), 'utf8'),
+  readFileSync(new URL('../../templates/src/pelvico.json', import.meta.url), 'utf8'),
 ) as Template;
 
 const com = (e: Estado, id: string, valor: unknown) => aplicar(e, { tipo: 'campo', id, valor });
 const ids = new Set(t.secoes.flatMap(s => s.campos.map(c => c.id)));
 
-describe('pelve suprapubica mask', () => {
+describe('pelvico mask', () => {
   it('opens with the bladder and keeps uterus and ovaries', () => {
     expect(t.secoes[1].id).toBe('bexiga');
     for (const id of ['utero', 'ovd', 'ove', 'liquido']) expect(ids.has(id)).toBe(true);
