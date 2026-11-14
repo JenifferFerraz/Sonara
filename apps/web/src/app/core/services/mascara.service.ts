@@ -34,7 +34,7 @@ export class MascaraService {
     const modulos = this._licenca.modulos();
     return Object.values(this._instaladas())
       .map(m => m.versoes[m.emUso])
-      .filter(t => !t.modulo || modulos.includes(t.modulo));
+      .filter(t => !config.exigirLogin || !t.modulo || modulos.includes(t.modulo));
   });
 
   /** Máscaras com versão nova esperando decisão. */

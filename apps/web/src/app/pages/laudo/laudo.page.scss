@@ -60,6 +60,17 @@ label span { font-size: 12px; color: var(--sn-texto-suave); }
     }
   }
 
+  /* Botão de ação dentro das abas: não herda o visual de aba. */
+  button.btn {
+    border: 1px solid var(--sn-borda);
+    background: var(--sn-superficie);
+    color: var(--sn-primaria);
+    border-radius: var(--sn-raio);
+    padding: 3px 10px;
+    margin: 0 8px 6px 0;
+    font-size: 12px;
+  }
+
   .espaco { flex: 1; }
   .versao { display: flex; gap: 6px; align-items: center; padding-bottom: 6px; }
   .link-mudancas { padding-bottom: 6px; font-size: 12px; color: var(--sn-primaria); }

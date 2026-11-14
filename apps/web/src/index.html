@@ -7,6 +7,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#11534b">
   <link rel="icon" type="image/svg+xml" href="logo-icone.svg">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Sonara">
+  <meta name="description" content="Laudos de ultrassom: preencha as medidas e os achados e o Sonara redige o laudo.">
+  <script>
+    // O navegador dispara este evento uma só vez, cedo. Guardamos para o botão "Instalar" usar depois.
+    window.addEventListener('beforeinstallprompt', function (e) {
+      e.preventDefault();
+      window.__sonaraInstalar = e;
+      window.dispatchEvent(new Event('sonara:instalavel'));
+    });
+  </script>
 </head>
 <body>
   <app-root></app-root>

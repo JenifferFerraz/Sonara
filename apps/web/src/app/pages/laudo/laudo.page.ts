@@ -18,11 +18,12 @@ import { ClipboardService } from '../../core/services/clipboard.service';
 import { MascaraService } from '../../core/services/mascara.service';
 import { PreferenciasService } from '../../core/services/preferencias.service';
 import { CampoComponent, MudancaCampo } from '../../shared/campo/campo.component';
+import { InstalarComponent } from '../../shared/instalar/instalar.component';
 import { aplicarMascara, mascaraInteiro } from '../../shared/mascaras';
 
 @Component({
   selector: 'app-laudo-page',
-  imports: [CampoComponent],
+  imports: [CampoComponent, InstalarComponent],
   templateUrl: './laudo.page.html',
   styleUrl: './laudo.page.scss'
 })
