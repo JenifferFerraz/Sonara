@@ -15,7 +15,8 @@ export interface MascaraInstalada {
 
 type Instaladas = Record<string, MascaraInstalada>;
 
-const CHAVE = 'sonara.mascaras';
+// v2: descarta máscaras instaladas com ids antigos (ex.: pelve-suprapubica, hoje pelvico).
+const CHAVE = 'sonara.mascaras.v2';
 
 @Injectable({ providedIn: 'root' })
 export class MascaraService {

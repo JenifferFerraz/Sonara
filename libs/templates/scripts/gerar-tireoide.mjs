@@ -175,6 +175,11 @@ const t = {
       id: 'nodulos', titulo: 'Nódulos',
       campos: [
         nodulo,
+      ],
+    },
+    {
+      id: 'coloides', titulo: 'Cistos coloides',
+      campos: [
         ...opcional('coloide', 'Cistos coloides', [
           num('coloide_max', 'Maior (cm)'),
         ], { laudo: 'Cistos coloides esparsos, o maior com {coloide_max} cm.', showIf: { '!=': [v('cirurgia'), 'total'] } }),

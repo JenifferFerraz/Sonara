@@ -2,6 +2,7 @@ export * from './types';
 export * from './engine';
 export * from './numeros';
 export * from './tirads';
+export * from './birads';
 export * from './seguranca';
 
 import type { Estado, LaudoRepository } from './types';

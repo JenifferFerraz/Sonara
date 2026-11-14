@@ -599,7 +599,13 @@
           "impressaoItem": "Nódulo tireoidiano no {local}, medindo {d1} x {d2} x {d3} cm{modo}.",
           "laudoMultiplos": "Múltiplos nódulos tireoidianos, o maior com {nodulos.maior} cm.",
           "impressaoMultiplos": "Nódulos tireoidianos."
-        },
+        }
+      ]
+    },
+    {
+      "id": "coloides",
+      "titulo": "Cistos coloides",
+      "campos": [
         {
           "id": "coloide",
           "tipo": "check",

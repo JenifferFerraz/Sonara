@@ -1,6 +1,7 @@
 import type { Template } from '@sonara/laudo-engine';
 import abdomeSuperior from './abdome-superior.json';
 import abdomeTotal from './abdome-total.json';
+import mamas from './mamas.json';
 import pelvico from './pelvico.json';
 import tireoide from './tireoide.json';
 import transvaginal from './transvaginal.json';
@@ -12,4 +13,5 @@ export const templates: Record<string, Template> = {
   transvaginal: transvaginal as unknown as Template,
   pelvico: pelvico as unknown as Template,
   tireoide: tireoide as unknown as Template,
+  mamas: mamas as unknown as Template,
 };

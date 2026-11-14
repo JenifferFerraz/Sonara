@@ -1,0 +1,1140 @@
+{
+  "id": "mamas",
+  "versao": "0.1.0",
+  "exame": "Mamas",
+  "subtipo": "Mamas",
+  "titulo": "ULTRASSONOGRAFIA DE MAMAS",
+  "mudancas": {
+    "url": "https://sonara.example/mudancas/mamas/0.1.0",
+    "resumo": "Primeira versão da máscara (rascunho, sem revisão médica)."
+  },
+  "referencias": {
+    "birads": "ACR BI-RADS (US), sugestão por regra provisória, somente aviso"
+  },
+  "secoes": [
+    {
+      "id": "motivo",
+      "titulo": "Motivo do exame",
+      "campos": [
+        {
+          "id": "motivo",
+          "tipo": "check",
+          "rotulo": "Descrever motivo do exame",
+          "laudo": "Exame realizado para {motivo_tipo}.",
+          "paragrafo": true
+        },
+        {
+          "id": "motivo_tipo",
+          "tipo": "select",
+          "rotulo": "Motivo",
+          "padrao": "rotina",
+          "opcoes": [
+            {
+              "valor": "rotina",
+              "rotulo": "Rotina",
+              "laudo": "rotina"
+            },
+            {
+              "valor": "familiar",
+              "rotulo": "História familiar positiva",
+              "laudo": "avaliação por história familiar positiva"
+            },
+            {
+              "valor": "nodulo",
+              "rotulo": "Controle de nódulo",
+              "laudo": "controle de nódulo"
+            },
+            {
+              "valor": "cisto",
+              "rotulo": "Controle de cisto",
+              "laudo": "controle de cisto"
+            },
+            {
+              "valor": "mastalgia",
+              "rotulo": "Mastalgia",
+              "laudo": "investigação de mastalgia"
+            },
+            {
+              "valor": "mamografia",
+              "rotulo": "Complementação de mamografia",
+              "laudo": "complementação de mamografia"
+            },
+            {
+              "valor": "neoplasia",
+              "rotulo": "História pregressa de neoplasia",
+              "laudo": "seguimento de história pregressa de neoplasia de mama"
+            }
+          ],
+          "showIf": {
+            "var": "motivo"
+          }
+        }
+      ]
+    },
+    {
+      "id": "exame",
+      "titulo": "Exame normal, composição e lesões",
+      "campos": [
+        {
+          "id": "mamas",
+          "tipo": "check",
+          "rotulo": "Mamas normais",
+          "padrao": true,
+          "paragrafo": true,
+          "laudo": "Mamas de morfologia normal e contornos regulares."
+        },
+        {
+          "id": "pele",
+          "tipo": "check",
+          "rotulo": "Pele e tecido subcutâneo preservados",
+          "padrao": true,
+          "paragrafo": true,
+          "laudo": "Pele e tecido adiposo subcutâneo de aspecto ecográfico preservado."
+        },
+        {
+          "id": "comp",
+          "tipo": "seg",
+          "rotulo": "Composição da mama",
+          "padrao": "nc",
+          "paragrafo": true,
+          "opcoes": [
+            {
+              "valor": "nc",
+              "rotulo": "Não citar",
+              "laudo": ""
+            },
+            {
+              "valor": "fibro",
+              "rotulo": "Homogênea, fibroglandular",
+              "laudo": "A composição mamária apresenta ecotextura de fundo homogênea, fibroglandular."
+            },
+            {
+              "valor": "adiposa",
+              "rotulo": "Homogênea, adiposa",
+              "laudo": "A composição mamária apresenta ecotextura de fundo homogênea, adiposa."
+            },
+            {
+              "valor": "heterogenea",
+              "rotulo": "Heterogênea",
+              "laudo": "A composição mamária apresenta ecotextura de fundo heterogênea, entremeando áreas adiposas com áreas de tecido fibroglandular."
+            }
+          ]
+        },
+        {
+          "id": "lesoes",
+          "tipo": "seg",
+          "rotulo": "Imagens nodulares",
+          "padrao": "ausentes",
+          "paragrafo": true,
+          "opcoes": [
+            {
+              "valor": "ausentes",
+              "rotulo": "Ausentes",
+              "laudo": "Não se observam imagens nodulares sólidas ou císticas."
+            },
+            {
+              "valor": "cistos",
+              "rotulo": "Cistos",
+              "laudo": ""
+            },
+            {
+              "valor": "nodulos",
+              "rotulo": "Nódulos sólidos",
+              "laudo": ""
+            },
+            {
+              "valor": "ambos",
+              "rotulo": "Cistos e nódulos",
+              "laudo": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "implantes",
+      "titulo": "Implantes",
+      "campos": [
+        {
+          "id": "implante",
+          "tipo": "seg",
+          "rotulo": "Implantes mamários",
+          "padrao": "nenhum",
+          "opcoes": [
+            {
+              "valor": "nenhum",
+              "rotulo": "Sem implantes",
+              "laudo": ""
+            },
+            {
+              "valor": "normal",
+              "rotulo": "Sem anormalidades",
+              "laudo": "Implantes mamários sem alterações ecográficas."
+            },
+            {
+              "valor": "dobras",
+              "rotulo": "Dobras do elastômero",
+              "laudo": "Implantes mamários com dobras do elastômero."
+            },
+            {
+              "valor": "intra",
+              "rotulo": "Rotura intracapsular",
+              "laudo": "Implantes mamários com sinais de rotura intracapsular.",
+              "impressao": "Sinais de rotura intracapsular de implante."
+            },
+            {
+              "valor": "extra",
+              "rotulo": "Rotura extracapsular",
+              "laudo": "Implantes mamários com sinais de rotura extracapsular.",
+              "impressao": "Sinais de rotura extracapsular de implante."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cirurgias",
+      "titulo": "Cirurgias",
+      "campos": [
+        {
+          "id": "cirurgia",
+          "tipo": "seg",
+          "rotulo": "Cirurgia mamária",
+          "padrao": "nenhuma",
+          "opcoes": [
+            {
+              "valor": "nenhuma",
+              "rotulo": "Nenhuma",
+              "laudo": ""
+            },
+            {
+              "valor": "mastectomia_d",
+              "rotulo": "Mastectomia direita",
+              "laudo": "Mama direita ausente (status pós-mastectomia).",
+              "impressao": "Status pós-mastectomia direita."
+            },
+            {
+              "valor": "mastectomia_e",
+              "rotulo": "Mastectomia esquerda",
+              "laudo": "Mama esquerda ausente (status pós-mastectomia).",
+              "impressao": "Status pós-mastectomia esquerda."
+            },
+            {
+              "valor": "mastectomia_b",
+              "rotulo": "Mastectomia bilateral",
+              "laudo": "Mamas ausentes (status pós-mastectomia bilateral).",
+              "impressao": "Status pós-mastectomia bilateral."
+            },
+            {
+              "valor": "quadrantectomia",
+              "rotulo": "Quadrantectomia",
+              "laudo": "Alterações cicatriciais compatíveis com status pós-quadrantectomia.",
+              "impressao": "Status pós-quadrantectomia."
+            },
+            {
+              "valor": "mamoplastia",
+              "rotulo": "Mamoplastia",
+              "laudo": "Alterações compatíveis com status pós-mamoplastia.",
+              "impressao": "Status pós-mamoplastia."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cistos",
+      "titulo": "Cistos",
+      "campos": [
+        {
+          "id": "cistos",
+          "tipo": "list",
+          "rotulo": "Cisto",
+          "obrigatorio": true,
+          "paragrafo": true,
+          "showIf": {
+            "or": [
+              {
+                "==": [
+                  {
+                    "var": "lesoes"
+                  },
+                  "cistos"
+                ]
+              },
+              {
+                "==": [
+                  {
+                    "var": "lesoes"
+                  },
+                  "ambos"
+                ]
+              }
+            ]
+          },
+          "birads": {
+            "modo": "modo",
+            "categoria": "tipo"
+          },
+          "itens": [
+            {
+              "id": "d1",
+              "tipo": "num",
+              "rotulo": "Medida (cm)",
+              "unidade": "cm",
+              "obrigatorio": true
+            },
+            {
+              "id": "lado",
+              "tipo": "select",
+              "rotulo": "Mama",
+              "padrao": "direita",
+              "opcoes": [
+                {
+                  "valor": "direita",
+                  "rotulo": "Direita",
+                  "laudo": "direita"
+                },
+                {
+                  "valor": "esquerda",
+                  "rotulo": "Esquerda",
+                  "laudo": "esquerda"
+                }
+              ]
+            },
+            {
+              "id": "hora",
+              "tipo": "select",
+              "rotulo": "Hora",
+              "padrao": "12",
+              "opcoes": [
+                {
+                  "valor": "1",
+                  "rotulo": "1 h",
+                  "laudo": "à 1 hora"
+                },
+                {
+                  "valor": "2",
+                  "rotulo": "2 h",
+                  "laudo": "às 2 horas"
+                },
+                {
+                  "valor": "3",
+                  "rotulo": "3 h",
+                  "laudo": "às 3 horas"
+                },
+                {
+                  "valor": "4",
+                  "rotulo": "4 h",
+                  "laudo": "às 4 horas"
+                },
+                {
+                  "valor": "5",
+                  "rotulo": "5 h",
+                  "laudo": "às 5 horas"
+                },
+                {
+                  "valor": "6",
+                  "rotulo": "6 h",
+                  "laudo": "às 6 horas"
+                },
+                {
+                  "valor": "7",
+                  "rotulo": "7 h",
+                  "laudo": "às 7 horas"
+                },
+                {
+                  "valor": "8",
+                  "rotulo": "8 h",
+                  "laudo": "às 8 horas"
+                },
+                {
+                  "valor": "9",
+                  "rotulo": "9 h",
+                  "laudo": "às 9 horas"
+                },
+                {
+                  "valor": "10",
+                  "rotulo": "10 h",
+                  "laudo": "às 10 horas"
+                },
+                {
+                  "valor": "11",
+                  "rotulo": "11 h",
+                  "laudo": "às 11 horas"
+                },
+                {
+                  "valor": "12",
+                  "rotulo": "12 h",
+                  "laudo": "às 12 horas"
+                }
+              ]
+            },
+            {
+              "id": "tipo",
+              "tipo": "select",
+              "rotulo": "Conteúdo",
+              "padrao": "simples",
+              "opcoes": [
+                {
+                  "valor": "simples",
+                  "rotulo": "Anecogênico (simples)",
+                  "laudo": "anecogênico",
+                  "pontos": 2
+                },
+                {
+                  "valor": "complicado",
+                  "rotulo": "Espesso (complicado)",
+                  "laudo": "espesso",
+                  "pontos": 3
+                }
+              ]
+            },
+            {
+              "id": "modo",
+              "tipo": "select",
+              "rotulo": "BI-RADS no laudo",
+              "padrao": "nc",
+              "opcoes": [
+                {
+                  "valor": "nc",
+                  "rotulo": "Não citar",
+                  "laudo": ""
+                },
+                {
+                  "valor": "auto",
+                  "rotulo": "Citar o sugerido"
+                },
+                {
+                  "valor": "1",
+                  "rotulo": "Citar 1 (manual)",
+                  "laudo": ", BI-RADS 1"
+                },
+                {
+                  "valor": "2",
+                  "rotulo": "Citar 2 (manual)",
+                  "laudo": ", BI-RADS 2"
+                },
+                {
+                  "valor": "3",
+                  "rotulo": "Citar 3 (manual)",
+                  "laudo": ", BI-RADS 3"
+                },
+                {
+                  "valor": "4A",
+                  "rotulo": "Citar 4A (manual)",
+                  "laudo": ", BI-RADS 4A"
+                },
+                {
+                  "valor": "4B",
+                  "rotulo": "Citar 4B (manual)",
+                  "laudo": ", BI-RADS 4B"
+                },
+                {
+                  "valor": "4C",
+                  "rotulo": "Citar 4C (manual)",
+                  "laudo": ", BI-RADS 4C"
+                },
+                {
+                  "valor": "5",
+                  "rotulo": "Citar 5 (manual)",
+                  "laudo": ", BI-RADS 5"
+                }
+              ]
+            }
+          ],
+          "laudoItem": "Imagem cística de conteúdo {tipo}, medindo {d1} cm, localizada {hora} da mama {lado}.",
+          "impressaoItem": "Cisto mamário na mama {lado}, medindo {d1} cm{modo}.",
+          "laudoMultiplos": "Múltiplos cistos simples, o maior com {cistos.maior} cm.",
+          "impressaoMultiplos": "Cistos mamários simples."
+        }
+      ]
+    },
+    {
+      "id": "nodulos",
+      "titulo": "Nódulos sólidos",
+      "campos": [
+        {
+          "id": "nodulos",
+          "tipo": "list",
+          "rotulo": "Nódulo sólido",
+          "obrigatorio": true,
+          "paragrafo": true,
+          "showIf": {
+            "or": [
+              {
+                "==": [
+                  {
+                    "var": "lesoes"
+                  },
+                  "nodulos"
+                ]
+              },
+              {
+                "==": [
+                  {
+                    "var": "lesoes"
+                  },
+                  "ambos"
+                ]
+              }
+            ]
+          },
+          "birads": {
+            "modo": "modo",
+            "nodulo": {
+              "forma": "forma",
+              "orientacao": "orientacao",
+              "margem": "margem",
+              "posterior": "posterior",
+              "calcificacoes": "calcificacoes"
+            }
+          },
+          "itens": [
+            {
+              "id": "d1",
+              "tipo": "num",
+              "rotulo": "Medida 1 (cm)",
+              "unidade": "cm",
+              "obrigatorio": true,
+              "linha": "Mede:"
+            },
+            {
+              "id": "d2",
+              "tipo": "num",
+              "rotulo": "Medida 2 (cm)",
+              "unidade": "cm",
+              "obrigatorio": true,
+              "linha": "Mede:"
+            },
+            {
+              "id": "d3",
+              "tipo": "num",
+              "rotulo": "Medida 3 (cm)",
+              "unidade": "cm",
+              "obrigatorio": true,
+              "linha": "Mede:"
+            },
+            {
+              "id": "lado",
+              "tipo": "select",
+              "rotulo": "Mama",
+              "padrao": "direita",
+              "opcoes": [
+                {
+                  "valor": "direita",
+                  "rotulo": "Direita",
+                  "laudo": "direita"
+                },
+                {
+                  "valor": "esquerda",
+                  "rotulo": "Esquerda",
+                  "laudo": "esquerda"
+                }
+              ]
+            },
+            {
+              "id": "hora",
+              "tipo": "select",
+              "rotulo": "Hora",
+              "padrao": "12",
+              "opcoes": [
+                {
+                  "valor": "1",
+                  "rotulo": "1 h",
+                  "laudo": "à 1 hora"
+                },
+                {
+                  "valor": "2",
+                  "rotulo": "2 h",
+                  "laudo": "às 2 horas"
+                },
+                {
+                  "valor": "3",
+                  "rotulo": "3 h",
+                  "laudo": "às 3 horas"
+                },
+                {
+                  "valor": "4",
+                  "rotulo": "4 h",
+                  "laudo": "às 4 horas"
+                },
+                {
+                  "valor": "5",
+                  "rotulo": "5 h",
+                  "laudo": "às 5 horas"
+                },
+                {
+                  "valor": "6",
+                  "rotulo": "6 h",
+                  "laudo": "às 6 horas"
+                },
+                {
+                  "valor": "7",
+                  "rotulo": "7 h",
+                  "laudo": "às 7 horas"
+                },
+                {
+                  "valor": "8",
+                  "rotulo": "8 h",
+                  "laudo": "às 8 horas"
+                },
+                {
+                  "valor": "9",
+                  "rotulo": "9 h",
+                  "laudo": "às 9 horas"
+                },
+                {
+                  "valor": "10",
+                  "rotulo": "10 h",
+                  "laudo": "às 10 horas"
+                },
+                {
+                  "valor": "11",
+                  "rotulo": "11 h",
+                  "laudo": "às 11 horas"
+                },
+                {
+                  "valor": "12",
+                  "rotulo": "12 h",
+                  "laudo": "às 12 horas"
+                }
+              ]
+            },
+            {
+              "id": "forma",
+              "tipo": "select",
+              "rotulo": "Forma",
+              "padrao": "oval",
+              "opcoes": [
+                {
+                  "valor": "oval",
+                  "rotulo": "Oval",
+                  "laudo": "oval"
+                },
+                {
+                  "valor": "redonda",
+                  "rotulo": "Redonda",
+                  "laudo": "redondo"
+                },
+                {
+                  "valor": "irregular",
+                  "rotulo": "Irregular",
+                  "laudo": "irregular"
+                }
+              ]
+            },
+            {
+              "id": "orientacao",
+              "tipo": "select",
+              "rotulo": "Orientação",
+              "padrao": "paralela",
+              "opcoes": [
+                {
+                  "valor": "paralela",
+                  "rotulo": "Paralela à pele",
+                  "laudo": "paralela à pele"
+                },
+                {
+                  "valor": "nao_paralela",
+                  "rotulo": "Não paralela",
+                  "laudo": "não paralela à pele"
+                }
+              ]
+            },
+            {
+              "id": "margem",
+              "tipo": "select",
+              "rotulo": "Margens",
+              "padrao": "circunscrita",
+              "opcoes": [
+                {
+                  "valor": "circunscrita",
+                  "rotulo": "Circunscritas",
+                  "laudo": "circunscritas"
+                },
+                {
+                  "valor": "indistinta",
+                  "rotulo": "Indistintas",
+                  "laudo": "indistintas"
+                },
+                {
+                  "valor": "angular",
+                  "rotulo": "Angulares",
+                  "laudo": "angulares"
+                },
+                {
+                  "valor": "microlobulada",
+                  "rotulo": "Microlobuladas",
+                  "laudo": "microlobuladas"
+                },
+                {
+                  "valor": "espiculada",
+                  "rotulo": "Espiculadas",
+                  "laudo": "espiculadas"
+                }
+              ]
+            },
+            {
+              "id": "eco",
+              "tipo": "select",
+              "rotulo": "Ecogenicidade",
+              "padrao": "hipoecoico",
+              "opcoes": [
+                {
+                  "valor": "hipoecoico",
+                  "rotulo": "Hipoecogênico",
+                  "laudo": "hipoecogênico"
+                },
+                {
+                  "valor": "iso",
+                  "rotulo": "Isoecogênico",
+                  "laudo": "isoecogênico"
+                },
+                {
+                  "valor": "hiper",
+                  "rotulo": "Hiperecogênico",
+                  "laudo": "hiperecogênico"
+                },
+                {
+                  "valor": "heterogeneo",
+                  "rotulo": "Heterogêneo",
+                  "laudo": "heterogêneo"
+                }
+              ]
+            },
+            {
+              "id": "posterior",
+              "tipo": "select",
+              "rotulo": "Característica posterior",
+              "padrao": "nenhum",
+              "opcoes": [
+                {
+                  "valor": "nenhum",
+                  "rotulo": "Sem alteração",
+                  "laudo": "sem repercussão acústica posterior"
+                },
+                {
+                  "valor": "reforco",
+                  "rotulo": "Reforço acústico",
+                  "laudo": "com reforço acústico posterior"
+                },
+                {
+                  "valor": "sombra",
+                  "rotulo": "Sombra acústica",
+                  "laudo": "com sombra acústica posterior"
+                },
+                {
+                  "valor": "combinado",
+                  "rotulo": "Padrão combinado",
+                  "laudo": "com padrão posterior combinado"
+                }
+              ]
+            },
+            {
+              "id": "calcificacoes",
+              "tipo": "select",
+              "rotulo": "Calcificações",
+              "padrao": "ausentes",
+              "opcoes": [
+                {
+                  "valor": "ausentes",
+                  "rotulo": "Ausentes",
+                  "laudo": ""
+                },
+                {
+                  "valor": "presentes",
+                  "rotulo": "Presentes",
+                  "laudo": ", com calcificações"
+                }
+              ]
+            },
+            {
+              "id": "modo",
+              "tipo": "select",
+              "rotulo": "BI-RADS no laudo",
+              "padrao": "nc",
+              "opcoes": [
+                {
+                  "valor": "nc",
+                  "rotulo": "Não citar",
+                  "laudo": ""
+                },
+                {
+                  "valor": "auto",
+                  "rotulo": "Citar o sugerido"
+                },
+                {
+                  "valor": "1",
+                  "rotulo": "Citar 1 (manual)",
+                  "laudo": ", BI-RADS 1"
+                },
+                {
+                  "valor": "2",
+                  "rotulo": "Citar 2 (manual)",
+                  "laudo": ", BI-RADS 2"
+                },
+                {
+                  "valor": "3",
+                  "rotulo": "Citar 3 (manual)",
+                  "laudo": ", BI-RADS 3"
+                },
+                {
+                  "valor": "4A",
+                  "rotulo": "Citar 4A (manual)",
+                  "laudo": ", BI-RADS 4A"
+                },
+                {
+                  "valor": "4B",
+                  "rotulo": "Citar 4B (manual)",
+                  "laudo": ", BI-RADS 4B"
+                },
+                {
+                  "valor": "4C",
+                  "rotulo": "Citar 4C (manual)",
+                  "laudo": ", BI-RADS 4C"
+                },
+                {
+                  "valor": "5",
+                  "rotulo": "Citar 5 (manual)",
+                  "laudo": ", BI-RADS 5"
+                }
+              ]
+            }
+          ],
+          "laudoItem": "Nódulo sólido {forma}, {eco}, de margens {margem}, orientação {orientacao}, {posterior}{calcificacoes}, medindo {d1} x {d2} x {d3} cm, localizado {hora} da mama {lado}{modo}.",
+          "impressaoItem": "Nódulo sólido na mama {lado}, {hora}, medindo {d1} x {d2} x {d3} cm{modo}.",
+          "laudoMultiplos": "Múltiplos nódulos sólidos, o maior com {nodulos.maior} cm.",
+          "impressaoMultiplos": "Nódulos sólidos mamários."
+        }
+      ]
+    },
+    {
+      "id": "ductos",
+      "titulo": "Ectasias ductais",
+      "campos": [
+        {
+          "id": "ectasias",
+          "tipo": "seg",
+          "rotulo": "Ectasias ductais",
+          "padrao": "nc",
+          "paragrafo": true,
+          "opcoes": [
+            {
+              "valor": "nc",
+              "rotulo": "Não citar",
+              "laudo": ""
+            },
+            {
+              "valor": "ausentes",
+              "rotulo": "Ausentes",
+              "laudo": "Ausência de ectasias ductais."
+            },
+            {
+              "valor": "anecoico_d",
+              "rotulo": "Anecogênica, à direita",
+              "laudo": "Ectasia ductal de conteúdo anecogênico à direita.",
+              "impressao": "Ectasia ductal à direita."
+            },
+            {
+              "valor": "anecoico_e",
+              "rotulo": "Anecogênica, à esquerda",
+              "laudo": "Ectasia ductal de conteúdo anecogênico à esquerda.",
+              "impressao": "Ectasia ductal à esquerda."
+            },
+            {
+              "valor": "anecoico_b",
+              "rotulo": "Anecogênica, bilateral",
+              "laudo": "Ectasia ductal de conteúdo anecogênico, bilateral.",
+              "impressao": "Ectasia ductal bilateral."
+            },
+            {
+              "valor": "espesso_d",
+              "rotulo": "Espessa, à direita",
+              "laudo": "Ectasia ductal de conteúdo espesso à direita.",
+              "impressao": "Ectasia ductal à direita."
+            },
+            {
+              "valor": "espesso_e",
+              "rotulo": "Espessa, à esquerda",
+              "laudo": "Ectasia ductal de conteúdo espesso à esquerda.",
+              "impressao": "Ectasia ductal à esquerda."
+            },
+            {
+              "valor": "espesso_b",
+              "rotulo": "Espessa, bilateral",
+              "laudo": "Ectasia ductal de conteúdo espesso, bilateral.",
+              "impressao": "Ectasia ductal bilateral."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ginecomastia",
+      "titulo": "Ginecomastia",
+      "campos": [
+        {
+          "id": "gineco",
+          "tipo": "seg",
+          "rotulo": "Ginecomastia (mama masculina)",
+          "padrao": "nc",
+          "showIf": {
+            "==": [
+              {
+                "var": "sexo"
+              },
+              "M"
+            ]
+          },
+          "paragrafo": true,
+          "opcoes": [
+            {
+              "valor": "nc",
+              "rotulo": "Não citar",
+              "laudo": ""
+            },
+            {
+              "valor": "ausente",
+              "rotulo": "Ausente",
+              "laudo": "Ausência de ginecomastia."
+            },
+            {
+              "valor": "bilateral",
+              "rotulo": "Bilateral",
+              "laudo": "Ginecomastia bilateral.",
+              "impressao": "Ginecomastia bilateral."
+            },
+            {
+              "valor": "direita",
+              "rotulo": "À direita",
+              "laudo": "Ginecomastia à direita.",
+              "impressao": "Ginecomastia à direita."
+            },
+            {
+              "valor": "esquerda",
+              "rotulo": "À esquerda",
+              "laudo": "Ginecomastia à esquerda.",
+              "impressao": "Ginecomastia à esquerda."
+            },
+            {
+              "valor": "pseudo",
+              "rotulo": "Pseudoginecomastia",
+              "laudo": "Pseudoginecomastia (tecido adiposo retroareolar).",
+              "impressao": "Pseudoginecomastia."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "planos",
+      "titulo": "Planos musculares",
+      "campos": [
+        {
+          "id": "planos",
+          "tipo": "check",
+          "rotulo": "Citar planos musculares normais",
+          "paragrafo": true,
+          "laudo": "Planos musculares de aspecto ecográfico preservado."
+        }
+      ]
+    },
+    {
+      "id": "axilas",
+      "titulo": "Axilas",
+      "campos": [
+        {
+          "id": "axilas",
+          "tipo": "seg",
+          "rotulo": "Axilas",
+          "padrao": "ausencia",
+          "paragrafo": true,
+          "opcoes": [
+            {
+              "valor": "nc",
+              "rotulo": "Não citar",
+              "laudo": ""
+            },
+            {
+              "valor": "ausencia",
+              "rotulo": "Sem linfonodomegalias",
+              "laudo": "Ausência de linfonodomegalias axilares."
+            },
+            {
+              "valor": "normais",
+              "rotulo": "Linfonodos normais",
+              "laudo": "Linfonodos axilares de aspecto ecográfico habitual."
+            },
+            {
+              "valor": "alterados",
+              "rotulo": "Linfonodomegalia",
+              "laudo": ""
+            }
+          ]
+        },
+        {
+          "id": "linf_axilares",
+          "tipo": "list",
+          "rotulo": "Linfonodo axilar",
+          "obrigatorio": true,
+          "paragrafo": true,
+          "showIf": {
+            "==": [
+              {
+                "var": "axilas"
+              },
+              "alterados"
+            ]
+          },
+          "itens": [
+            {
+              "id": "d1",
+              "tipo": "num",
+              "rotulo": "Maior eixo (cm)",
+              "unidade": "cm",
+              "obrigatorio": true,
+              "linha": "Mede:"
+            },
+            {
+              "id": "d2",
+              "tipo": "num",
+              "rotulo": "Menor eixo (cm)",
+              "unidade": "cm",
+              "obrigatorio": true,
+              "linha": "Mede:"
+            },
+            {
+              "id": "lado",
+              "tipo": "select",
+              "rotulo": "Mama",
+              "padrao": "direita",
+              "opcoes": [
+                {
+                  "valor": "direita",
+                  "rotulo": "Direita",
+                  "laudo": "direita"
+                },
+                {
+                  "valor": "esquerda",
+                  "rotulo": "Esquerda",
+                  "laudo": "esquerda"
+                }
+              ]
+            },
+            {
+              "id": "aspecto",
+              "tipo": "select",
+              "rotulo": "Aspecto",
+              "padrao": "habitual",
+              "opcoes": [
+                {
+                  "valor": "habitual",
+                  "rotulo": "Ovalado, hilo preservado",
+                  "laudo": "de aspecto ovalado, com hilo gorduroso preservado"
+                },
+                {
+                  "valor": "espessado",
+                  "rotulo": "Córtex espessado",
+                  "laudo": "com córtex espessado"
+                },
+                {
+                  "valor": "sem_hilo",
+                  "rotulo": "Sem hilo",
+                  "laudo": "arredondado, com perda do hilo gorduroso"
+                }
+              ]
+            }
+          ],
+          "laudoItem": "Linfonodo axilar {lado} {aspecto}, medindo {d1} x {d2} cm.",
+          "impressaoItem": "Linfonodomegalia axilar {lado}.",
+          "laudoMultiplos": "Múltiplos linfonodos axilares, o maior com {linf_axilares.maior} cm.",
+          "impressaoMultiplos": "Linfonodomegalias axilares."
+        }
+      ]
+    },
+    {
+      "id": "final",
+      "titulo": "Classificação BI-RADS",
+      "campos": [
+        {
+          "id": "birads_final",
+          "tipo": "seg",
+          "rotulo": "Categoria final",
+          "padrao": "nc",
+          "categoriaFinal": {
+            "listas": [
+              "cistos",
+              "nodulos"
+            ]
+          },
+          "opcoes": [
+            {
+              "valor": "nc",
+              "rotulo": "Não citar",
+              "laudo": ""
+            },
+            {
+              "valor": "auto",
+              "rotulo": "Maior categoria sugerida"
+            },
+            {
+              "valor": "m0",
+              "rotulo": "BI-RADS 0 (avaliação adicional)",
+              "laudo": "",
+              "impressao": "Categoria BI-RADS 0."
+            },
+            {
+              "valor": "m1",
+              "rotulo": "BI-RADS 1",
+              "laudo": "",
+              "impressao": "Categoria BI-RADS 1."
+            },
+            {
+              "valor": "m2",
+              "rotulo": "BI-RADS 2",
+              "laudo": "",
+              "impressao": "Categoria BI-RADS 2."
+            },
+            {
+              "valor": "m3",
+              "rotulo": "BI-RADS 3",
+              "laudo": "",
+              "impressao": "Categoria BI-RADS 3."
+            },
+            {
+              "valor": "m4A",
+              "rotulo": "BI-RADS 4A",
+              "laudo": "",
+              "impressao": "Categoria BI-RADS 4A."
+            },
+            {
+              "valor": "m4B",
+              "rotulo": "BI-RADS 4B",
+              "laudo": "",
+              "impressao": "Categoria BI-RADS 4B."
+            },
+            {
+              "valor": "m4C",
+              "rotulo": "BI-RADS 4C",
+              "laudo": "",
+              "impressao": "Categoria BI-RADS 4C."
+            },
+            {
+              "valor": "m5",
+              "rotulo": "BI-RADS 5",
+              "laudo": "",
+              "impressao": "Categoria BI-RADS 5."
+            },
+            {
+              "valor": "m6",
+              "rotulo": "BI-RADS 6",
+              "laudo": "",
+              "impressao": "Categoria BI-RADS 6."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "avisos": []
+}

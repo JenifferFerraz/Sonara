@@ -4,3 +4,4 @@ import './gerar-abdome-total.mjs';
 import './gerar-abdome-superior.mjs';
 import './gerar-pelvico.mjs';
 import './gerar-tireoide.mjs';
+import './gerar-mamas.mjs';

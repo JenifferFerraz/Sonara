@@ -69,6 +69,18 @@ export interface Campo {
     /** Sub-campo select: nc, auto (usa o cálculo) ou TR1 a TR5 (escolha manual). */
     modo: string;
   };
+  /**
+   * Só tipo list: sugestão de categoria BI-RADS por lesão (só aviso). `modo` é o sub-campo
+   * select (nc, auto ou categoria manual). Para cistos, `categoria` aponta o sub-campo cujas
+   * opções trazem a categoria em `pontos`; para nódulos sólidos, `nodulo` mapeia os sub-campos.
+   */
+  birads?: {
+    modo: string;
+    categoria?: string;
+    nodulo?: { forma: string; orientacao: string; margem: string; posterior: string; calcificacoes: string };
+  };
+  /** Só tipo seg: com a opção `auto`, escreve na impressão a maior categoria sugerida nas listas. */
+  categoriaFinal?: { listas: string[] };
   /** Só tipo list: sub-campos de cada item e frases. */
   itens?: Campo[];
   laudoItem?: string;

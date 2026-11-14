@@ -2,6 +2,8 @@ import jsonLogic from 'json-logic-js';
 import { FALTA, formatarNumero, lerNumero, volume } from './numeros';
 import { calcularTirads } from './tirads';
 import type { Composicao, Ecogenicidade, Forma, Foco, Margem, Nodulo } from './tirads';
+import { categoriaValida, maiorCategoria, sugerirNoduloSolido } from './birads';
+import type { Categoria, NoduloSolido } from './birads';
 import type {
   Alerta, Campo, Dims, Estado, ItemLista, ListaValor, Mudanca, Preferencias, Resultado, Template, Variante,
 } from './types';
@@ -167,6 +169,8 @@ export function gerar(template: Template, estado: Estado, preferencias: Preferen
   const impressao: string[] = [];
   const paragrafos: string[] = [];
   const frases = template.frases ?? FRASES_PADRAO;
+  /** Categorias BI-RADS sugeridas, por lista, para a categoria final. */
+  const categorias: Record<string, Categoria[]> = {};
 
   const pedir = (campo: Campo, mensagem = `${campo.rotulo}: preenchimento obrigatório.`) =>
     alertas.push({ campo: campo.id, tipo: 'obrigatorio', mensagem });
@@ -204,6 +208,10 @@ export function gerar(template: Template, estado: Estado, preferencias: Preferen
           const f = o && frase(`${c.id}.${o.valor}`, o.laudo, o.variantes, preferencias);
           if (f) frasesSecao.push(interpolar(f, texto));
           if (o?.impressao) impressao.push(interpolar(o.impressao, texto));
+          if (c.categoriaFinal && v === 'auto') {
+            const maior = maiorCategoria(c.categoriaFinal.listas.flatMap((l) => categorias[l] ?? []));
+            impressao.push(`Categoria BI-RADS ${maior ?? '1'}.`);
+          }
           break;
         }
         case 'check':
@@ -249,6 +257,18 @@ export function gerar(template: Template, estado: Estado, preferencias: Preferen
           }
           l.itens.forEach((item, i) => {
             const ictx = contextoItem(c, item);
+            if (c.birads) {
+              const cat = biradsDoItem(c.birads, c, item);
+              if (item[c.birads.modo] === 'auto') ictx[c.birads.modo] = cat ? `, BI-RADS ${cat}` : '';
+              if (cat) {
+                (categorias[c.id] ??= []).push(cat);
+                alertas.push({
+                  campo: `${c.id}[${i}].birads`,
+                  tipo: 'referencia',
+                  mensagem: `${c.rotulo} ${i + 1}: BI-RADS sugerido ${cat} (regra provisória, a validar com o médico revisor). A categoria é sua e só entra no laudo se você a escolher.`,
+                });
+              }
+            }
             if (c.tirads) {
               const r = tiradsDoItem(c.tirads, item);
               if (item[c.tirads.modo] === 'auto') {
@@ -364,4 +384,24 @@ function tiradsDoItem(m: NonNullable<Campo['tirads']>, item: ItemLista) {
   } catch {
     return null;
   }
+}
+
+/** Categoria BI-RADS sugerida para um item da lista; null se faltar dado ou o valor não bater. */
+function biradsDoItem(m: NonNullable<Campo['birads']>, lista: Campo, item: ItemLista): Categoria | null {
+  if (m.categoria) {
+    const sub = lista.itens?.find((x) => x.id === m.categoria);
+    const pontos = sub?.opcoes?.find((o) => o.valor === item[m.categoria as string])?.pontos;
+    const cat = pontos === undefined ? null : String(pontos);
+    return categoriaValida(cat) ? cat : null;
+  }
+  if (m.nodulo) {
+    const n = m.nodulo;
+    const nod = {
+      forma: item[n.forma], orientacao: item[n.orientacao], margem: item[n.margem],
+      posterior: item[n.posterior], calcificacoes: item[n.calcificacoes],
+    } as NoduloSolido;
+    if (Object.values(nod).some((x) => !x)) return null;
+    return sugerirNoduloSolido(nod);
+  }
+  return null;
 }
