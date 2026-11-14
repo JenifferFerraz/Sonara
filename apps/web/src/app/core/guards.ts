@@ -23,3 +23,9 @@ export const sessaoGuard: CanActivateFn = () => {
   const roteador = inject(Router);
   return auth.logado() ? true : roteador.createUrlTree(['/entrar']);
 };
+
+/** No modo de teste (sem login), as telas de entrada não existem: vai direto para o laudo. */
+export const semLoginGuard: CanActivateFn = () => {
+  if (config.exigirLogin) return true;
+  return inject(Router).createUrlTree(['/']);
+};

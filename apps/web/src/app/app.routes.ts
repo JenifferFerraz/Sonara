@@ -1,14 +1,16 @@
 import { Routes } from '@angular/router';
-import { licencaGuard, sessaoGuard } from './core/guards';
+import { licencaGuard, semLoginGuard, sessaoGuard } from './core/guards';
 import { ShellComponent } from './layouts/shell/shell.component';
 
 export const routes: Routes = [
   {
     path: 'entrar',
+    canActivate: [semLoginGuard],
     loadComponent: () => import('./pages/entrar/entrar.page').then(m => m.EntrarPage)
   },
   {
     path: 'cadastro',
+    canActivate: [semLoginGuard],
     loadComponent: () => import('./pages/cadastro/cadastro.page').then(m => m.CadastroPage)
   },
   {

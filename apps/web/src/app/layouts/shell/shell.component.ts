@@ -1,6 +1,5 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
-import { SwUpdate } from '@angular/service-worker';
 import { config } from '../../core/config';
 import { AuthService } from '../../core/services/auth.service';
 import { LicencaService } from '../../core/services/licenca.service';
@@ -32,13 +31,6 @@ import { MascaraService } from '../../core/services/mascara.service';
         <button type="button" class="link" (click)="sair()">Sair</button>
       }
     </header>
-
-    @if (atualizacao()) {
-      <div class="faixa" role="status">
-        Há uma nova versão do Sonara. Copie o laudo em andamento antes de atualizar.
-        <button type="button" class="link" (click)="atualizar()">Atualizar agora</button>
-      </div>
-    }
 
     @if (!modoTeste && licenca.aviso(); as aviso) {
       <div class="faixa" role="status">
@@ -80,15 +72,12 @@ import { MascaraService } from '../../core/services/mascara.service';
 export class ShellComponent implements OnInit {
   private readonly _mascaras = inject(MascaraService);
   private readonly _roteador = inject(Router);
-  private readonly _atualizacoes = inject(SwUpdate);
   readonly auth = inject(AuthService);
   readonly licenca = inject(LicencaService);
 
   /** Login desligado (config.exigirLogin = false): o app abre direto no laudo. */
   readonly modoTeste = !config.exigirLogin;
   readonly online = signal(navigator.onLine);
-  /** Há uma versão nova baixada, esperando a pessoa decidir quando atualizar. */
-  readonly atualizacao = signal(false);
 
   /** Nome e CRM vêm da licença assinada, então aparecem mesmo sem internet. */
   readonly medico = computed(() => {
@@ -104,19 +93,6 @@ export class ShellComponent implements OnInit {
   ngOnInit(): void {
     // Com internet e sessão, procura máscaras novas. Sem rede, segue com as instaladas.
     void this._mascaras.buscarAtualizacoes();
-
-    // O service worker baixa a versão nova sozinho; quem decide quando recarregar é o médico,
-    // para não perder um laudo em andamento.
-    if (this._atualizacoes.isEnabled) {
-      this._atualizacoes.versionUpdates.subscribe(e => {
-        if (e.type === 'VERSION_READY') this.atualizacao.set(true);
-      });
-    }
-  }
-
-  async atualizar(): Promise<void> {
-    await this._atualizacoes.activateUpdate();
-    location.reload();
   }
 
   async sair(): Promise<void> {
