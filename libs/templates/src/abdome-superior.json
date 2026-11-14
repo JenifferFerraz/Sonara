@@ -1,0 +1,848 @@
+{
+  "id": "abdome-superior",
+  "versao": "0.1.0",
+  "exame": "Abdome",
+  "subtipo": "Abdome superior",
+  "titulo": "ULTRASSONOGRAFIA DO ABDOME SUPERIOR",
+  "mudancas": {
+    "url": "https://sonara.example/mudancas/abdome-superior/0.1.0",
+    "resumo": "Primeira versão da máscara (rascunho, sem revisão médica)."
+  },
+  "referencias": {},
+  "secoes": [
+    {
+      "id": "limitacoes",
+      "titulo": "Limitações técnicas",
+      "campos": [
+        {
+          "id": "limitacao",
+          "tipo": "seg",
+          "rotulo": "Limitação",
+          "padrao": "nenhuma",
+          "opcoes": [
+            {
+              "valor": "nenhuma",
+              "rotulo": "Nenhuma",
+              "laudo": ""
+            },
+            {
+              "valor": "gas",
+              "rotulo": "Interposição gasosa",
+              "laudo": "Exame limitado por interposição gasosa intestinal."
+            },
+            {
+              "valor": "biotipo",
+              "rotulo": "Biotipo",
+              "laudo": "Exame limitado pelo biotipo do paciente."
+            },
+            {
+              "valor": "gas_biotipo",
+              "rotulo": "Gás + biotipo",
+              "laudo": "Exame limitado por interposição gasosa intestinal e pelo biotipo do paciente."
+            },
+            {
+              "valor": "leito",
+              "rotulo": "À beira do leito",
+              "laudo": "Exame realizado à beira do leito, com limitações de posicionamento."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "figado",
+      "titulo": "Fígado",
+      "campos": [
+        {
+          "id": "fig_dim",
+          "tipo": "seg",
+          "rotulo": "Dimensões",
+          "padrao": "normais",
+          "opcoes": [
+            {
+              "valor": "normais",
+              "rotulo": "Normais",
+              "laudo": "Fígado com dimensões normais, contornos regulares e bordas finas. Veia porta e veias hepáticas sem alterações."
+            },
+            {
+              "valor": "aumentadas",
+              "rotulo": "Aumentadas",
+              "laudo": "Fígado com dimensões aumentadas.",
+              "impressao": "Hepatomegalia."
+            },
+            {
+              "valor": "reduzidas",
+              "rotulo": "Reduzidas",
+              "laudo": "Fígado com dimensões reduzidas.",
+              "impressao": "Redução das dimensões hepáticas."
+            }
+          ]
+        },
+        {
+          "id": "fig_eco",
+          "tipo": "seg",
+          "rotulo": "Ecotextura",
+          "padrao": "homogenea",
+          "opcoes": [
+            {
+              "valor": "homogenea",
+              "rotulo": "Homogênea",
+              "laudo": "Ecotextura homogênea."
+            },
+            {
+              "valor": "est_nd",
+              "rotulo": "Esteatose (grau não especificado)",
+              "laudo": "Ecotextura hiperecogênica difusa, compatível com esteatose.",
+              "impressao": "Esteatose hepática."
+            },
+            {
+              "valor": "est_leve",
+              "rotulo": "Esteatose leve",
+              "laudo": "Ecotextura hiperecogênica difusa, compatível com esteatose leve.",
+              "impressao": "Esteatose hepática leve."
+            },
+            {
+              "valor": "est_mod",
+              "rotulo": "Esteatose moderada",
+              "laudo": "Ecotextura hiperecogênica difusa, com atenuação do feixe, compatível com esteatose moderada.",
+              "impressao": "Esteatose hepática moderada."
+            },
+            {
+              "valor": "est_acent",
+              "rotulo": "Esteatose acentuada",
+              "laudo": "Ecotextura hiperecogênica difusa, com acentuada atenuação do feixe, compatível com esteatose acentuada.",
+              "impressao": "Esteatose hepática acentuada."
+            },
+            {
+              "valor": "hepatopatia",
+              "rotulo": "Hepatopatia crônica",
+              "laudo": "Ecotextura heterogênea, com contornos irregulares, sugestivos de hepatopatia crônica.",
+              "impressao": "Sinais de hepatopatia crônica."
+            }
+          ]
+        },
+        {
+          "id": "fig_med",
+          "tipo": "check",
+          "rotulo": "Citar medidas dos lobos",
+          "achado": "Citar medidas dos lobos"
+        },
+        {
+          "id": "fig_ld",
+          "tipo": "num",
+          "rotulo": "Lobo direito (cm)",
+          "unidade": "cm",
+          "obrigatorio": true,
+          "laudo": "Lobo direito medindo {fig_ld} cm.",
+          "showIf": {
+            "var": "fig_med"
+          }
+        },
+        {
+          "id": "fig_le",
+          "tipo": "num",
+          "rotulo": "Lobo esquerdo (cm)",
+          "unidade": "cm",
+          "obrigatorio": true,
+          "laudo": "Lobo esquerdo medindo {fig_le} cm.",
+          "showIf": {
+            "var": "fig_med"
+          }
+        },
+        {
+          "id": "fig_cisto",
+          "tipo": "check",
+          "rotulo": "Cisto simples",
+          "achado": "Cisto simples",
+          "laudo": "Cisto simples no {fig_cisto_seg}, medindo {fig_cisto_cm} cm.",
+          "impressao": "Cisto hepático simples."
+        },
+        {
+          "id": "fig_cisto_cm",
+          "tipo": "num",
+          "rotulo": "Medida (cm)",
+          "unidade": "cm",
+          "obrigatorio": true,
+          "showIf": {
+            "var": "fig_cisto"
+          }
+        },
+        {
+          "id": "fig_cisto_seg",
+          "tipo": "select",
+          "rotulo": "Segmento",
+          "padrao": "6",
+          "opcoes": [
+            {
+              "valor": "1",
+              "rotulo": "segmento I",
+              "laudo": "segmento I"
+            },
+            {
+              "valor": "2",
+              "rotulo": "segmento II",
+              "laudo": "segmento II"
+            },
+            {
+              "valor": "3",
+              "rotulo": "segmento III",
+              "laudo": "segmento III"
+            },
+            {
+              "valor": "4a",
+              "rotulo": "segmento IVa",
+              "laudo": "segmento IVa"
+            },
+            {
+              "valor": "4b",
+              "rotulo": "segmento IVb",
+              "laudo": "segmento IVb"
+            },
+            {
+              "valor": "5",
+              "rotulo": "segmento V",
+              "laudo": "segmento V"
+            },
+            {
+              "valor": "6",
+              "rotulo": "segmento VI",
+              "laudo": "segmento VI"
+            },
+            {
+              "valor": "7",
+              "rotulo": "segmento VII",
+              "laudo": "segmento VII"
+            },
+            {
+              "valor": "8",
+              "rotulo": "segmento VIII",
+              "laudo": "segmento VIII"
+            }
+          ],
+          "showIf": {
+            "var": "fig_cisto"
+          }
+        },
+        {
+          "id": "fig_cistos",
+          "tipo": "check",
+          "rotulo": "Vários cistos simples",
+          "achado": "Vários cistos simples",
+          "laudo": "Múltiplos cistos simples hepáticos, o maior com {fig_cistos_max} cm.",
+          "impressao": "Cistos hepáticos simples."
+        },
+        {
+          "id": "fig_cistos_max",
+          "tipo": "num",
+          "rotulo": "Maior (cm)",
+          "unidade": "cm",
+          "obrigatorio": true,
+          "showIf": {
+            "var": "fig_cistos"
+          }
+        },
+        {
+          "id": "fig_nodulo",
+          "tipo": "check",
+          "rotulo": "Nódulo hepático",
+          "achado": "Nódulo hepático",
+          "laudo": "Nódulo {fig_nodulo_eco}, de contornos {fig_nodulo_cont}, no {fig_nodulo_seg}, medindo {fig_nodulo_cm} cm.",
+          "impressao": "Nódulo hepático."
+        },
+        {
+          "id": "fig_nodulo_eco",
+          "tipo": "select",
+          "rotulo": "Ecogenicidade",
+          "padrao": "hiper",
+          "opcoes": [
+            {
+              "valor": "hiper",
+              "rotulo": "hiperecogênico"
+            },
+            {
+              "valor": "hipo",
+              "rotulo": "hipoecogênico"
+            },
+            {
+              "valor": "iso",
+              "rotulo": "isoecogênico"
+            }
+          ],
+          "showIf": {
+            "var": "fig_nodulo"
+          }
+        },
+        {
+          "id": "fig_nodulo_cont",
+          "tipo": "select",
+          "rotulo": "Contornos",
+          "padrao": "regulares",
+          "opcoes": [
+            {
+              "valor": "regulares",
+              "rotulo": "regulares"
+            },
+            {
+              "valor": "irregulares",
+              "rotulo": "irregulares"
+            }
+          ],
+          "showIf": {
+            "var": "fig_nodulo"
+          }
+        },
+        {
+          "id": "fig_nodulo_cm",
+          "tipo": "num",
+          "rotulo": "Medida (cm)",
+          "unidade": "cm",
+          "obrigatorio": true,
+          "showIf": {
+            "var": "fig_nodulo"
+          }
+        },
+        {
+          "id": "fig_nodulo_seg",
+          "tipo": "select",
+          "rotulo": "Segmento",
+          "padrao": "6",
+          "opcoes": [
+            {
+              "valor": "1",
+              "rotulo": "segmento I",
+              "laudo": "segmento I"
+            },
+            {
+              "valor": "2",
+              "rotulo": "segmento II",
+              "laudo": "segmento II"
+            },
+            {
+              "valor": "3",
+              "rotulo": "segmento III",
+              "laudo": "segmento III"
+            },
+            {
+              "valor": "4a",
+              "rotulo": "segmento IVa",
+              "laudo": "segmento IVa"
+            },
+            {
+              "valor": "4b",
+              "rotulo": "segmento IVb",
+              "laudo": "segmento IVb"
+            },
+            {
+              "valor": "5",
+              "rotulo": "segmento V",
+              "laudo": "segmento V"
+            },
+            {
+              "valor": "6",
+              "rotulo": "segmento VI",
+              "laudo": "segmento VI"
+            },
+            {
+              "valor": "7",
+              "rotulo": "segmento VII",
+              "laudo": "segmento VII"
+            },
+            {
+              "valor": "8",
+              "rotulo": "segmento VIII",
+              "laudo": "segmento VIII"
+            }
+          ],
+          "showIf": {
+            "var": "fig_nodulo"
+          }
+        },
+        {
+          "id": "fig_calc",
+          "tipo": "check",
+          "rotulo": "Calcificação grosseira",
+          "achado": "Calcificação grosseira",
+          "laudo": "Calcificação grosseira no {fig_calc_seg}, medindo {fig_calc_cm} cm."
+        },
+        {
+          "id": "fig_calc_cm",
+          "tipo": "num",
+          "rotulo": "Medida (cm)",
+          "unidade": "cm",
+          "obrigatorio": true,
+          "showIf": {
+            "var": "fig_calc"
+          }
+        },
+        {
+          "id": "fig_calc_seg",
+          "tipo": "select",
+          "rotulo": "Segmento",
+          "padrao": "6",
+          "opcoes": [
+            {
+              "valor": "1",
+              "rotulo": "segmento I",
+              "laudo": "segmento I"
+            },
+            {
+              "valor": "2",
+              "rotulo": "segmento II",
+              "laudo": "segmento II"
+            },
+            {
+              "valor": "3",
+              "rotulo": "segmento III",
+              "laudo": "segmento III"
+            },
+            {
+              "valor": "4a",
+              "rotulo": "segmento IVa",
+              "laudo": "segmento IVa"
+            },
+            {
+              "valor": "4b",
+              "rotulo": "segmento IVb",
+              "laudo": "segmento IVb"
+            },
+            {
+              "valor": "5",
+              "rotulo": "segmento V",
+              "laudo": "segmento V"
+            },
+            {
+              "valor": "6",
+              "rotulo": "segmento VI",
+              "laudo": "segmento VI"
+            },
+            {
+              "valor": "7",
+              "rotulo": "segmento VII",
+              "laudo": "segmento VII"
+            },
+            {
+              "valor": "8",
+              "rotulo": "segmento VIII",
+              "laudo": "segmento VIII"
+            }
+          ],
+          "showIf": {
+            "var": "fig_calc"
+          }
+        }
+      ]
+    },
+    {
+      "id": "vesicula",
+      "titulo": "Vesícula biliar",
+      "campos": [
+        {
+          "id": "ves",
+          "tipo": "seg",
+          "rotulo": "Vesícula",
+          "padrao": "normal",
+          "opcoes": [
+            {
+              "valor": "normal",
+              "rotulo": "Normal",
+              "laudo": "Vesícula biliar com forma e dimensões normais, paredes finas e regulares, apresentando conteúdo anecogênico sem imagens calculosas."
+            },
+            {
+              "valor": "calc",
+              "rotulo": "Cálculo único",
+              "laudo": "Vesícula biliar contendo imagem hiperecogênica com sombra acústica posterior, medindo {ves_calc_cm} cm, compatível com cálculo.",
+              "impressao": "Colelitíase."
+            },
+            {
+              "valor": "calcs",
+              "rotulo": "Múltiplos cálculos",
+              "laudo": "Vesícula biliar contendo múltiplas imagens hiperecogênicas com sombra acústica posterior, a maior com {ves_calcs_max} cm, compatíveis com cálculos.",
+              "impressao": "Colelitíase."
+            },
+            {
+              "valor": "polipo",
+              "rotulo": "Pólipo",
+              "laudo": "Vesícula biliar com imagem polipoide séssil aderida à parede, medindo {ves_polipo_cm} cm.",
+              "impressao": "Pólipo vesicular."
+            },
+            {
+              "valor": "colesterolose",
+              "rotulo": "Colesterolose",
+              "laudo": "Vesícula biliar com pequenos focos ecogênicos aderidos à parede, sem sombra acústica, sugestivos de colesterolose.",
+              "impressao": "Sinais de colesterolose vesicular."
+            },
+            {
+              "valor": "vazia",
+              "rotulo": "Vazia / contraída",
+              "laudo": "Vesícula biliar contraída, de avaliação limitada."
+            },
+            {
+              "valor": "ausente",
+              "rotulo": "Ausente",
+              "laudo": "Vesícula biliar não visualizada.",
+              "impressao": "Vesícula biliar não visualizada."
+            }
+          ]
+        },
+        {
+          "id": "ves_calc_cm",
+          "tipo": "num",
+          "rotulo": "Cálculo (cm)",
+          "unidade": "cm",
+          "obrigatorio": true,
+          "showIf": {
+            "==": [
+              {
+                "var": "ves"
+              },
+              "calc"
+            ]
+          }
+        },
+        {
+          "id": "ves_calcs_max",
+          "tipo": "num",
+          "rotulo": "Maior cálculo (cm)",
+          "unidade": "cm",
+          "obrigatorio": true,
+          "showIf": {
+            "==": [
+              {
+                "var": "ves"
+              },
+              "calcs"
+            ]
+          }
+        },
+        {
+          "id": "ves_polipo_cm",
+          "tipo": "num",
+          "rotulo": "Pólipo (cm)",
+          "unidade": "cm",
+          "obrigatorio": true,
+          "showIf": {
+            "==": [
+              {
+                "var": "ves"
+              },
+              "polipo"
+            ]
+          }
+        },
+        {
+          "id": "ves_parede",
+          "tipo": "check",
+          "rotulo": "Citar espessura da parede",
+          "achado": "Citar espessura da parede",
+          "laudo": "Parede vesicular com espessura de {ves_parede_cm} cm."
+        },
+        {
+          "id": "ves_parede_cm",
+          "tipo": "num",
+          "rotulo": "Espessura (cm)",
+          "unidade": "cm",
+          "obrigatorio": true,
+          "showIf": {
+            "var": "ves_parede"
+          }
+        }
+      ]
+    },
+    {
+      "id": "vias",
+      "titulo": "Vias biliares",
+      "campos": [
+        {
+          "id": "vias",
+          "tipo": "seg",
+          "rotulo": "Vias biliares",
+          "padrao": "normal",
+          "opcoes": [
+            {
+              "valor": "normal",
+              "rotulo": "Normais",
+              "laudo": "Não há dilatação das vias biliares intra ou extra-hepáticas."
+            },
+            {
+              "valor": "coledoco",
+              "rotulo": "Colédoco ectasiado",
+              "laudo": "Colédoco com calibre aumentado, medindo {vias_calibre} cm.",
+              "impressao": "Dilatação do colédoco."
+            },
+            {
+              "valor": "intra",
+              "rotulo": "Dilatação intra-hepática",
+              "laudo": "Dilatação das vias biliares intra-hepáticas.",
+              "impressao": "Dilatação das vias biliares intra-hepáticas."
+            }
+          ]
+        },
+        {
+          "id": "vias_calibre",
+          "tipo": "num",
+          "rotulo": "Calibre do colédoco (cm)",
+          "unidade": "cm",
+          "obrigatorio": true,
+          "showIf": {
+            "==": [
+              {
+                "var": "vias"
+              },
+              "coledoco"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "pancreas",
+      "titulo": "Pâncreas",
+      "campos": [
+        {
+          "id": "panc",
+          "tipo": "seg",
+          "rotulo": "Pâncreas",
+          "padrao": "normal",
+          "opcoes": [
+            {
+              "valor": "normal",
+              "rotulo": "Normal",
+              "laudo": "Pâncreas de dimensões normais, contornos regulares e ecotextura homogênea. Não há dilatação do ducto pancreático."
+            },
+            {
+              "valor": "parcial",
+              "rotulo": "Parcialmente acessível",
+              "laudo": "Pâncreas parcialmente visualizado por interposição gasosa."
+            },
+            {
+              "valor": "inacessivel",
+              "rotulo": "Inacessível",
+              "laudo": "Pâncreas não avaliável por interposição gasosa."
+            }
+          ]
+        },
+        {
+          "id": "panc_med",
+          "tipo": "check",
+          "rotulo": "Citar dimensões (espessura)",
+          "achado": "Citar dimensões (espessura)"
+        },
+        {
+          "id": "panc_cab",
+          "tipo": "num",
+          "rotulo": "Cabeça (cm)",
+          "unidade": "cm",
+          "obrigatorio": true,
+          "laudo": "Cabeça pancreática com espessura de {panc_cab} cm.",
+          "showIf": {
+            "var": "panc_med"
+          }
+        },
+        {
+          "id": "panc_corpo",
+          "tipo": "num",
+          "rotulo": "Corpo (cm)",
+          "unidade": "cm",
+          "obrigatorio": true,
+          "laudo": "Corpo com {panc_corpo} cm.",
+          "showIf": {
+            "var": "panc_med"
+          }
+        },
+        {
+          "id": "panc_cauda",
+          "tipo": "num",
+          "rotulo": "Cauda (cm)",
+          "unidade": "cm",
+          "obrigatorio": true,
+          "laudo": "Cauda com {panc_cauda} cm.",
+          "showIf": {
+            "var": "panc_med"
+          }
+        }
+      ]
+    },
+    {
+      "id": "baco",
+      "titulo": "Baço",
+      "campos": [
+        {
+          "id": "baco",
+          "tipo": "seg",
+          "rotulo": "Baço",
+          "padrao": "normal",
+          "opcoes": [
+            {
+              "valor": "normal",
+              "rotulo": "Normal",
+              "laudo": "Baço com dimensões normais, contornos regulares e ecotextura homogênea."
+            },
+            {
+              "valor": "aumentado",
+              "rotulo": "Aumentado",
+              "laudo": "Baço com dimensões aumentadas e ecotextura homogênea.",
+              "impressao": "Esplenomegalia."
+            },
+            {
+              "valor": "ausente",
+              "rotulo": "Ausente",
+              "laudo": "Baço não visualizado.",
+              "impressao": "Baço não visualizado."
+            }
+          ]
+        },
+        {
+          "id": "baco_med",
+          "tipo": "check",
+          "rotulo": "Citar medidas",
+          "achado": "Citar medidas"
+        },
+        {
+          "id": "baco_long",
+          "tipo": "num",
+          "rotulo": "Longitudinal (cm)",
+          "unidade": "cm",
+          "obrigatorio": true,
+          "laudo": "Eixo longitudinal do baço medindo {baco_long} cm.",
+          "showIf": {
+            "var": "baco_med"
+          }
+        },
+        {
+          "id": "baco_transv",
+          "tipo": "num",
+          "rotulo": "Transverso (cm)",
+          "unidade": "cm",
+          "obrigatorio": true,
+          "laudo": "Eixo transverso medindo {baco_transv} cm.",
+          "showIf": {
+            "var": "baco_med"
+          }
+        },
+        {
+          "id": "baco_acess",
+          "tipo": "check",
+          "rotulo": "Baço acessório",
+          "achado": "Baço acessório",
+          "laudo": "Baço acessório medindo {baco_acess_cm} cm."
+        },
+        {
+          "id": "baco_acess_cm",
+          "tipo": "num",
+          "rotulo": "Medida (cm)",
+          "unidade": "cm",
+          "obrigatorio": true,
+          "showIf": {
+            "var": "baco_acess"
+          }
+        },
+        {
+          "id": "baco_calc",
+          "tipo": "check",
+          "rotulo": "Calcificação esplênica",
+          "achado": "Calcificação esplênica",
+          "laudo": "Calcificação esplênica medindo {baco_calc_cm} cm."
+        },
+        {
+          "id": "baco_calc_cm",
+          "tipo": "num",
+          "rotulo": "Medida (cm)",
+          "unidade": "cm",
+          "obrigatorio": true,
+          "showIf": {
+            "var": "baco_calc"
+          }
+        }
+      ]
+    },
+    {
+      "id": "aorta",
+      "titulo": "Aorta e retroperitônio",
+      "campos": [
+        {
+          "id": "aorta",
+          "tipo": "seg",
+          "rotulo": "Aorta",
+          "padrao": "normal",
+          "opcoes": [
+            {
+              "valor": "normal",
+              "rotulo": "Normal",
+              "laudo": "Aorta e veia cava inferior com calibre e trajeto preservados. Ausência de linfonodomegalias retroperitoneais detectáveis."
+            },
+            {
+              "valor": "ateromatosa",
+              "rotulo": "Ateromatosa",
+              "laudo": "Aorta com paredes ateromatosas e calibre preservado. Ausência de linfonodomegalias retroperitoneais detectáveis.",
+              "impressao": "Aortoateromatose."
+            },
+            {
+              "valor": "aneurisma",
+              "rotulo": "Aneurisma",
+              "laudo": "Dilatação aneurismática da aorta abdominal, de calibre máximo de {aorta_cm} cm.",
+              "impressao": "Aneurisma da aorta abdominal."
+            },
+            {
+              "valor": "inacessivel",
+              "rotulo": "Inacessível",
+              "laudo": "Aorta e retroperitônio não avaliáveis por interposição gasosa."
+            }
+          ]
+        },
+        {
+          "id": "aorta_cm",
+          "tipo": "num",
+          "rotulo": "Calibre máximo (cm)",
+          "unidade": "cm",
+          "obrigatorio": true,
+          "showIf": {
+            "==": [
+              {
+                "var": "aorta"
+              },
+              "aneurisma"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "liquido",
+      "titulo": "Líquido livre",
+      "campos": [
+        {
+          "id": "liquido",
+          "tipo": "seg",
+          "rotulo": "Líquido livre",
+          "padrao": "ausente",
+          "opcoes": [
+            {
+              "valor": "ausente",
+              "rotulo": "Ausente",
+              "laudo": "Ausência de líquido livre na cavidade abdominal."
+            },
+            {
+              "valor": "pequena",
+              "rotulo": "Pequena",
+              "laudo": "Pequena quantidade de líquido livre na cavidade abdominal.",
+              "impressao": "Líquido livre na cavidade abdominal."
+            },
+            {
+              "valor": "moderada",
+              "rotulo": "Moderada",
+              "laudo": "Moderada quantidade de líquido livre na cavidade abdominal.",
+              "impressao": "Líquido livre na cavidade abdominal."
+            },
+            {
+              "valor": "grande",
+              "rotulo": "Grande",
+              "laudo": "Grande quantidade de líquido livre na cavidade abdominal.",
+              "impressao": "Líquido livre na cavidade abdominal."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "avisos": []
+}

@@ -59,7 +59,7 @@ const rim = (k, lado) => {
 const t = {
   id: 'abdome-total',
   versao: '0.1.0',
-  exame: 'Abdome / Pelve',
+  exame: 'Abdome',
   subtipo: 'Abdome total',
   titulo: 'ULTRASSONOGRAFIA DO ABDOME TOTAL',
   mudancas: {
@@ -307,3 +307,5 @@ const t = {
 };
 
 salvar(t);
+
+export default t;

@@ -61,7 +61,7 @@ const semEndo = and(semCirurgia, { '!': [v('endo_nid')] });
 const t = {
   id: 'transvaginal',
   versao: '0.1.0',
-  exame: 'Abdome / Pelve',
+  exame: 'Pelve',
   subtipo: 'Pelve feminina transvaginal',
   titulo: 'ULTRASSONOGRAFIA PÉLVICA TRANSVAGINAL',
   mudancas: {

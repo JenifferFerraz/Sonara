@@ -48,7 +48,7 @@ export class LaudoPage {
     }
     return [...grupos.values()];
   });
-  readonly abaAtiva = signal('transvaginal');
+  readonly abaAtiva = signal(this._mascaras.emUso()[0].id);
   /** Aba (exame) em que a máscara ativa está. */
   readonly exameAtivo = computed(() => this.template().exame ?? this.template().titulo);
   readonly subtiposDoExame = computed(
