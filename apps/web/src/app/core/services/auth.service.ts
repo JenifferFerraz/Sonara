@@ -55,9 +55,23 @@ function gravar(chave: string, valor: string | null): void {
   }
 }
 
+/** Só o que a tela usa. O CPF e outros dados da conta ficam no servidor, não no navegador. */
+function reduzirUsuario(u: Usuario): Usuario {
+  return {
+    id: u.id,
+    email: u.email,
+    name: u.name,
+    crm: u.crm,
+    crmUf: u.crmUf,
+    modulos: u.modulos,
+    statusAssinatura: u.statusAssinatura
+  };
+}
+
 function lerUsuario(): Usuario | null {
   try {
-    return JSON.parse(ler(CHAVES.usuario) ?? 'null') as Usuario | null;
+    const guardado = JSON.parse(ler(CHAVES.usuario) ?? 'null') as Usuario | null;
+    return guardado ? reduzirUsuario(guardado) : null;
   } catch {
     return null;
   }
@@ -113,8 +127,9 @@ export class AuthService {
     );
     gravar(CHAVES.dispositivo, resposta.deviceId);
     this.guardarSessao(resposta.accessToken, resposta.refreshToken);
-    gravar(CHAVES.usuario, JSON.stringify(resposta.user));
-    this._usuario.set(resposta.user);
+    const usuario = reduzirUsuario(resposta.user);
+    gravar(CHAVES.usuario, JSON.stringify(usuario));
+    this._usuario.set(usuario);
   }
 
   /** Encerra a sessão neste aparelho. Se estiver sem internet, encerra só aqui. */
