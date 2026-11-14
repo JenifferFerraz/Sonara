@@ -145,3 +145,10 @@ form {
   font-size: 12px;
   color: var(--sn-texto-suave);
 }
+
+/* Botão "Instalar o Sonara" logo abaixo do formulário. Só aparece quando o navegador oferece a instalação. */
+.instalar-login {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(14px, 2.4vh, 22px);
+}

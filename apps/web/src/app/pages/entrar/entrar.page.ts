@@ -3,10 +3,11 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { LicencaService } from '../../core/services/licenca.service';
 import { AuthLayoutComponent } from '../../shared/auth-layout/auth-layout.component';
+import { InstalarComponent } from '../../shared/instalar/instalar.component';
 
 @Component({
   selector: 'app-entrar-page',
-  imports: [RouterLink, AuthLayoutComponent],
+  imports: [RouterLink, AuthLayoutComponent, InstalarComponent],
   template: `
     <app-auth-layout>
       <span class="selo">Acesso ao Sonara</span>
@@ -64,6 +65,10 @@ import { AuthLayoutComponent } from '../../shared/auth-layout/auth-layout.compon
           }
         </button>
       </form>
+
+      <div class="instalar-login">
+        <app-instalar />
+      </div>
     </app-auth-layout>
   `,
   styleUrl: '../auth.scss'
