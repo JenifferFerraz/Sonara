@@ -2,19 +2,20 @@ import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { LicencaService } from '../../core/services/licenca.service';
+import { AuthLayoutComponent } from '../../shared/auth-layout/auth-layout.component';
 import { aplicarMascara, mascaraCpf } from '../../shared/mascaras';
 
 const UFS = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'];
 
 @Component({
   selector: 'app-cadastro-page',
-  imports: [RouterLink],
+  imports: [RouterLink, AuthLayoutComponent],
   template: `
-    <main class="cartao largo">
-      <img src="logo-icone.svg" alt="" width="48" height="48" />
-      <h1>Criar conta</h1>
-      <p class="intro">
-        O Sonara só redige o laudo. Quem interpreta o exame e responde por ele é o médico.
+    <app-auth-layout>
+      <span class="selo">Novo por aqui</span>
+      <h2 class="titulo">Criar conta</h2>
+      <p class="sub">
+        Já tem conta? <a routerLink="/entrar">Entrar</a>
       </p>
 
       <form (submit)="cadastrar($event)">
@@ -24,15 +25,41 @@ const UFS = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', '
         </label>
         <label>
           E-mail
-          <input type="email" name="email" autocomplete="username" required [value]="email()" (input)="email.set(valor($event))" />
+          <input
+            type="email"
+            name="email"
+            autocomplete="username"
+            placeholder="voce@clinica.com.br"
+            required
+            [value]="email()"
+            (input)="email.set(valor($event))" />
         </label>
         <label>
           Senha (mínimo de 8 caracteres)
-          <input type="password" name="senha" autocomplete="new-password" minlength="8" required [value]="senha()" (input)="senha.set(valor($event))" />
+          <span class="campo-senha">
+            <input
+              [type]="mostrar() ? 'text' : 'password'"
+              name="senha"
+              autocomplete="new-password"
+              minlength="8"
+              required
+              [value]="senha()"
+              (input)="senha.set(valor($event))" />
+            <button type="button" class="mostrar" [attr.aria-pressed]="mostrar()" (click)="mostrar.set(!mostrar())">
+              {{ mostrar() ? 'Ocultar' : 'Mostrar' }}
+            </button>
+          </span>
         </label>
         <label>
           CPF
-          <input name="cpf" inputmode="numeric" autocomplete="off" required [value]="cpf()" (input)="cpf.set(mascara($event))" />
+          <input
+            name="cpf"
+            inputmode="numeric"
+            autocomplete="off"
+            placeholder="000.000.000-00"
+            required
+            [value]="cpf()"
+            (input)="cpf.set(mascara($event))" />
         </label>
         <div class="par">
           <label>
@@ -54,13 +81,14 @@ const UFS = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', '
           <p class="erro" role="alert">{{ erro() }}</p>
         }
 
-        <button type="submit" class="btn primario" [disabled]="carregando()">
+        <button type="submit" class="acao" [disabled]="carregando()">
           {{ carregando() ? 'Criando...' : 'Criar conta e entrar' }}
+          @if (!carregando()) {
+            <span class="seta" aria-hidden="true">→</span>
+          }
         </button>
       </form>
-
-      <p class="rodape">Já tem conta? <a routerLink="/entrar">Entrar</a></p>
-    </main>
+    </app-auth-layout>
   `,
   styleUrl: '../auth.scss'
 })
@@ -78,6 +106,7 @@ export class CadastroPage {
   readonly uf = signal('');
   readonly erro = signal('');
   readonly carregando = signal(false);
+  readonly mostrar = signal(false);
 
   valor(evento: Event): string {
     return (evento.target as HTMLInputElement | HTMLSelectElement).value;
