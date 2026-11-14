@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="70 40 640 560" role="img" aria-label="Sonara">
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="40">
+    <path d="M95 205 A397 397 0 0 1 688 205" stroke="#ffffff"/>
+    <path d="M170 268 A292 292 0 0 1 615 268" stroke="#46b39c"/>
+    <path d="M236 335 A194 194 0 0 1 548 340" stroke="#ffffff"/>
+    <path d="M347 408 A64 64 0 0 1 476 408" stroke="#ffffff"/>
+    <path d="M236 335 L372 495" stroke="#ffffff" stroke-width="44"/>
+  </g>
+  <path d="M340 582 L340 530 Q340 500 366 492 L420 492 Q445 500 445 530 L445 582 Z" fill="#ffffff" stroke="#ffffff" stroke-width="6" stroke-linejoin="round"/>
+</svg>

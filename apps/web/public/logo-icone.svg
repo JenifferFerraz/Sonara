@@ -1,6 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke-linecap="round">
-  <path d="M19.4 34.3 A40 40 0 0 1 80.6 34.3" stroke="#0b6b66" stroke-width="9"/>
-  <path d="M28.6 42 A28 28 0 0 1 71.4 42" stroke="#5fd6c6" stroke-width="9"/>
-  <path d="M37.7 49.7 A16 16 0 0 1 62.3 49.7" stroke="#93ddd3" stroke-width="9"/>
-  <path d="M50 60 L58 73 L52.6 71.6 L53 83 L47 83 L47.4 71.6 L42 73 Z" fill="#0b6b66" stroke="#0b6b66" stroke-width="2" stroke-linejoin="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="70 40 640 560" role="img" aria-label="Sonara">
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="40">
+    <path d="M95 205 A397 397 0 0 1 688 205" stroke="#11534b"/>
+    <path d="M170 268 A292 292 0 0 1 615 268" stroke="#46b39c"/>
+    <path d="M236 335 A194 194 0 0 1 548 340" stroke="#11534b"/>
+    <path d="M347 408 A64 64 0 0 1 476 408" stroke="#11534b"/>
+    <path d="M236 335 L372 495" stroke="#11534b" stroke-width="44"/>
+  </g>
+  <path d="M340 582 L340 530 Q340 500 366 492 L420 492 Q445 500 445 530 L445 582 Z" fill="#11534b" stroke="#11534b" stroke-width="6" stroke-linejoin="round"/>
 </svg>

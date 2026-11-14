@@ -9,8 +9,8 @@ import { MascaraService } from '../../core/services/mascara.service';
   imports: [RouterOutlet, RouterLink],
   template: `
     <header class="topo">
-      <img src="logo-icone.svg" alt="" width="34" height="34" />
-      <span class="marca">Sonara</span>
+      <img src="logo-icone.svg" alt="" width="38" height="34" />
+      <span class="marca">sonara</span>
       <span class="aviso-legal">
         O sistema só redige. Quem interpreta o exame e responde pelo laudo é o médico.
       </span>
@@ -44,7 +44,7 @@ import { MascaraService } from '../../core/services/mascara.service';
       background: var(--sn-superficie);
       border-bottom: 1px solid var(--sn-borda);
     }
-    .marca { font-size: 20px; font-weight: 700; color: var(--sn-primaria); letter-spacing: 0.2px; }
+    .marca { font-size: 24px; font-weight: 600; color: var(--sn-primaria); letter-spacing: -0.6px; line-height: 1; }
     .aviso-legal { margin-left: auto; font-size: 12px; color: var(--sn-texto-suave); }
     .medico { font-weight: 600; font-size: 13px; }
     .link { border: 0; background: none; color: var(--sn-primaria); font-weight: 600; text-decoration: underline; padding: 0; }

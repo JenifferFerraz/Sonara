@@ -13,8 +13,8 @@
 }
 
 .titulo {
-  margin: 14px 0 6px;
-  font-size: 30px;
+  margin: clamp(8px, 1.6vh, 14px) 0 6px;
+  font-size: clamp(24px, 3.6vh, 30px);
   line-height: 1.15;
   letter-spacing: -0.4px;
   color: var(--sn-profunda);
@@ -35,20 +35,20 @@
 form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-top: 24px;
+  gap: clamp(10px, 1.9vh, 16px);
+  margin-top: clamp(14px, 2.6vh, 24px);
 
   label {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: clamp(4px, 0.7vh, 6px);
     font-size: 13px;
     font-weight: 600;
   }
 
   input,
   select {
-    height: 46px;
+    height: clamp(40px, 5.6vh, 46px);
     padding: 0 14px;
     border: 1.5px solid var(--sn-borda);
     border-radius: 10px;
@@ -97,7 +97,7 @@ form {
 }
 
 .acao {
-  height: 48px;
+  height: clamp(42px, 5.8vh, 48px);
   margin-top: 6px;
   border: 0;
   border-radius: 10px;
