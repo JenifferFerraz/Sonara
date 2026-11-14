@@ -173,17 +173,29 @@ export function gerar(template: Template, estado: Estado, preferencias: Preferen
 
   for (const secao of template.secoes) {
     const frasesSecao: string[] = [];
+    /** Campo com `paragrafo`: as frases novas (a partir de `desde`) saem da seção e viram parágrafos próprios. */
+    const separar = (c: Campo, desde: number) => {
+      if (!c.paragrafo || frasesSecao.length <= desde) return;
+      const novas = frasesSecao.splice(desde);
+      if (frasesSecao.length) {
+        paragrafos.push(frasesSecao.join(' '));
+        frasesSecao.length = 0;
+      }
+      paragrafos.push(...novas);
+    };
     for (const c of secao.campos) {
       if (c.tipo === 'calc') {
         // Campo calculado com frase (ex.: volume total da tireoide).
         if (visivel(c, logica) && c.laudo) {
           frasesSecao.push(interpolar(frase(c.id, c.laudo, c.variantes, preferencias) ?? c.laudo, texto));
+          separar(c, frasesSecao.length - 1);
         }
         continue;
       }
       if (!visivel(c, logica)) continue;
       const v = estado.valores[c.id];
       const naoCitar = Boolean(estado.valores[`${c.id}__nc`]);
+      const antes = frasesSecao.length;
 
       switch (c.tipo) {
         case 'seg':
@@ -273,6 +285,7 @@ export function gerar(template: Template, estado: Estado, preferencias: Preferen
           if (typeof v === 'string' && v.trim() !== '') frasesSecao.push(interpolar(frase(c.id, c.laudo, c.variantes, preferencias) ?? '{valor}', { valor: v.trim() }));
           break;
       }
+      separar(c, antes);
     }
     if (frasesSecao.length) paragrafos.push(frasesSecao.join(' '));
   }

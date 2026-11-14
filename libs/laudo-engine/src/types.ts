@@ -49,6 +49,10 @@ export interface Campo {
   laudo?: string;
   /** Frases alternativas à de `laudo` (check, num, dims, text). */
   variantes?: Variante[];
+  /** A frase deste campo vira um parágrafo próprio no laudo (cada item de lista, um parágrafo). */
+  paragrafo?: boolean;
+  /** Sub-campos numéricos consecutivos com a mesma `linha` aparecem juntos: "Mede: a x b x c cm". */
+  linha?: string;
   /** Rótulo do achado no diálogo "Adicionar achado". Sem ele, o campo fica sempre na tela. */
   achado?: string;
   impressao?: string;

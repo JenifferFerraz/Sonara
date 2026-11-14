@@ -43,6 +43,18 @@ describe('tireoide mask', () => {
     expect(r.impressao).toEqual(['Exame sem anormalidades detectáveis pelo método.']);
   });
 
+  it('puts each measurement in its own paragraph, with the nodules sentence in the first one', () => {
+    const r = gerar(t, medidasNormais());
+    expect(r.paragrafos).toEqual([
+      'Tireoide tópica, com dimensões normais e contornos regulares. A ecotextura é homogênea. Não se observam lesões nodulares.',
+      'O lobo direito mede 4,0 x 1,2 x 1,2 cm.',
+      'O lobo esquerdo mede 4,0 x 1,2 x 1,2 cm.',
+      'O istmo tem espessura de 0,3 cm.',
+      'Volume tireoidiano estimado em 6,0 cm³.',
+      'Ausência de linfonodomegalias cervicais.',
+    ]);
+  });
+
   it('writes a nodule and computes ACR TI-RADS as a warning only', () => {
     const r = gerar(t, comNodulo({ eco: 'hipoecoico', composicao: 'solido', forma: 'mais_largo' }));
     // sólido 2 + hipoecogênico 2 = 4 pontos = TR4; 1,6 cm >= 1,5 cm

@@ -152,26 +152,45 @@
       </div>
 
       @if (!lista().multiplos) {
-        @for (item of lista().itens; track $index) {
+        @for (item of lista().itens; track $index; let i = $index) {
           <div class="item">
-            <span class="indice">{{ $index + 1 }}</span>
-            @for (sub of c.itens; track sub.id) {
-              @if (sub.tipo === 'num') {
+            <span class="indice">{{ i + 1 }}</span>
+            @for (bloco of blocosItem(); track $index) {
+              @if (bloco.tipo === 'linha') {
+                <div class="sub linha-medidas">
+                  <span>{{ bloco.rotulo }}</span>
+                  @for (sub of bloco.subs; track sub.id; let ultimo = $last) {
+                    <input
+                      class="curto"
+                      inputmode="decimal"
+                      autocomplete="off"
+                      [attr.aria-label]="sub.rotulo"
+                      [class.faltando]="itemSemMedida(i, sub.id)"
+                      [value]="item[sub.id]"
+                      (input)="mudarItem(i, sub.id, decimalEm($event))" />
+                    @if (!ultimo) {
+                      <span class="x">×</span>
+                    }
+                  }
+                  <span class="unidade">cm</span>
+                </div>
+              } @else if (bloco.sub.tipo === 'num') {
                 <label class="sub">
-                  <span>{{ sub.rotulo }}</span>
+                  <span>{{ bloco.sub.rotulo }}</span>
                   <input
                     class="curto"
                     inputmode="decimal"
-                    [class.faltando]="itemSemMedida($index, sub.id)"
-                    [value]="item[sub.id]"
-                    (input)="mudarItem($index, sub.id, decimalEm($event))" />
+                    autocomplete="off"
+                    [class.faltando]="itemSemMedida(i, bloco.sub.id)"
+                    [value]="item[bloco.sub.id]"
+                    (input)="mudarItem(i, bloco.sub.id, decimalEm($event))" />
                 </label>
               } @else {
                 <label class="sub">
-                  <span>{{ sub.rotulo }}</span>
-                  <select (change)="mudarItem($index, sub.id, valorEm($event))">
-                    @for (o of sub.opcoes; track o.valor) {
-                      <option [value]="o.valor" [selected]="item[sub.id] === o.valor">
+                  <span>{{ bloco.sub.rotulo }}</span>
+                  <select (change)="mudarItem(i, bloco.sub.id, valorEm($event))">
+                    @for (o of bloco.sub.opcoes; track o.valor) {
+                      <option [value]="o.valor" [selected]="item[bloco.sub.id] === o.valor">
                         {{ o.rotulo }}
                       </option>
                     }
@@ -179,7 +198,7 @@
                 </label>
               }
             }
-            <button type="button" class="btn pequeno" (click)="remover($index)">Remover</button>
+            <button type="button" class="btn pequeno" (click)="remover(i)">Remover</button>
           </div>
         }
         <button type="button" class="btn pequeno" (click)="adicionar()">+ adicionar</button>

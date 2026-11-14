@@ -11,16 +11,16 @@ const loboEsquerdo = { and: [{ '!=': [v('cirurgia'), 'total'] }, { '!=': [v('cir
 
 // Valores das opções iguais aos de libs/laudo-engine/src/tirads.ts.
 const nodulo = {
-  id: 'nodulos', tipo: 'list', rotulo: 'Nódulo', obrigatorio: true,
+  id: 'nodulos', tipo: 'list', rotulo: 'Nódulo', obrigatorio: true, paragrafo: true,
   showIf: e('nod_status', 'presentes'),
   tirads: {
     composicao: 'composicao', ecogenicidade: 'eco', forma: 'forma', margem: 'margem',
     foco: 'foco', medidas: ['d1', 'd2', 'd3'], modo: 'modo',
   },
   itens: [
-    num('d1', 'Maior eixo (cm)'),
-    num('d2', 'Eixo 2 (cm)'),
-    num('d3', 'Eixo 3 (cm)'),
+    num('d1', 'Medida 1 (cm)', { linha: 'Mede:' }),
+    num('d2', 'Medida 2 (cm)', { linha: 'Mede:' }),
+    num('d3', 'Medida 3 (cm)', { linha: 'Mede:' }),
     {
       id: 'local', tipo: 'select', rotulo: 'Localização', padrao: 'ld_medio',
       opcoes: [
@@ -138,6 +138,13 @@ const t = {
             op('tireoidite', 'Padrão de tireoidite', 'Ecotextura heterogênea difusa, com aspecto que pode corresponder a tireoidite.', 'Alteração textural difusa, a correlacionar com tireoidite.'),
           ],
         },
+        {
+          id: 'nod_status', tipo: 'seg', rotulo: 'Nódulos', padrao: 'ausentes', showIf: { '!=': [v('cirurgia'), 'total'] },
+          opcoes: [
+            op('ausentes', 'Ausentes', 'Não se observam lesões nodulares.'),
+            op('presentes', 'Presentes', ''),
+          ],
+        },
         ...opcional('doppler', 'Descrever Doppler do parênquima', [
           {
             id: 'doppler_tipo', tipo: 'select', rotulo: 'Doppler', padrao: 'normal',
@@ -153,12 +160,12 @@ const t = {
     {
       id: 'medidas', titulo: 'Medidas',
       campos: [
-        { id: 'lobo_d', tipo: 'dims', rotulo: 'Lobo direito (L × AP × T, cm)', obrigatorio: true, showIf: loboDireito, laudo: 'O lobo direito mede {lobo_d.a} x {lobo_d.b} x {lobo_d.c} cm.' },
-        { id: 'lobo_e', tipo: 'dims', rotulo: 'Lobo esquerdo (L × AP × T, cm)', obrigatorio: true, showIf: loboEsquerdo, laudo: 'O lobo esquerdo mede {lobo_e.a} x {lobo_e.b} x {lobo_e.c} cm.' },
-        num('istmo', 'Istmo (espessura, cm)', { showIf: and(semCirurgia, { '!': [v('istmo_fil')] }), laudo: 'O istmo tem espessura de {istmo} cm.' }),
-        { id: 'istmo_fil', tipo: 'check', rotulo: 'Istmo filiforme (não mensurável)', showIf: semCirurgia, laudo: 'O istmo é filiforme, não mensurável.' },
+        { id: 'lobo_d', tipo: 'dims', rotulo: 'Lobo direito (L × AP × T, cm)', obrigatorio: true, showIf: loboDireito, paragrafo: true, laudo: 'O lobo direito mede {lobo_d.a} x {lobo_d.b} x {lobo_d.c} cm.' },
+        { id: 'lobo_e', tipo: 'dims', rotulo: 'Lobo esquerdo (L × AP × T, cm)', obrigatorio: true, showIf: loboEsquerdo, paragrafo: true, laudo: 'O lobo esquerdo mede {lobo_e.a} x {lobo_e.b} x {lobo_e.c} cm.' },
+        num('istmo', 'Istmo (espessura, cm)', { showIf: and(semCirurgia, { '!': [v('istmo_fil')] }), paragrafo: true, laudo: 'O istmo tem espessura de {istmo} cm.' }),
+        { id: 'istmo_fil', tipo: 'check', rotulo: 'Istmo filiforme (não mensurável)', showIf: semCirurgia, paragrafo: true, laudo: 'O istmo é filiforme, não mensurável.' },
         {
-          id: 'vol_total', tipo: 'calc', rotulo: 'Volume tireoidiano', casas: 1, showIf: semCirurgia,
+          id: 'vol_total', tipo: 'calc', rotulo: 'Volume tireoidiano', casas: 1, showIf: semCirurgia, paragrafo: true,
           expressao: { '+': [{ var: 'lobo_d.vol' }, { var: 'lobo_e.vol' }] },
           laudo: 'Volume tireoidiano estimado em {vol_total} cm³.',
         },
@@ -167,13 +174,6 @@ const t = {
     {
       id: 'nodulos', titulo: 'Nódulos',
       campos: [
-        {
-          id: 'nod_status', tipo: 'seg', rotulo: 'Nódulos', padrao: 'ausentes', showIf: { '!=': [v('cirurgia'), 'total'] },
-          opcoes: [
-            op('ausentes', 'Ausentes', 'Não se observam lesões nodulares.'),
-            op('presentes', 'Presentes', ''),
-          ],
-        },
         nodulo,
         ...opcional('coloide', 'Cistos coloides', [
           num('coloide_max', 'Maior (cm)'),
@@ -191,10 +191,10 @@ const t = {
           ],
         },
         {
-          id: 'linfonodos', tipo: 'list', rotulo: 'Linfonodo', obrigatorio: true, showIf: e('linf_status', 'presentes'),
+          id: 'linfonodos', tipo: 'list', rotulo: 'Linfonodo', obrigatorio: true, paragrafo: true, showIf: e('linf_status', 'presentes'),
           itens: [
-            num('d1', 'Maior eixo (cm)'),
-            num('d2', 'Menor eixo (cm)'),
+            num('d1', 'Maior eixo (cm)', { linha: 'Mede:' }),
+            num('d2', 'Menor eixo (cm)', { linha: 'Mede:' }),
             {
               id: 'nivel', tipo: 'select', rotulo: 'Nível', padrao: 'II',
               opcoes: ['IA', 'IB', 'II', 'III', 'IV', 'V', 'VI'].map((n) => op(n, `Nível ${n}`, n)),

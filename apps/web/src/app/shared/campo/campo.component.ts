@@ -3,6 +3,11 @@ import { Alerta, Campo, Dims, ItemLista, ListaValor } from '@sonara/laudo-engine
 
 import { aplicarMascara, mascaraData, mascaraDecimal } from '../mascaras';
 
+/** Sub-campos de um item de lista: ou um campo sozinho, ou uma linha "Mede: a x b x c cm". */
+export type BlocoItem =
+  | { tipo: 'campo'; sub: Campo }
+  | { tipo: 'linha'; rotulo: string; subs: Campo[] };
+
 export interface MudancaCampo {
   id: string;
   valor: unknown;
@@ -48,6 +53,22 @@ export class CampoComponent {
     return (
       (this.valores()[this.campo().id] as ListaValor) ?? { multiplos: false, maior: '', itens: [] }
     );
+  }
+
+  /** Agrupa os sub-campos que dividem a mesma `linha`, mantendo a ordem. */
+  blocosItem(): BlocoItem[] {
+    const blocos: BlocoItem[] = [];
+    for (const sub of this.campo().itens ?? []) {
+      const ultimo = blocos.at(-1);
+      if (sub.linha && ultimo?.tipo === 'linha' && ultimo.rotulo === sub.linha) {
+        ultimo.subs.push(sub);
+      } else if (sub.linha) {
+        blocos.push({ tipo: 'linha', rotulo: sub.linha, subs: [sub] });
+      } else {
+        blocos.push({ tipo: 'campo', sub });
+      }
+    }
+    return blocos;
   }
 
   selecionados(): string[] {

@@ -120,6 +120,32 @@
           ]
         },
         {
+          "id": "nod_status",
+          "tipo": "seg",
+          "rotulo": "Nódulos",
+          "padrao": "ausentes",
+          "showIf": {
+            "!=": [
+              {
+                "var": "cirurgia"
+              },
+              "total"
+            ]
+          },
+          "opcoes": [
+            {
+              "valor": "ausentes",
+              "rotulo": "Ausentes",
+              "laudo": "Não se observam lesões nodulares."
+            },
+            {
+              "valor": "presentes",
+              "rotulo": "Presentes",
+              "laudo": ""
+            }
+          ]
+        },
+        {
           "id": "doppler",
           "tipo": "check",
           "rotulo": "Descrever Doppler do parênquima",
@@ -191,6 +217,7 @@
               }
             ]
           },
+          "paragrafo": true,
           "laudo": "O lobo direito mede {lobo_d.a} x {lobo_d.b} x {lobo_d.c} cm."
         },
         {
@@ -218,6 +245,7 @@
               }
             ]
           },
+          "paragrafo": true,
           "laudo": "O lobo esquerdo mede {lobo_e.a} x {lobo_e.b} x {lobo_e.c} cm."
         },
         {
@@ -245,6 +273,7 @@
               }
             ]
           },
+          "paragrafo": true,
           "laudo": "O istmo tem espessura de {istmo} cm."
         },
         {
@@ -259,6 +288,7 @@
               "nenhuma"
             ]
           },
+          "paragrafo": true,
           "laudo": "O istmo é filiforme, não mensurável."
         },
         {
@@ -274,6 +304,7 @@
               "nenhuma"
             ]
           },
+          "paragrafo": true,
           "expressao": {
             "+": [
               {
@@ -293,36 +324,11 @@
       "titulo": "Nódulos",
       "campos": [
         {
-          "id": "nod_status",
-          "tipo": "seg",
-          "rotulo": "Nódulos",
-          "padrao": "ausentes",
-          "showIf": {
-            "!=": [
-              {
-                "var": "cirurgia"
-              },
-              "total"
-            ]
-          },
-          "opcoes": [
-            {
-              "valor": "ausentes",
-              "rotulo": "Ausentes",
-              "laudo": "Não se observam lesões nodulares."
-            },
-            {
-              "valor": "presentes",
-              "rotulo": "Presentes",
-              "laudo": ""
-            }
-          ]
-        },
-        {
           "id": "nodulos",
           "tipo": "list",
           "rotulo": "Nódulo",
           "obrigatorio": true,
+          "paragrafo": true,
           "showIf": {
             "==": [
               {
@@ -348,23 +354,26 @@
             {
               "id": "d1",
               "tipo": "num",
-              "rotulo": "Maior eixo (cm)",
+              "rotulo": "Medida 1 (cm)",
               "unidade": "cm",
-              "obrigatorio": true
+              "obrigatorio": true,
+              "linha": "Mede:"
             },
             {
               "id": "d2",
               "tipo": "num",
-              "rotulo": "Eixo 2 (cm)",
+              "rotulo": "Medida 2 (cm)",
               "unidade": "cm",
-              "obrigatorio": true
+              "obrigatorio": true,
+              "linha": "Mede:"
             },
             {
               "id": "d3",
               "tipo": "num",
-              "rotulo": "Eixo 3 (cm)",
+              "rotulo": "Medida 3 (cm)",
               "unidade": "cm",
-              "obrigatorio": true
+              "obrigatorio": true,
+              "linha": "Mede:"
             },
             {
               "id": "local",
@@ -646,6 +655,7 @@
           "tipo": "list",
           "rotulo": "Linfonodo",
           "obrigatorio": true,
+          "paragrafo": true,
           "showIf": {
             "==": [
               {
@@ -660,14 +670,16 @@
               "tipo": "num",
               "rotulo": "Maior eixo (cm)",
               "unidade": "cm",
-              "obrigatorio": true
+              "obrigatorio": true,
+              "linha": "Mede:"
             },
             {
               "id": "d2",
               "tipo": "num",
               "rotulo": "Menor eixo (cm)",
               "unidade": "cm",
-              "obrigatorio": true
+              "obrigatorio": true,
+              "linha": "Mede:"
             },
             {
               "id": "nivel",
