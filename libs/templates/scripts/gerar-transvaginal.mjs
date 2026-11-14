@@ -253,3 +253,5 @@ const t = {
 };
 
 salvar(t);
+
+export default t;

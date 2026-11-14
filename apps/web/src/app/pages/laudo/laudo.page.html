@@ -55,16 +55,6 @@
       {{ aba.nome }}
     </button>
   }
-  @if (subtiposDoExame().length > 1) {
-    <label class="versao" title="Tipo de exame">
-      Subtipo
-      <select (change)="escolherSubtipo($event)">
-        @for (s of subtiposDoExame(); track s.id) {
-          <option [value]="s.id" [selected]="s.id === t.id">{{ s.nome }}</option>
-        }
-      </select>
-    </label>
-  }
   <span class="espaco"></span>
   <label class="versao" title="Versões instaladas da máscara">
     Máscara
@@ -82,6 +72,16 @@
 <div class="colunas">
   <!-- Formulário -->
   <main class="formulario">
+    @if (subtiposDoExame().length > 1) {
+      <section class="subtipo">
+        <header><h2>Subtipo de exame</h2></header>
+        <select aria-label="Subtipo de exame" (change)="escolherSubtipo($event)">
+          @for (s of subtiposDoExame(); track s.id) {
+            <option [value]="s.id" [selected]="s.id === t.id">{{ s.nome }}</option>
+          }
+        </select>
+      </section>
+    }
     @if (temAchados()) {
       <div class="barra-achados">
         <button type="button" class="btn pequeno" (click)="abrirAchados()">+ Adicionar achado</button>

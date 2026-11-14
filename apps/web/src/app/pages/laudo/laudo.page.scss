@@ -276,3 +276,18 @@ label span { font-size: 12px; color: var(--sn-texto-suave); }
   .vazio { color: var(--sn-texto-suave); }
   footer { border-top: 1px solid var(--sn-borda); .dica { font-size: 12px; color: var(--sn-texto-suave); } }
 }
+
+.subtipo {
+  margin-bottom: 10px;
+  border: 1px solid var(--sn-borda);
+  border-radius: var(--sn-raio);
+  overflow: hidden;
+  background: var(--sn-superficie);
+
+  header {
+    background: var(--sn-primaria);
+    padding: 5px 12px;
+    h2 { margin: 0; font-size: 13px; color: #fff; }
+  }
+  select { width: calc(100% - 24px); margin: 10px 12px; }
+}
