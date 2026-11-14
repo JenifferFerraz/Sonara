@@ -14,9 +14,9 @@ describe('abdome total mask', () => {
   it('generates a normal exam without required alerts', () => {
     const r = gerar(t, criarEstado(t));
     expect(camposVazios(r)).toHaveLength(0);
-    expect(r.impressao).toEqual(['Exame sem anormalidades detectáveis pelo método.']);
-    expect(r.paragrafos.some(p => p.startsWith('Fígado com dimensões normais'))).toBe(true);
-    expect(r.paragrafos.some(p => p.startsWith('Bexiga com boa repleção'))).toBe(true);
+    expect(r.impressao).toEqual(['Exame sem alterações ecográficas relevantes.']);
+    expect(r.paragrafos.some(p => p.startsWith('Fígado de tamanho normal'))).toBe(true);
+    expect(r.paragrafos.some(p => p.startsWith('Bexiga com repleção adequada'))).toBe(true);
   });
 
   it('keeps hidden optional groups out of the report', () => {

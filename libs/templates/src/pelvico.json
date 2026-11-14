@@ -84,7 +84,7 @@
             {
               "valor": "normal",
               "rotulo": "Normal",
-              "laudo": "Bexiga com boa repleção, paredes finas e regulares, conteúdo anecogênico."
+              "laudo": "Bexiga com repleção adequada, paredes delgadas e lisas e conteúdo anecogênico."
             },
             {
               "valor": "trabeculada",
@@ -1119,7 +1119,7 @@
             {
               "valor": "ausente",
               "rotulo": "Ausente",
-              "laudo": "Ausência de líquido livre na pelve."
+              "laudo": "Não há líquido livre na pelve."
             },
             {
               "valor": "pequena",

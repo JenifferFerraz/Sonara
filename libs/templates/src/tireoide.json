@@ -70,18 +70,18 @@
             {
               "valor": "normais",
               "rotulo": "Normais",
-              "laudo": "Tireoide tópica, com dimensões normais e contornos regulares."
+              "laudo": "Glândula tireoide em posição habitual, de tamanho normal e contornos regulares."
             },
             {
               "valor": "aumentadas",
               "rotulo": "Aumentadas",
-              "laudo": "Tireoide tópica, com dimensões aumentadas e contornos regulares.",
+              "laudo": "Glândula tireoide em posição habitual, de tamanho aumentado e contornos regulares.",
               "impressao": "Aumento volumétrico da tireoide."
             },
             {
               "valor": "reduzidas",
               "rotulo": "Reduzidas",
-              "laudo": "Tireoide tópica, com dimensões reduzidas e contornos regulares.",
+              "laudo": "Glândula tireoide em posição habitual, de tamanho reduzido e contornos regulares.",
               "impressao": "Redução volumétrica da tireoide."
             }
           ]
@@ -103,7 +103,7 @@
             {
               "valor": "normal",
               "rotulo": "Homogênea",
-              "laudo": "A ecotextura é homogênea."
+              "laudo": "Parênquima de ecotextura homogênea."
             },
             {
               "valor": "difusa",
@@ -136,7 +136,7 @@
             {
               "valor": "ausentes",
               "rotulo": "Ausentes",
-              "laudo": "Não se observam lesões nodulares."
+              "laudo": "Não há lesões nodulares."
             },
             {
               "valor": "presentes",
@@ -217,7 +217,7 @@
             ]
           },
           "paragrafo": true,
-          "laudo": "O lobo direito mede {lobo_d.a} x {lobo_d.b} x {lobo_d.c} cm."
+          "laudo": "Lobo direito com {lobo_d.a} x {lobo_d.b} x {lobo_d.c} cm."
         },
         {
           "id": "lobo_e",
@@ -245,7 +245,7 @@
             ]
           },
           "paragrafo": true,
-          "laudo": "O lobo esquerdo mede {lobo_e.a} x {lobo_e.b} x {lobo_e.c} cm."
+          "laudo": "Lobo esquerdo com {lobo_e.a} x {lobo_e.b} x {lobo_e.c} cm."
         },
         {
           "id": "istmo",
@@ -273,7 +273,7 @@
             ]
           },
           "paragrafo": true,
-          "laudo": "O istmo tem espessura de {istmo} cm."
+          "laudo": "Istmo com espessura de {istmo} cm."
         },
         {
           "id": "istmo_fil",
@@ -288,7 +288,7 @@
             ]
           },
           "paragrafo": true,
-          "laudo": "O istmo é filiforme, não mensurável."
+          "laudo": "Istmo filiforme, não mensurável."
         },
         {
           "id": "vol_total",
@@ -314,7 +314,7 @@
               }
             ]
           },
-          "laudo": "Volume tireoidiano estimado em {vol_total} cm³."
+          "laudo": "Volume glandular total estimado em {vol_total} cm³."
         }
       ]
     },
@@ -645,7 +645,7 @@
             {
               "valor": "ausentes",
               "rotulo": "Sem linfonodomegalias",
-              "laudo": "Ausência de linfonodomegalias cervicais."
+              "laudo": "Não há linfonodos cervicais aumentados."
             },
             {
               "valor": "presentes",

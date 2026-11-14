@@ -35,23 +35,23 @@ describe('tireoide mask', () => {
     const r = gerar(t, medidasNormais());
     expect(camposVazios(r)).toHaveLength(0);
     const txt = formatar(r, 'texto');
-    expect(txt).toContain('O lobo direito mede 4,0 x 1,2 x 1,2 cm.');
-    expect(txt).toContain('O istmo tem espessura de 0,3 cm.');
-    expect(txt).toContain('Volume tireoidiano estimado em 6,0 cm³.');
-    expect(txt).toContain('Não se observam lesões nodulares.');
-    expect(txt).toContain('Ausência de linfonodomegalias cervicais.');
-    expect(r.impressao).toEqual(['Exame sem anormalidades detectáveis pelo método.']);
+    expect(txt).toContain('Lobo direito com 4,0 x 1,2 x 1,2 cm.');
+    expect(txt).toContain('Istmo com espessura de 0,3 cm.');
+    expect(txt).toContain('Volume glandular total estimado em 6,0 cm³.');
+    expect(txt).toContain('Não há lesões nodulares.');
+    expect(txt).toContain('Não há linfonodos cervicais aumentados.');
+    expect(r.impressao).toEqual(['Exame sem alterações ecográficas relevantes.']);
   });
 
   it('puts each measurement in its own paragraph, with the nodules sentence in the first one', () => {
     const r = gerar(t, medidasNormais());
     expect(r.paragrafos).toEqual([
-      'Tireoide tópica, com dimensões normais e contornos regulares. A ecotextura é homogênea. Não se observam lesões nodulares.',
-      'O lobo direito mede 4,0 x 1,2 x 1,2 cm.',
-      'O lobo esquerdo mede 4,0 x 1,2 x 1,2 cm.',
-      'O istmo tem espessura de 0,3 cm.',
-      'Volume tireoidiano estimado em 6,0 cm³.',
-      'Ausência de linfonodomegalias cervicais.',
+      'Glândula tireoide em posição habitual, de tamanho normal e contornos regulares. Parênquima de ecotextura homogênea. Não há lesões nodulares.',
+      'Lobo direito com 4,0 x 1,2 x 1,2 cm.',
+      'Lobo esquerdo com 4,0 x 1,2 x 1,2 cm.',
+      'Istmo com espessura de 0,3 cm.',
+      'Volume glandular total estimado em 6,0 cm³.',
+      'Não há linfonodos cervicais aumentados.',
     ]);
   });
 
@@ -78,7 +78,7 @@ describe('tireoide mask', () => {
     const r = gerar(t, e);
     expect(formatar(r, 'texto')).toContain('Tireoide não visualizada (status pós-tireoidectomia total).');
     expect(camposVazios(r)).toHaveLength(0);
-    expect(formatar(r, 'texto')).not.toContain('Volume tireoidiano');
+    expect(formatar(r, 'texto')).not.toContain('Volume glandular');
   });
 
   it('asks only for the remaining lobe after a hemithyroidectomy', () => {

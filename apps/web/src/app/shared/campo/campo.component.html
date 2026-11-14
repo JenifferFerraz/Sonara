@@ -132,13 +132,15 @@
     <div class="lista">
       <div class="lista-topo">
         <span class="rotulo">{{ c.rotulo }}</span>
-        <label class="check nc">
+        @if (!c.semMultiplos) {
+          <label class="check nc">
           <input
             type="checkbox"
             [checked]="lista().multiplos"
             (change)="mudarMultiplos(checadoEm($event))" />
           <span>múltiplos, o maior com</span>
         </label>
+        }
         @if (lista().multiplos) {
           <input
             class="curto"

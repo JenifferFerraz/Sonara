@@ -124,16 +124,16 @@ const t = {
         {
           id: 'tam', tipo: 'seg', rotulo: 'Dimensões', padrao: 'normais', showIf: semCirurgia,
           opcoes: [
-            op('normais', 'Normais', 'Tireoide tópica, com dimensões normais e contornos regulares.'),
-            op('aumentadas', 'Aumentadas', 'Tireoide tópica, com dimensões aumentadas e contornos regulares.', 'Aumento volumétrico da tireoide.'),
-            op('reduzidas', 'Reduzidas', 'Tireoide tópica, com dimensões reduzidas e contornos regulares.', 'Redução volumétrica da tireoide.'),
+            op('normais', 'Normais', 'Glândula tireoide em posição habitual, de tamanho normal e contornos regulares.'),
+            op('aumentadas', 'Aumentadas', 'Glândula tireoide em posição habitual, de tamanho aumentado e contornos regulares.', 'Aumento volumétrico da tireoide.'),
+            op('reduzidas', 'Reduzidas', 'Glândula tireoide em posição habitual, de tamanho reduzido e contornos regulares.', 'Redução volumétrica da tireoide.'),
           ],
         },
         {
           id: 'eco', tipo: 'seg', rotulo: 'Ecotextura', padrao: 'normal',
           showIf: { '!=': [v('cirurgia'), 'total'] },
           opcoes: [
-            op('normal', 'Homogênea', 'A ecotextura é homogênea.'),
+            op('normal', 'Homogênea', 'Parênquima de ecotextura homogênea.'),
             op('difusa', 'Alteração difusa inespecífica', 'Ecotextura heterogênea, com alteração textural difusa inespecífica.', 'Alteração textural difusa da tireoide.'),
             op('tireoidite', 'Padrão de tireoidite', 'Ecotextura heterogênea difusa, com aspecto que pode corresponder a tireoidite.', 'Alteração textural difusa, a correlacionar com tireoidite.'),
           ],
@@ -141,7 +141,7 @@ const t = {
         {
           id: 'nod_status', tipo: 'seg', rotulo: 'Nódulos', padrao: 'ausentes', showIf: { '!=': [v('cirurgia'), 'total'] },
           opcoes: [
-            op('ausentes', 'Ausentes', 'Não se observam lesões nodulares.'),
+            op('ausentes', 'Ausentes', 'Não há lesões nodulares.'),
             op('presentes', 'Presentes', ''),
           ],
         },
@@ -160,14 +160,14 @@ const t = {
     {
       id: 'medidas', titulo: 'Medidas',
       campos: [
-        { id: 'lobo_d', tipo: 'dims', rotulo: 'Lobo direito (L × AP × T, cm)', obrigatorio: true, showIf: loboDireito, paragrafo: true, laudo: 'O lobo direito mede {lobo_d.a} x {lobo_d.b} x {lobo_d.c} cm.' },
-        { id: 'lobo_e', tipo: 'dims', rotulo: 'Lobo esquerdo (L × AP × T, cm)', obrigatorio: true, showIf: loboEsquerdo, paragrafo: true, laudo: 'O lobo esquerdo mede {lobo_e.a} x {lobo_e.b} x {lobo_e.c} cm.' },
-        num('istmo', 'Istmo (espessura, cm)', { showIf: and(semCirurgia, { '!': [v('istmo_fil')] }), paragrafo: true, laudo: 'O istmo tem espessura de {istmo} cm.' }),
-        { id: 'istmo_fil', tipo: 'check', rotulo: 'Istmo filiforme (não mensurável)', showIf: semCirurgia, paragrafo: true, laudo: 'O istmo é filiforme, não mensurável.' },
+        { id: 'lobo_d', tipo: 'dims', rotulo: 'Lobo direito (L × AP × T, cm)', obrigatorio: true, showIf: loboDireito, paragrafo: true, laudo: 'Lobo direito com {lobo_d.a} x {lobo_d.b} x {lobo_d.c} cm.' },
+        { id: 'lobo_e', tipo: 'dims', rotulo: 'Lobo esquerdo (L × AP × T, cm)', obrigatorio: true, showIf: loboEsquerdo, paragrafo: true, laudo: 'Lobo esquerdo com {lobo_e.a} x {lobo_e.b} x {lobo_e.c} cm.' },
+        num('istmo', 'Istmo (espessura, cm)', { showIf: and(semCirurgia, { '!': [v('istmo_fil')] }), paragrafo: true, laudo: 'Istmo com espessura de {istmo} cm.' }),
+        { id: 'istmo_fil', tipo: 'check', rotulo: 'Istmo filiforme (não mensurável)', showIf: semCirurgia, paragrafo: true, laudo: 'Istmo filiforme, não mensurável.' },
         {
           id: 'vol_total', tipo: 'calc', rotulo: 'Volume tireoidiano', casas: 1, showIf: semCirurgia, paragrafo: true,
           expressao: { '+': [{ var: 'lobo_d.vol' }, { var: 'lobo_e.vol' }] },
-          laudo: 'Volume tireoidiano estimado em {vol_total} cm³.',
+          laudo: 'Volume glandular total estimado em {vol_total} cm³.',
         },
       ],
     },
@@ -191,7 +191,7 @@ const t = {
         {
           id: 'linf_status', tipo: 'seg', rotulo: 'Linfonodos', padrao: 'ausentes',
           opcoes: [
-            op('ausentes', 'Sem linfonodomegalias', 'Ausência de linfonodomegalias cervicais.'),
+            op('ausentes', 'Sem linfonodomegalias', 'Não há linfonodos cervicais aumentados.'),
             op('presentes', 'Linfonodomegalia', ''),
           ],
         },

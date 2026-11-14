@@ -18,7 +18,7 @@ const bexiga = {
     {
       id: 'bexiga', tipo: 'seg', rotulo: 'Bexiga', padrao: 'normal',
       opcoes: [
-        op('normal', 'Normal', 'Bexiga com boa repleção, paredes finas e regulares, conteúdo anecogênico.'),
+        op('normal', 'Normal', 'Bexiga com repleção adequada, paredes delgadas e lisas e conteúdo anecogênico.'),
         op('trabeculada', 'Trabeculada', 'Bexiga com paredes espessadas e trabeculadas.', 'Bexiga com paredes trabeculadas.'),
         op('calculo', 'Cálculo', 'Bexiga contendo imagem calculosa de {bex_calc_cm} cm.', 'Cálculo vesical.'),
         op('lesao', 'Lesão vegetante', 'Lesão vegetante aderida à parede vesical, medindo {bex_lesao_cm} cm.', 'Lesão vegetante vesical.'),

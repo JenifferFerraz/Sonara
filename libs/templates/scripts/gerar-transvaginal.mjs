@@ -235,7 +235,7 @@ const t = {
         {
           id: 'liquido', tipo: 'seg', rotulo: 'Líquido livre', padrao: 'ausente',
           opcoes: [
-            op('ausente', 'Ausente', 'Ausência de líquido livre na pelve.'),
+            op('ausente', 'Ausente', 'Não há líquido livre na pelve.'),
             ...[['pequena', 'Pequena'], ['moderada', 'Moderada'], ['grande', 'Grande']].map(([k, r]) =>
               op(k, r, `${r} quantidade de líquido livre na pelve.`, 'Líquido livre na pelve.')),
           ],

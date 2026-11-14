@@ -23,7 +23,7 @@ const rim = (k, lado) => {
     doLado({
       id: `rim${k}_aspecto`, tipo: 'seg', rotulo: `Rim ${lado}`, padrao: 'normal',
       opcoes: [
-        op('normal', 'Normal', `Rim ${lado} tópico, de dimensões normais, contornos regulares e ecotextura habitual.`),
+        op('normal', 'Normal', `Rim ${lado} em topografia habitual, de tamanho e ecotextura normais, com contornos lisos.`),
         op('ausente', 'Não visualizado', `Rim ${lado} não visualizado.`, `Rim ${lado} não visualizado.`),
         op('atrofico', 'Atrófico', `Rim ${lado} de dimensões reduzidas, com ecotextura aumentada.`, `Rim ${lado} com sinais de atrofia.`),
       ],
@@ -89,7 +89,7 @@ const t = {
         {
           id: 'fig_dim', tipo: 'seg', rotulo: 'Dimensões', padrao: 'normais',
           opcoes: [
-            op('normais', 'Normais', 'Fígado com dimensões normais, contornos regulares e bordas finas. Veia porta e veias hepáticas sem alterações.'),
+            op('normais', 'Normais', 'Fígado de tamanho normal, com superfície regular e bordas finas. As veias porta e hepáticas têm aspecto habitual.'),
             op('aumentadas', 'Aumentadas', 'Fígado com dimensões aumentadas.', 'Hepatomegalia.'),
             op('reduzidas', 'Reduzidas', 'Fígado com dimensões reduzidas.', 'Redução das dimensões hepáticas.'),
           ],
@@ -97,7 +97,7 @@ const t = {
         {
           id: 'fig_eco', tipo: 'seg', rotulo: 'Ecotextura', padrao: 'homogenea',
           opcoes: [
-            op('homogenea', 'Homogênea', 'Ecotextura homogênea.'),
+            op('homogenea', 'Homogênea', 'Parênquima de ecotextura uniforme.'),
             op('est_nd', 'Esteatose (grau não especificado)', 'Ecotextura hiperecogênica difusa, compatível com esteatose.', 'Esteatose hepática.'),
             op('est_leve', 'Esteatose leve', 'Ecotextura hiperecogênica difusa, compatível com esteatose leve.', 'Esteatose hepática leve.'),
             op('est_mod', 'Esteatose moderada', 'Ecotextura hiperecogênica difusa, com atenuação do feixe, compatível com esteatose moderada.', 'Esteatose hepática moderada.'),
@@ -140,7 +140,7 @@ const t = {
         {
           id: 'ves', tipo: 'seg', rotulo: 'Vesícula', padrao: 'normal',
           opcoes: [
-            op('normal', 'Normal', 'Vesícula biliar com forma e dimensões normais, paredes finas e regulares, apresentando conteúdo anecogênico sem imagens calculosas.'),
+            op('normal', 'Normal', 'Vesícula biliar de forma e volume habituais, com paredes delgadas e lisas e conteúdo anecogênico, sem cálculos.'),
             op('calc', 'Cálculo único', 'Vesícula biliar contendo imagem hiperecogênica com sombra acústica posterior, medindo {ves_calc_cm} cm, compatível com cálculo.', 'Colelitíase.'),
             op('calcs', 'Múltiplos cálculos', 'Vesícula biliar contendo múltiplas imagens hiperecogênicas com sombra acústica posterior, a maior com {ves_calcs_max} cm, compatíveis com cálculos.', 'Colelitíase.'),
             op('polipo', 'Pólipo', 'Vesícula biliar com imagem polipoide séssil aderida à parede, medindo {ves_polipo_cm} cm.', 'Pólipo vesicular.'),
@@ -163,7 +163,7 @@ const t = {
         {
           id: 'vias', tipo: 'seg', rotulo: 'Vias biliares', padrao: 'normal',
           opcoes: [
-            op('normal', 'Normais', 'Não há dilatação das vias biliares intra ou extra-hepáticas.'),
+            op('normal', 'Normais', 'Vias biliares intra e extra-hepáticas sem dilatação.'),
             op('coledoco', 'Colédoco ectasiado', 'Colédoco com calibre aumentado, medindo {vias_calibre} cm.', 'Dilatação do colédoco.'),
             op('intra', 'Dilatação intra-hepática', 'Dilatação das vias biliares intra-hepáticas.', 'Dilatação das vias biliares intra-hepáticas.'),
           ],
@@ -177,7 +177,7 @@ const t = {
         {
           id: 'panc', tipo: 'seg', rotulo: 'Pâncreas', padrao: 'normal',
           opcoes: [
-            op('normal', 'Normal', 'Pâncreas de dimensões normais, contornos regulares e ecotextura homogênea. Não há dilatação do ducto pancreático.'),
+            op('normal', 'Normal', 'Pâncreas com dimensões e contornos preservados e parênquima homogêneo; ducto pancreático sem dilatação.'),
             op('parcial', 'Parcialmente acessível', 'Pâncreas parcialmente visualizado por interposição gasosa.'),
             op('inacessivel', 'Inacessível', 'Pâncreas não avaliável por interposição gasosa.'),
           ],
@@ -195,7 +195,7 @@ const t = {
         {
           id: 'baco', tipo: 'seg', rotulo: 'Baço', padrao: 'normal',
           opcoes: [
-            op('normal', 'Normal', 'Baço com dimensões normais, contornos regulares e ecotextura homogênea.'),
+            op('normal', 'Normal', 'Baço de tamanho normal, com contornos lisos e parênquima homogêneo.'),
             op('aumentado', 'Aumentado', 'Baço com dimensões aumentadas e ecotextura homogênea.', 'Esplenomegalia.'),
             op('ausente', 'Ausente', 'Baço não visualizado.', 'Baço não visualizado.'),
           ],
@@ -218,8 +218,8 @@ const t = {
         {
           id: 'aorta', tipo: 'seg', rotulo: 'Aorta', padrao: 'normal',
           opcoes: [
-            op('normal', 'Normal', 'Aorta e veia cava inferior com calibre e trajeto preservados. Ausência de linfonodomegalias retroperitoneais detectáveis.'),
-            op('ateromatosa', 'Ateromatosa', 'Aorta com paredes ateromatosas e calibre preservado. Ausência de linfonodomegalias retroperitoneais detectáveis.', 'Aortoateromatose.'),
+            op('normal', 'Normal', 'Aorta abdominal e veia cava inferior com calibre e trajeto habituais. Não há linfonodos retroperitoneais aumentados.'),
+            op('ateromatosa', 'Ateromatosa', 'Aorta com paredes ateromatosas e calibre preservado. Não há linfonodos retroperitoneais aumentados.', 'Aortoateromatose.'),
             op('aneurisma', 'Aneurisma', 'Dilatação aneurismática da aorta abdominal, de calibre máximo de {aorta_cm} cm.', 'Aneurisma da aorta abdominal.'),
             op('inacessivel', 'Inacessível', 'Aorta e retroperitônio não avaliáveis por interposição gasosa.'),
           ],
@@ -247,7 +247,7 @@ const t = {
         {
           id: 'rins', tipo: 'seg', rotulo: 'Rins', padrao: 'normais',
           opcoes: [
-            op('normais', 'Normais', 'Rins tópicos, com dimensões normais, contornos regulares e ecotextura habitual. Não há evidências de imagens calculosas calicinais. Não há dilatação do sistema coletor.'),
+            op('normais', 'Normais', 'Rins em topografia habitual, de tamanho normal, contornos lisos e ecotextura preservada, sem cálculos e sem dilatação do sistema pielocalicinal.'),
             op('achados', 'Com achados', ''),
           ],
         },
@@ -272,7 +272,7 @@ const t = {
         {
           id: 'bexiga', tipo: 'seg', rotulo: 'Bexiga', padrao: 'normal',
           opcoes: [
-            op('normal', 'Normal', 'Bexiga com boa repleção, paredes finas e regulares, conteúdo anecogênico.'),
+            op('normal', 'Normal', 'Bexiga com repleção adequada, paredes delgadas e lisas e conteúdo anecogênico.'),
             op('trabeculada', 'Trabeculada', 'Bexiga com paredes espessadas e trabeculadas.', 'Bexiga com paredes trabeculadas.'),
             op('calculo', 'Cálculo', 'Bexiga contendo imagem calculosa de {bex_calc_cm} cm.', 'Cálculo vesical.'),
             op('lesao', 'Lesão vegetante', 'Lesão vegetante aderida à parede vesical, medindo {bex_lesao_cm} cm.', 'Lesão vegetante vesical.'),
@@ -295,7 +295,7 @@ const t = {
         {
           id: 'liquido', tipo: 'seg', rotulo: 'Líquido livre', padrao: 'ausente',
           opcoes: [
-            op('ausente', 'Ausente', 'Ausência de líquido livre na cavidade abdominal.'),
+            op('ausente', 'Ausente', 'Não há líquido livre na cavidade abdominal.'),
             ...[['pequena', 'Pequena'], ['moderada', 'Moderada'], ['grande', 'Grande']].map(([k, r]) =>
               op(k, r, `${r} quantidade de líquido livre na cavidade abdominal.`, 'Líquido livre na cavidade abdominal.')),
           ],

@@ -36,7 +36,7 @@ describe('pelvico mask', () => {
     e = com(e, 'endo_mm', '6');
     const r = gerar(t, e);
     expect(camposVazios(r)).toHaveLength(0);
-    expect(r.paragrafos.some(p => p.startsWith('Bexiga com boa repleção'))).toBe(true);
+    expect(r.paragrafos.some(p => p.startsWith('Bexiga com repleção adequada'))).toBe(true);
     expect(formatar(r, 'texto')).toContain('7,0 x 4,0 x 3,5');
   });
 

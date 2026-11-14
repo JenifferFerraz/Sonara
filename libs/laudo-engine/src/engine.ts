@@ -11,8 +11,8 @@ import type {
 type Ctx = Record<string, unknown>;
 
 const FRASES_PADRAO = {
-  normal: 'Exame sem anormalidades detectáveis pelo método.',
-  restante: 'Restante do exame sem particularidades.',
+  normal: 'Exame sem alterações ecográficas relevantes.',
+  restante: 'Demais estruturas avaliadas sem alterações.',
 };
 
 function hoje(): string {
@@ -167,6 +167,7 @@ export function gerar(template: Template, estado: Estado, preferencias: Preferen
   const { logica, texto, calculos } = montarContextos(template, estado);
   const alertas: Alerta[] = [];
   const impressao: string[] = [];
+  const classificacao: string[] = [];
   const paragrafos: string[] = [];
   const frases = template.frases ?? FRASES_PADRAO;
   /** Categorias BI-RADS sugeridas, por lista, para a categoria final. */
@@ -208,9 +209,10 @@ export function gerar(template: Template, estado: Estado, preferencias: Preferen
           const f = o && frase(`${c.id}.${o.valor}`, o.laudo, o.variantes, preferencias);
           if (f) frasesSecao.push(interpolar(f, texto));
           if (o?.impressao) impressao.push(interpolar(o.impressao, texto));
+          if (o?.classificacao) classificacao.push(interpolar(o.classificacao, texto));
           if (c.categoriaFinal && v === 'auto') {
             const maior = maiorCategoria(c.categoriaFinal.listas.flatMap((l) => categorias[l] ?? []));
-            impressao.push(`Categoria BI-RADS ${maior ?? '1'}.`);
+            classificacao.push(`BI-RADS ${maior ?? '1'}`);
           }
           break;
         }
@@ -223,9 +225,13 @@ export function gerar(template: Template, estado: Estado, preferencias: Preferen
           break;
         case 'multi': {
           const sel = Array.isArray(v) ? (v as string[]) : [];
-          for (const o of c.opcoes ?? []) {
-            if (!sel.includes(o.valor)) continue;
-            if (o.laudo) frasesSecao.push(interpolar(o.laudo, texto));
+          const marcadas = (c.opcoes ?? []).filter((o) => sel.includes(o.valor));
+          if (c.laudoMulti && marcadas.length) {
+            const itens = marcadas.map((o) => o.laudo ?? o.rotulo);
+            frasesSecao.push(interpolar(c.laudoMulti, { lista: juntar(itens) }, texto));
+          }
+          for (const o of marcadas) {
+            if (!c.laudoMulti && o.laudo) frasesSecao.push(interpolar(o.laudo, texto));
             if (o.impressao) impressao.push(interpolar(o.impressao, texto));
           }
           break;
@@ -259,7 +265,7 @@ export function gerar(template: Template, estado: Estado, preferencias: Preferen
             const ictx = contextoItem(c, item);
             if (c.birads) {
               const cat = biradsDoItem(c.birads, c, item);
-              if (item[c.birads.modo] === 'auto') ictx[c.birads.modo] = cat ? `, BI-RADS ${cat}` : '';
+              if (c.birads.modo && item[c.birads.modo] === 'auto') ictx[c.birads.modo] = cat ? `, BI-RADS ${cat}` : '';
               if (cat) {
                 (categorias[c.id] ??= []).push(cat);
                 alertas.push({
@@ -319,6 +325,7 @@ export function gerar(template: Template, estado: Estado, preferencias: Preferen
     titulo: template.titulo,
     paragrafos,
     impressao: unicas.length ? [...unicas, frases.restante] : [frases.normal],
+    classificacao,
     alertas,
     calculos,
   };
@@ -335,6 +342,11 @@ function contextoItem(lista: Campo, item: ItemLista): Ctx {
     }
     else ctx[sub.id] = raw || FALTA;
   }
+  // Frases de opção podem citar outros sub-campos do mesmo item: {mamilo}, {pele}...
+  for (const sub of lista.itens ?? []) {
+    const val = ctx[sub.id];
+    if (typeof val === 'string' && val.includes('{')) ctx[sub.id] = interpolar(val, ctx);
+  }
   return ctx;
 }
 
@@ -347,14 +359,22 @@ const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replac
 
 export function formatar(r: Resultado, formato: 'texto' | 'html'): string {
   if (formato === 'texto') {
-    return [r.titulo, ...r.paragrafos, 'IMPRESSÃO DIAGNÓSTICA:\n' + r.impressao.join('\n')].join('\n\n');
+    return [
+      r.titulo,
+      ...r.paragrafos,
+      'IMPRESSÃO DIAGNÓSTICA:\n\n' + r.impressao.join('\n'),
+      // Classificação (ex.: BI-RADS) fica numa linha própria, abaixo da conclusão.
+      ...r.classificacao,
+    ].join('\n\n');
   }
   const marca = (s: string) => esc(s).replaceAll(FALTA, `<mark>${FALTA}</mark>`);
+  const fonte = "font-family:'Times New Roman',serif;font-size:12pt";
   return [
-    `<p style="text-align:center"><b>${esc(r.titulo)}</b></p>`,
-    ...r.paragrafos.map((p) => `<p style="text-align:justify">${marca(p)}</p>`),
-    '<p><b>IMPRESSÃO DIAGNÓSTICA:</b></p>',
-    ...r.impressao.map((i) => `<p>${marca(i)}</p>`),
+    `<p style="${fonte};text-align:center"><b>${esc(r.titulo)}</b></p>`,
+    ...r.paragrafos.map((p) => `<p style="${fonte};text-align:justify">${marca(p)}</p>`),
+    `<p style="${fonte}"><b>IMPRESSÃO DIAGNÓSTICA:</b></p>`,
+    ...r.impressao.map((i) => `<p style="${fonte}">${marca(i)}</p>`),
+    ...r.classificacao.map((c) => `<p style="${fonte}"><b>${marca(c)}</b></p>`),
   ].join('\n');
 }
 
@@ -404,4 +424,10 @@ function biradsDoItem(m: NonNullable<Campo['birads']>, lista: Campo, item: ItemL
     return sugerirNoduloSolido(nod);
   }
   return null;
+}
+
+/** "a", "a e b", "a, b e c". */
+function juntar(itens: string[]): string {
+  if (itens.length <= 1) return itens[0] ?? '';
+  return `${itens.slice(0, -1).join(', ')} e ${itens.at(-1)}`;
 }

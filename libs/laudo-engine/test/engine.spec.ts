@@ -39,7 +39,7 @@ describe('transvaginal', () => {
   it('generates a normal exam with no alerts after required measures', () => {
     const r = gerar(tv, medidas());
     expect(camposVazios(r)).toHaveLength(0);
-    expect(r.impressao).toEqual(['Exame sem anormalidades detectáveis pelo método.']);
+    expect(r.impressao).toEqual(['Exame sem alterações ecográficas relevantes.']);
     expect(r.paragrafos.join(' ')).toContain('7,0 x 4,0 x 3,5 cm');
     expect(r.paragrafos.join(' ')).toContain('51,3 cm³');
   });
@@ -64,7 +64,7 @@ describe('transvaginal', () => {
     expect(r.impressao).toEqual([
       'Mioma uterino subseroso, medindo 2,1 cm.',
       'Líquido livre na pelve.',
-      'Restante do exame sem particularidades.',
+      'Demais estruturas avaliadas sem alterações.',
     ]);
   });
 
@@ -81,7 +81,7 @@ describe('transvaginal', () => {
   it('warns (without concluding) for endometrium above 4 mm in postmenopause', () => {
     const r = gerar(tv, aplicar(medidas(), { tipo: 'campo', id: 'status', valor: 'pos' }));
     expect(r.alertas.some(a => a.tipo === 'referencia')).toBe(true);
-    expect(r.impressao).toEqual(['Exame sem anormalidades detectáveis pelo método.']);
+    expect(r.impressao).toEqual(['Exame sem alterações ecográficas relevantes.']);
   });
 
   it('hides uterine fields after total hysterectomy', () => {
@@ -166,3 +166,18 @@ describe('license', () => {
     expect((await verificarLicenca(`${adulterado}.${sig}`, pub, 'd1', agora, 0)).status).toBe('invalida');
   });
 });
+
+describe('formatar', () => {
+  it('puts a blank line after the diagnostic impression title in plain text', () => {
+    const txt = formatar(gerar(tv, criarEstado(tv)), 'texto');
+    expect(txt).toContain('IMPRESSÃO DIAGNÓSTICA:\n\n');
+  });
+
+  it('writes the HTML in Times New Roman 12pt so Word keeps the font', () => {
+    const html = formatar(gerar(tv, criarEstado(tv)), 'html');
+    expect(html).toContain("font-family:'Times New Roman'");
+    expect(html).toContain('font-size:12pt');
+    expect(html).not.toMatch(/<p>/); // todo parágrafo leva o estilo
+  });
+});
+

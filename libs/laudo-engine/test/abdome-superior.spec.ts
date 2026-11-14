@@ -30,6 +30,6 @@ describe('abdome superior mask', () => {
   it('generates a normal exam with no required alerts', () => {
     const r = gerar(superior, criarEstado(superior));
     expect(camposVazios(r)).toHaveLength(0);
-    expect(r.impressao).toEqual(['Exame sem anormalidades detectáveis pelo método.']);
+    expect(r.impressao).toEqual(['Exame sem alterações ecográficas relevantes.']);
   });
 });

@@ -1111,7 +1111,7 @@
             {
               "valor": "ausente",
               "rotulo": "Ausente",
-              "laudo": "Ausência de líquido livre na pelve."
+              "laudo": "Não há líquido livre na pelve."
             },
             {
               "valor": "pequena",

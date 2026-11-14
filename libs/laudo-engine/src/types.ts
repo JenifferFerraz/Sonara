@@ -10,6 +10,8 @@ export interface Opcao {
   laudo?: string;
   /** Frase da impressão diagnóstica. */
   impressao?: string;
+  /** Linha própria abaixo da impressão diagnóstica (ex.: categoria BI-RADS). */
+  classificacao?: string;
   /** Pontos (ex.: TI-RADS), usados por campos multi. */
   pontos?: number;
   /** Frases alternativas à de `laudo`, escritas e aprovadas pelo revisor. O médico escolhe a sua. */
@@ -49,6 +51,10 @@ export interface Campo {
   laudo?: string;
   /** Frases alternativas à de `laudo` (check, num, dims, text). */
   variantes?: Variante[];
+  /** Só tipo multi: uma frase só com as opções marcadas, em `{lista}` ("a, b e c"). Usa o `laudo` de cada opção. */
+  laudoMulti?: string;
+  /** Só tipo list: esconde o "múltiplos, o maior com" (quando há um grupo próprio para isso). */
+  semMultiplos?: boolean;
   /** A frase deste campo vira um parágrafo próprio no laudo (cada item de lista, um parágrafo). */
   paragrafo?: boolean;
   /** Sub-campos numéricos consecutivos com a mesma `linha` aparecem juntos: "Mede: a x b x c cm". */
@@ -75,7 +81,7 @@ export interface Campo {
    * opções trazem a categoria em `pontos`; para nódulos sólidos, `nodulo` mapeia os sub-campos.
    */
   birads?: {
-    modo: string;
+    modo?: string;
     categoria?: string;
     nodulo?: { forma: string; orientacao: string; margem: string; posterior: string; calcificacoes: string };
   };
@@ -155,6 +161,8 @@ export interface Resultado {
   titulo: string;
   paragrafos: string[];
   impressao: string[];
+  /** Linhas abaixo da impressão (ex.: BI-RADS), fora da conclusão. */
+  classificacao: string[];
   alertas: Alerta[];
   calculos: Record<string, number | null>;
 }

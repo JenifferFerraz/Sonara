@@ -62,7 +62,7 @@
             {
               "valor": "normais",
               "rotulo": "Normais",
-              "laudo": "Fígado com dimensões normais, contornos regulares e bordas finas. Veia porta e veias hepáticas sem alterações."
+              "laudo": "Fígado de tamanho normal, com superfície regular e bordas finas. As veias porta e hepáticas têm aspecto habitual."
             },
             {
               "valor": "aumentadas",
@@ -87,7 +87,7 @@
             {
               "valor": "homogenea",
               "rotulo": "Homogênea",
-              "laudo": "Ecotextura homogênea."
+              "laudo": "Parênquima de ecotextura uniforme."
             },
             {
               "valor": "est_nd",
@@ -440,7 +440,7 @@
             {
               "valor": "normal",
               "rotulo": "Normal",
-              "laudo": "Vesícula biliar com forma e dimensões normais, paredes finas e regulares, apresentando conteúdo anecogênico sem imagens calculosas."
+              "laudo": "Vesícula biliar de forma e volume habituais, com paredes delgadas e lisas e conteúdo anecogênico, sem cálculos."
             },
             {
               "valor": "calc",
@@ -555,7 +555,7 @@
             {
               "valor": "normal",
               "rotulo": "Normais",
-              "laudo": "Não há dilatação das vias biliares intra ou extra-hepáticas."
+              "laudo": "Vias biliares intra e extra-hepáticas sem dilatação."
             },
             {
               "valor": "coledoco",
@@ -601,7 +601,7 @@
             {
               "valor": "normal",
               "rotulo": "Normal",
-              "laudo": "Pâncreas de dimensões normais, contornos regulares e ecotextura homogênea. Não há dilatação do ducto pancreático."
+              "laudo": "Pâncreas com dimensões e contornos preservados e parênquima homogêneo; ducto pancreático sem dilatação."
             },
             {
               "valor": "parcial",
@@ -668,7 +668,7 @@
             {
               "valor": "normal",
               "rotulo": "Normal",
-              "laudo": "Baço com dimensões normais, contornos regulares e ecotextura homogênea."
+              "laudo": "Baço de tamanho normal, com contornos lisos e parênquima homogêneo."
             },
             {
               "valor": "aumentado",
@@ -758,12 +758,12 @@
             {
               "valor": "normal",
               "rotulo": "Normal",
-              "laudo": "Aorta e veia cava inferior com calibre e trajeto preservados. Ausência de linfonodomegalias retroperitoneais detectáveis."
+              "laudo": "Aorta abdominal e veia cava inferior com calibre e trajeto habituais. Não há linfonodos retroperitoneais aumentados."
             },
             {
               "valor": "ateromatosa",
               "rotulo": "Ateromatosa",
-              "laudo": "Aorta com paredes ateromatosas e calibre preservado. Ausência de linfonodomegalias retroperitoneais detectáveis.",
+              "laudo": "Aorta com paredes ateromatosas e calibre preservado. Não há linfonodos retroperitoneais aumentados.",
               "impressao": "Aortoateromatose."
             },
             {
@@ -809,7 +809,7 @@
             {
               "valor": "ausente",
               "rotulo": "Ausente",
-              "laudo": "Ausência de líquido livre na cavidade abdominal."
+              "laudo": "Não há líquido livre na cavidade abdominal."
             },
             {
               "valor": "pequena",
