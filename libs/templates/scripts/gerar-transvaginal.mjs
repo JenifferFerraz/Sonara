@@ -1,17 +1,6 @@
 // Gera libs/templates/src/transvaginal.json. Rode: npm run templates
-import { writeFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
+import { and, e, op, salvar, v } from './lib.mjs';
 
-const v = (id) => ({ var: id });
-const e = (a, b) => ({ '==': [v(a), b] });
-const and = (...c) => ({ and: c });
-const op = (valor, rotulo, laudo, impressao) => ({
-  valor,
-  rotulo,
-  ...(laudo !== undefined && { laudo }),
-  ...(impressao && { impressao }),
-});
 const semCirurgia = e('cirurgia', 'nenhuma');
 
 const ovarioVisivel = (k) =>
@@ -72,6 +61,8 @@ const semEndo = and(semCirurgia, { '!': [v('endo_nid')] });
 const t = {
   id: 'transvaginal',
   versao: '0.1.0',
+  exame: 'Abdome / Pelve',
+  subtipo: 'Pelve feminina transvaginal',
   titulo: 'ULTRASSONOGRAFIA PÉLVICA TRANSVAGINAL',
   mudancas: {
     url: 'https://sonara.example/mudancas/transvaginal/0.1.0', // TODO: link real do changelog aprovado
@@ -261,6 +252,4 @@ const t = {
   ],
 };
 
-const dir = dirname(fileURLToPath(import.meta.url));
-writeFileSync(join(dir, '..', 'src', 'transvaginal.json'), JSON.stringify(t, null, 2) + '\n');
-console.log('transvaginal.json gerado');
+salvar(t);

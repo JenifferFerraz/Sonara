@@ -12,7 +12,23 @@ export interface Opcao {
   impressao?: string;
   /** Pontos (ex.: TI-RADS), usados por campos multi. */
   pontos?: number;
+  /** Frases alternativas à de `laudo`, escritas e aprovadas pelo revisor. O médico escolhe a sua. */
+  variantes?: Variante[];
 }
+
+/** Redação alternativa de uma frase. */
+export interface Variante {
+  id: string;
+  /** Nome curto mostrado no diálogo. */
+  rotulo?: string;
+  texto: string;
+}
+
+/**
+ * Escolhas do médico (por login): chave da frase → id da variante.
+ * A chave é `campo` ou `campo.opcao`. Sem escolha, vale a frase padrão da máscara.
+ */
+export type Preferencias = Record<string, string>;
 
 export interface Campo {
   id: string;
@@ -31,6 +47,10 @@ export interface Campo {
   opcoes?: Opcao[];
   /** Frase do laudo (check, num, dims, text). Aceita {id}, {id.a}, {id.vol}. */
   laudo?: string;
+  /** Frases alternativas à de `laudo` (check, num, dims, text). */
+  variantes?: Variante[];
+  /** Rótulo do achado no diálogo "Adicionar achado". Sem ele, o campo fica sempre na tela. */
+  achado?: string;
   impressao?: string;
   /** Só tipo list: sub-campos de cada item e frases. */
   itens?: Campo[];
@@ -58,6 +78,10 @@ export interface Aviso {
 export interface Template {
   id: string;
   versao: string;
+  /** Nome da aba do exame (vários subtipos podem dividir a mesma aba). */
+  exame?: string;
+  /** Nome do subtipo dentro da aba (ex.: Abdome total, Pelve transvaginal). */
+  subtipo?: string;
   titulo: string;
   referencias: Record<string, string>;
   /** Mudanças desta versão, aprovadas pelo médico revisor. */

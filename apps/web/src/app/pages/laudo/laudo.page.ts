@@ -12,6 +12,7 @@ import {
 } from '@sonara/laudo-engine';
 import { ClipboardService } from '../../core/services/clipboard.service';
 import { MascaraService } from '../../core/services/mascara.service';
+import { PreferenciasService } from '../../core/services/preferencias.service';
 import { CampoComponent, MudancaCampo } from '../../shared/campo/campo.component';
 import { aplicarMascara, mascaraInteiro } from '../../shared/mascaras';
 
@@ -25,22 +26,64 @@ export class LaudoPage {
   private readonly _mascaras = inject(MascaraService);
   private readonly _clipboard = inject(ClipboardService);
   private readonly _sanitizer = inject(DomSanitizer);
+  private readonly _preferencias = inject(PreferenciasService);
 
-  readonly abas = computed(() => this._mascaras.emUso().map(t => ({ id: t.id, titulo: t.titulo })));
+  /** Uma aba por exame; os subtipos (Abdome total, Pelve transvaginal...) ficam dentro da aba. */
+  readonly abas = computed(() => {
+    const grupos = new Map<string, { nome: string; subtipos: { id: string; nome: string }[] }>();
+    for (const t of this._mascaras.emUso()) {
+      const nome = t.exame ?? t.titulo;
+      const g = grupos.get(nome) ?? { nome, subtipos: [] };
+      g.subtipos.push({ id: t.id, nome: t.subtipo ?? t.titulo });
+      grupos.set(nome, g);
+    }
+    return [...grupos.values()];
+  });
   readonly abaAtiva = signal('transvaginal');
+  /** Aba (exame) em que a máscara ativa está. */
+  readonly exameAtivo = computed(() => this.template().exame ?? this.template().titulo);
+  readonly subtiposDoExame = computed(
+    () => this.abas().find(a => a.nome === this.exameAtivo())?.subtipos ?? []
+  );
+  /** Estado guardado de cada máscara: trocar de aba não perde o que foi preenchido. */
+  private readonly _estados = new Map<string, Estado>();
   readonly pendencias = this._mascaras.pendencias;
 
   /** Máscara em uso do exame aberto. */
   readonly template = computed(
     () => this._mascaras.emUso().find(t => t.id === this.abaAtiva()) ?? this._mascaras.emUso()[0]
   );
+  /** Abre outra máscara, guardando o estado da atual e levando o cabeçalho junto. */
+  abrirExame(id: string): void {
+    if (id === this.abaAtiva()) return;
+    const atual = this.estado();
+    this._estados.set(this.template().id, atual);
+    this.abaAtiva.set(id);
+    const guardado = this._estados.get(id);
+    const novo = guardado ?? criarEstado(this.template());
+    this.estado.set({ ...novo, cabecalho: atual.cabecalho });
+    this.htmlEditado.set(null);
+    this.abertas.set({});
+    this.copiado.set(false);
+  }
+
+  /** Abre o primeiro subtipo da aba, ou o que o médico usou por último nela. */
+  abrirAba(nome: string): void {
+    const aba = this.abas().find(a => a.nome === nome);
+    if (aba) this.abrirExame(aba.subtipos[0].id);
+  }
+
+  escolherSubtipo(evento: Event): void {
+    this.abrirExame((evento.target as HTMLSelectElement).value);
+  }
+
   readonly versoes = computed(() => {
     const m = this._mascaras.instaladas()[this.template().id];
     return Object.values(m.versoes).map(t => t.versao);
   });
 
   readonly estado = signal<Estado>(criarEstado(this.template()));
-  readonly resultado = computed(() => gerar(this.template(), this.estado()));
+  readonly resultado = computed(() => gerar(this.template(), this.estado(), this._preferencias.frases()));
   readonly visiveis = computed(() => camposVisiveis(this.template(), this.estado()));
   readonly vazios = computed(() => this.resultado().alertas.filter(a => a.tipo === 'obrigatorio'));
   readonly avisos = computed(() => this.resultado().alertas.filter(a => a.tipo === 'referencia'));

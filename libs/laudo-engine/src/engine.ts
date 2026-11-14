@@ -1,7 +1,7 @@
 import jsonLogic from 'json-logic-js';
 import { FALTA, formatarNumero, lerNumero, volume } from './numeros';
 import type {
-  Alerta, Campo, Dims, Estado, ItemLista, ListaValor, Mudanca, Resultado, Template,
+  Alerta, Campo, Dims, Estado, ItemLista, ListaValor, Mudanca, Preferencias, Resultado, Template, Variante,
 } from './types';
 
 type Ctx = Record<string, unknown>;
@@ -152,7 +152,14 @@ function visivel(c: Campo, logica: Ctx): boolean {
 
 // ---------- Geração ----------
 
-export function gerar(template: Template, estado: Estado): Resultado {
+/** Frase escolhida pelo médico para a chave, ou a padrão da máscara. */
+function frase(chave: string, padrao: string | undefined, variantes: Variante[] | undefined, prefs: Preferencias): string | undefined {
+  const id = prefs[chave];
+  const v = id ? variantes?.find((x) => x.id === id) : undefined;
+  return v ? v.texto : padrao;
+}
+
+export function gerar(template: Template, estado: Estado, preferencias: Preferencias = {}): Resultado {
   const { logica, texto, calculos } = montarContextos(template, estado);
   const alertas: Alerta[] = [];
   const impressao: string[] = [];
@@ -173,13 +180,15 @@ export function gerar(template: Template, estado: Estado): Resultado {
         case 'seg':
         case 'select': {
           const o = c.opcoes?.find((x) => x.valor === v);
-          if (o?.laudo) frasesSecao.push(interpolar(o.laudo, texto));
+          const f = o && frase(`${c.id}.${o.valor}`, o.laudo, o.variantes, preferencias);
+          if (f) frasesSecao.push(interpolar(f, texto));
           if (o?.impressao) impressao.push(interpolar(o.impressao, texto));
           break;
         }
         case 'check':
           if (v) {
-            if (c.laudo) frasesSecao.push(interpolar(c.laudo, texto));
+            const f = frase(c.id, c.laudo, c.variantes, preferencias);
+            if (f) frasesSecao.push(interpolar(f, texto));
             if (c.impressao) impressao.push(interpolar(c.impressao, texto));
           }
           break;
@@ -195,7 +204,8 @@ export function gerar(template: Template, estado: Estado): Resultado {
         case 'num': {
           if (naoCitar) break;
           if (c.obrigatorio && lerNumero(v) === null) pedir(c);
-          if (c.laudo) frasesSecao.push(interpolar(c.laudo, texto));
+          const f = frase(c.id, c.laudo, c.variantes, preferencias);
+          if (f) frasesSecao.push(interpolar(f, texto));
           if (c.impressao && lerNumero(v) !== null) impressao.push(interpolar(c.impressao, texto));
           break;
         }
@@ -203,7 +213,8 @@ export function gerar(template: Template, estado: Estado): Resultado {
           const d = v as Dims;
           const falta = [d.a, d.b, d.c].some((x) => lerNumero(x) === null);
           if (c.obrigatorio && falta) pedir(c, `${c.rotulo}: medidas obrigatórias não preenchidas.`);
-          if (c.laudo) frasesSecao.push(interpolar(c.laudo, texto));
+          const f = frase(c.id, c.laudo, c.variantes, preferencias);
+          if (f) frasesSecao.push(interpolar(f, texto));
           if (c.impressao) impressao.push(interpolar(c.impressao, texto));
           break;
         }
@@ -231,7 +242,7 @@ export function gerar(template: Template, estado: Estado): Resultado {
           break;
         }
         case 'text':
-          if (typeof v === 'string' && v.trim() !== '') frasesSecao.push(interpolar(c.laudo ?? '{valor}', { valor: v.trim() }));
+          if (typeof v === 'string' && v.trim() !== '') frasesSecao.push(interpolar(frase(c.id, c.laudo, c.variantes, preferencias) ?? '{valor}', { valor: v.trim() }));
           break;
       }
     }

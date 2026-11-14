@@ -50,10 +50,20 @@
 </section>
 
 <nav class="abas" aria-label="Exames">
-  @for (aba of abas(); track aba.id) {
-    <button type="button" [class.ativa]="aba.id === abaAtiva()" (click)="abaAtiva.set(aba.id)">
-      {{ aba.titulo }}
+  @for (aba of abas(); track aba.nome) {
+    <button type="button" [class.ativa]="aba.nome === exameAtivo()" (click)="abrirAba(aba.nome)">
+      {{ aba.nome }}
     </button>
+  }
+  @if (subtiposDoExame().length > 1) {
+    <label class="versao" title="Tipo de exame">
+      Subtipo
+      <select (change)="escolherSubtipo($event)">
+        @for (s of subtiposDoExame(); track s.id) {
+          <option [value]="s.id" [selected]="s.id === t.id">{{ s.nome }}</option>
+        }
+      </select>
+    </label>
   }
   <span class="espaco"></span>
   <label class="versao" title="Versões instaladas da máscara">

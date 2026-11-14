@@ -1,6 +1,8 @@
 {
   "id": "transvaginal",
   "versao": "0.1.0",
+  "exame": "Abdome / Pelve",
+  "subtipo": "Pelve feminina transvaginal",
   "titulo": "ULTRASSONOGRAFIA PÉLVICA TRANSVAGINAL",
   "mudancas": {
     "url": "https://sonara.example/mudancas/transvaginal/0.1.0",
