@@ -53,8 +53,6 @@ export interface Campo {
   paragrafo?: boolean;
   /** Sub-campos numéricos consecutivos com a mesma `linha` aparecem juntos: "Mede: a x b x c cm". */
   linha?: string;
-  /** Rótulo do achado no diálogo "Adicionar achado". Sem ele, o campo fica sempre na tela. */
-  achado?: string;
   impressao?: string;
   /**
    * Só tipo list: liga os sub-campos de cada item ao cálculo ACR TI-RADS.

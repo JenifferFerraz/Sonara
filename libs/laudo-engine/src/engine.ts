@@ -198,8 +198,8 @@ export function gerar(template: Template, estado: Estado, preferencias: Preferen
       const antes = frasesSecao.length;
 
       switch (c.tipo) {
-        case 'seg':
-        case 'select': {
+        case 'seg': {
+          // Só `seg` escreve a frase da opção. `select` apenas fornece o valor para as frases de outros campos.
           const o = c.opcoes?.find((x) => x.valor === v);
           const f = o && frase(`${c.id}.${o.valor}`, o.laudo, o.variantes, preferencias);
           if (f) frasesSecao.push(interpolar(f, texto));

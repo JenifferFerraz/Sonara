@@ -282,7 +282,7 @@ const t = {
         },
         num('bex_calc_cm', 'Cálculo (cm)', { showIf: e('bexiga', 'calculo') }),
         num('bex_lesao_cm', 'Lesão (cm)', { showIf: e('bexiga', 'lesao') }),
-        { id: 'foley', tipo: 'check', rotulo: 'Sonda de Foley', achado: 'Sonda de Foley', laudo: 'Sonda vesical de demora em posição.' },
+        { id: 'foley', tipo: 'check', rotulo: 'Sonda de Foley', laudo: 'Sonda vesical de demora em posição.' },
         ...opcional('vol_vesical', 'Volume vesical pré e pós miccional', [
           { id: 'vesical_pre', tipo: 'dims', rotulo: 'Pré-miccional (cm)', obrigatorio: true },
           { id: 'vesical_pos', tipo: 'dims', rotulo: 'Pós-miccional (cm)', obrigatorio: true },

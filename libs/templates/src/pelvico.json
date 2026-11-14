@@ -145,7 +145,6 @@
           "id": "vol_vesical",
           "tipo": "check",
           "rotulo": "Volume vesical pré e pós miccional",
-          "achado": "Volume vesical pré e pós miccional",
           "laudo": "Volume vesical pré-miccional estimado em {vesical_pre.vol} ml e pós-miccional em {vesical_pos.vol} ml."
         },
         {

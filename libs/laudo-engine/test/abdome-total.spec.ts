@@ -35,6 +35,9 @@ describe('abdome total mask', () => {
     e = com(e, 'fig_cisto_cm', '1,2');
     e = com(e, 'fig_cisto_seg', '7');
     expect(texto(e)).toContain('Cisto simples no segmento VII, medindo 1,2 cm.');
+    // o seletor de segmento só alimenta a frase; não pode repetir "segmento VII" sozinho
+    expect(texto(e)).not.toMatch(/medindo 1,2 cm\. segmento/);
+    expect(texto(e).match(/segmento VII/g)).toHaveLength(1);
   });
 
   it('adds gallstones to the findings and impression', () => {

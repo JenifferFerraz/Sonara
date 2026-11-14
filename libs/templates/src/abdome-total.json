@@ -124,8 +124,7 @@
         {
           "id": "fig_med",
           "tipo": "check",
-          "rotulo": "Citar medidas dos lobos",
-          "achado": "Citar medidas dos lobos"
+          "rotulo": "Citar medidas dos lobos"
         },
         {
           "id": "fig_ld",
@@ -153,7 +152,6 @@
           "id": "fig_cisto",
           "tipo": "check",
           "rotulo": "Cisto simples",
-          "achado": "Cisto simples",
           "laudo": "Cisto simples no {fig_cisto_seg}, medindo {fig_cisto_cm} cm.",
           "impressao": "Cisto hepático simples."
         },
@@ -227,7 +225,6 @@
           "id": "fig_cistos",
           "tipo": "check",
           "rotulo": "Vários cistos simples",
-          "achado": "Vários cistos simples",
           "laudo": "Múltiplos cistos simples hepáticos, o maior com {fig_cistos_max} cm.",
           "impressao": "Cistos hepáticos simples."
         },
@@ -245,7 +242,6 @@
           "id": "fig_nodulo",
           "tipo": "check",
           "rotulo": "Nódulo hepático",
-          "achado": "Nódulo hepático",
           "laudo": "Nódulo {fig_nodulo_eco}, de contornos {fig_nodulo_cont}, no {fig_nodulo_seg}, medindo {fig_nodulo_cm} cm.",
           "impressao": "Nódulo hepático."
         },
@@ -361,7 +357,6 @@
           "id": "fig_calc",
           "tipo": "check",
           "rotulo": "Calcificação grosseira",
-          "achado": "Calcificação grosseira",
           "laudo": "Calcificação grosseira no {fig_calc_seg}, medindo {fig_calc_cm} cm."
         },
         {
@@ -533,7 +528,6 @@
           "id": "ves_parede",
           "tipo": "check",
           "rotulo": "Citar espessura da parede",
-          "achado": "Citar espessura da parede",
           "laudo": "Parede vesicular com espessura de {ves_parede_cm} cm."
         },
         {
@@ -624,8 +618,7 @@
         {
           "id": "panc_med",
           "tipo": "check",
-          "rotulo": "Citar dimensões (espessura)",
-          "achado": "Citar dimensões (espessura)"
+          "rotulo": "Citar dimensões (espessura)"
         },
         {
           "id": "panc_cab",
@@ -694,8 +687,7 @@
         {
           "id": "baco_med",
           "tipo": "check",
-          "rotulo": "Citar medidas",
-          "achado": "Citar medidas"
+          "rotulo": "Citar medidas"
         },
         {
           "id": "baco_long",
@@ -723,7 +715,6 @@
           "id": "baco_acess",
           "tipo": "check",
           "rotulo": "Baço acessório",
-          "achado": "Baço acessório",
           "laudo": "Baço acessório medindo {baco_acess_cm} cm."
         },
         {
@@ -740,7 +731,6 @@
           "id": "baco_calc",
           "tipo": "check",
           "rotulo": "Calcificação esplênica",
-          "achado": "Calcificação esplênica",
           "laudo": "Calcificação esplênica medindo {baco_calc_cm} cm."
         },
         {
@@ -814,7 +804,6 @@
           "id": "apendicite",
           "tipo": "check",
           "rotulo": "Sinais de apendicite",
-          "achado": "Sinais de apendicite",
           "laudo": "Estrutura tubular em fundo cego, não compressível, com calibre de {apend_cm} cm, em topografia apendicular.",
           "impressao": "Sinais ultrassonográficos de apendicite."
         },
@@ -832,7 +821,6 @@
           "id": "divert",
           "tipo": "check",
           "rotulo": "Diverticulite",
-          "achado": "Diverticulite",
           "laudo": "Espessamento parietal com borramento da gordura adjacente no {divert_seg}, associado a divertículos.",
           "impressao": "Sinais de diverticulite."
         },
@@ -1287,7 +1275,6 @@
           "id": "ureter_calc",
           "tipo": "check",
           "rotulo": "Cálculo ureteral",
-          "achado": "Cálculo ureteral",
           "laudo": "Imagem calculosa de {ureter_cm} cm no {ureter_terco} do ureter {ureter_lado}.",
           "impressao": "Cálculo ureteral."
         },
@@ -1347,7 +1334,6 @@
           "id": "duplo_j",
           "tipo": "check",
           "rotulo": "Cateter duplo J",
-          "achado": "Cateter duplo J",
           "laudo": "Cateter duplo J posicionado ({duplo_j_lado})."
         },
         {
@@ -1454,14 +1440,12 @@
           "id": "foley",
           "tipo": "check",
           "rotulo": "Sonda de Foley",
-          "achado": "Sonda de Foley",
           "laudo": "Sonda vesical de demora em posição."
         },
         {
           "id": "vol_vesical",
           "tipo": "check",
           "rotulo": "Volume vesical pré e pós miccional",
-          "achado": "Volume vesical pré e pós miccional",
           "laudo": "Volume vesical pré-miccional estimado em {vesical_pre.vol} ml e pós-miccional em {vesical_pos.vol} ml."
         },
         {

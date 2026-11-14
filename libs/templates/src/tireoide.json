@@ -149,7 +149,6 @@
           "id": "doppler",
           "tipo": "check",
           "rotulo": "Descrever Doppler do parênquima",
-          "achado": "Descrever Doppler do parênquima",
           "laudo": "Ao estudo Doppler, o parênquima apresenta {doppler_tipo}.",
           "showIf": {
             "!=": [
@@ -605,7 +604,6 @@
           "id": "coloide",
           "tipo": "check",
           "rotulo": "Cistos coloides",
-          "achado": "Cistos coloides",
           "laudo": "Cistos coloides esparsos, o maior com {coloide_max} cm.",
           "showIf": {
             "!=": [
@@ -781,7 +779,6 @@
           "id": "paratireoides",
           "tipo": "check",
           "rotulo": "Citar ausência de nódulos nas paratireoides",
-          "achado": "Citar ausência de nódulos nas paratireoides",
           "laudo": "Ausência de nódulos na topografia das paratireoides."
         }
       ]

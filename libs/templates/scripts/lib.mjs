@@ -19,7 +19,7 @@ export const op = (valor, rotulo, laudo, impressao) => ({
  */
 export function opcional(id, rotulo, campos, extra = {}) {
   return [
-    { id, tipo: 'check', rotulo, achado: rotulo, ...extra },
+    { id, tipo: 'check', rotulo, ...extra },
     ...campos.map((c) => ({ ...c, showIf: c.showIf ? and(v(id), c.showIf) : v(id) })),
   ];
 }

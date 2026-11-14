@@ -1,7 +1,6 @@
 import { Component, ElementRef, HostListener, computed, effect, inject, signal, viewChild } from '@angular/core';
 import {
   Cabecalho,
-  Campo,
   Estado,
   Secao,
   aplicar,
@@ -129,73 +128,7 @@ export class LaudoPage {
 
   campos(secao: Secao) {
     const visiveis = this.visiveis();
-    return secao.campos.filter(c => visiveis.has(c.id) && (!c.achado || this.achadoNaTela(c)));
-  }
-
-  // ----- achados sob demanda -----
-
-  /** Achados que o médico adicionou nesta sessão (por id da máscara). */
-  private readonly _adicionados = signal<Record<string, string[]>>({});
-  private readonly _dialogo = viewChild<ElementRef<HTMLDialogElement>>('dialogoAchados');
-  readonly busca = signal('');
-
-  /** Um achado aparece se foi adicionado, se é favorito do médico ou se já está marcado. */
-  achadoNaTela(c: Campo): boolean {
-    const mid = this.template().id;
-    return (
-      Boolean(this.estado().valores[c.id]) ||
-      (this._adicionados()[mid] ?? []).includes(c.id) ||
-      (this._preferencias.favoritos()[mid] ?? []).includes(c.id)
-    );
-  }
-
-  favorito(c: Campo): boolean {
-    return (this._preferencias.favoritos()[this.template().id] ?? []).includes(c.id);
-  }
-
-  /** Todos os achados da máscara, agrupados por seção, filtrados pela busca. */
-  readonly achadosDisponiveis = computed(() => {
-    const q = this.busca().trim().toLowerCase();
-    return this.template()
-      .secoes.map(secao => ({
-        secao,
-        itens: secao.campos.filter(
-          c =>
-            c.achado &&
-            (q === '' || c.achado.toLowerCase().includes(q) || secao.titulo.toLowerCase().includes(q))
-        )
-      }))
-      .filter(g => g.itens.length > 0);
-  });
-  readonly temAchados = computed(() =>
-    this.template().secoes.some(s => s.campos.some(c => c.achado))
-  );
-
-  abrirAchados(): void {
-    this.busca.set('');
-    this._dialogo()?.nativeElement.showModal();
-  }
-
-  fecharAchados(): void {
-    this._dialogo()?.nativeElement.close();
-  }
-
-  adicionarAchado(secao: Secao, c: Campo): void {
-    const mid = this.template().id;
-    this._adicionados.update(a => ({ ...a, [mid]: [...new Set([...(a[mid] ?? []), c.id])] }));
-    this.mudou({ id: c.id, valor: true });
-    this.abertas.update(a => ({ ...a, [secao.id]: true }));
-  }
-
-  /** Tira o achado da tela e desmarca. Se for favorito, ele continua na tela, desmarcado. */
-  removerAchado(c: Campo): void {
-    const mid = this.template().id;
-    this._adicionados.update(a => ({ ...a, [mid]: (a[mid] ?? []).filter(x => x !== c.id) }));
-    this.mudou({ id: c.id, valor: false });
-  }
-
-  alternarFavorito(c: Campo): void {
-    this._preferencias.alternarFavorito(this.template().id, c.id);
+    return secao.campos.filter(c => visiveis.has(c.id));
   }
 
   /** Seções com medida obrigatória visível ficam sempre abertas. */
@@ -324,7 +257,6 @@ export class LaudoPage {
       return;
     }
     this.estado.set(criarEstado(this.template()));
-    this._adicionados.update(a => ({ ...a, [this.template().id]: [] }));
     this.htmlEditado.set(null);
     this.abertas.set({});
     this.copiado.set(false);
