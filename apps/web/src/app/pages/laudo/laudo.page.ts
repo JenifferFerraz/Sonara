@@ -4,6 +4,11 @@ import {
   Estado,
   Secao,
   aplicar,
+  chaveFrase,
+  FraseEditavel,
+  frasesEditaveis,
+  PREFIXO_TEXTO,
+  validarFrase,
   camposVisiveis,
   criarEstado,
   formatar,
@@ -129,6 +134,91 @@ export class LaudoPage {
   campos(secao: Secao) {
     const visiveis = this.visiveis();
     return secao.campos.filter(c => visiveis.has(c.id));
+  }
+
+  // ----- minhas frases -----
+
+  private readonly _dialogoFrases = viewChild<ElementRef<HTMLDialogElement>>('dialogoFrases');
+  readonly buscaFrase = signal('');
+  readonly erroFrase = signal<Record<string, string>>({});
+
+  /** Frases da máscara aberta, agrupadas por seção e filtradas pela busca. */
+  readonly frasesDisponiveis = computed(() => {
+    const q = this.buscaFrase().trim().toLowerCase();
+    const grupos = new Map<string, FraseEditavel[]>();
+    for (const f of frasesEditaveis(this.template())) {
+      if (q && !`${f.rotulo} ${f.padrao}`.toLowerCase().includes(q)) continue;
+      grupos.set(f.secao, [...(grupos.get(f.secao) ?? []), f]);
+    }
+    return [...grupos.entries()].map(([secao, itens]) => ({ secao, itens }));
+  });
+
+  private preferenciaDe(f: FraseEditavel): string | undefined {
+    return this._preferencias.frases()[chaveFrase(this.template().id, f.chave)];
+  }
+
+  personalizada(f: FraseEditavel): boolean {
+    return this.preferenciaDe(f) !== undefined;
+  }
+
+  /** O texto que vale hoje: o do médico, a variante escolhida ou o padrão da máscara. */
+  textoDaFrase(f: FraseEditavel): string {
+    const pref = this.preferenciaDe(f);
+    if (pref?.startsWith(PREFIXO_TEXTO)) return pref.slice(PREFIXO_TEXTO.length);
+    return f.variantes?.find(v => v.id === pref)?.texto ?? f.padrao;
+  }
+
+  camposDaFrase(f: FraseEditavel): string[] {
+    return [...new Set([...f.padrao.matchAll(/\{([\w.]+)\}/g)].map(m => m[1]))];
+  }
+
+  abrirFrases(): void {
+    this.buscaFrase.set('');
+    this.erroFrase.set({});
+    this._dialogoFrases()?.nativeElement.showModal();
+  }
+
+  fecharFrases(): void {
+    this._dialogoFrases()?.nativeElement.close();
+  }
+
+  /** Salva o texto do médico se ele mantiver os mesmos campos da frase padrão; senão explica o que falta. */
+  salvarFrase(f: FraseEditavel, evento: Event): void {
+    const texto = (evento.target as HTMLTextAreaElement).value.trim();
+    const mostrar = (msg: string | null) =>
+      this.erroFrase.update(e => {
+        const proximo = { ...e };
+        if (msg === null) delete proximo[f.chave];
+        else proximo[f.chave] = msg;
+        return proximo;
+      });
+
+    if (texto === f.padrao.trim()) {
+      this._preferencias.definirTexto(chaveFrase(this.template().id, f.chave), null);
+      mostrar(null);
+      this.copiado.set(false);
+      return;
+    }
+    const v = validarFrase(f.padrao, texto);
+    if (!v.ok) {
+      if (texto === '') mostrar('A frase não pode ficar vazia.');
+      else if (v.faltando.length) mostrar(`Faltou manter: ${v.faltando.map(x => `{${x}}`).join(', ')}.`);
+      else mostrar(`Campo que não existe nesta frase: ${v.desconhecidos.map(x => `{${x}}`).join(', ')}.`);
+      return;
+    }
+    mostrar(null);
+    this._preferencias.definirTexto(chaveFrase(this.template().id, f.chave), texto);
+    this.copiado.set(false);
+  }
+
+  restaurarFrase(f: FraseEditavel): void {
+    this._preferencias.definirTexto(chaveFrase(this.template().id, f.chave), null);
+    this.erroFrase.update(e => {
+      const proximo = { ...e };
+      delete proximo[f.chave];
+      return proximo;
+    });
+    this.copiado.set(false);
   }
 
   /** Seções com medida obrigatória visível ficam sempre abertas. */

@@ -156,14 +156,82 @@ function visivel(c: Campo, logica: Ctx): boolean {
 
 // ---------- Geração ----------
 
-/** Frase escolhida pelo médico para a chave, ou a padrão da máscara. */
+// ---------- Frases do médico ----------
+
+/** Preferência de texto livre: `texto:` + a frase escrita pelo médico. */
+export const PREFIXO_TEXTO = 'texto:';
+
+/** Chave de uma preferência: as frases valem por máscara (o mesmo campo em outro exame é outra frase). */
+export const chaveFrase = (templateId: string, chave: string) => `${templateId}/${chave}`;
+
+/** Campos entre chaves de uma frase: `{lobo_d.a}` → `lobo_d.a`. */
+export function placeholders(f: string): string[] {
+  return [...new Set([...f.matchAll(/\{([\w.]+)\}/g)].map((m) => m[1]))];
+}
+
+/**
+ * Uma frase escrita pelo médico só vale se citar exatamente os mesmos campos da padrão:
+ * sem isso, uma medida sumiria do laudo ou apareceria um campo que não existe.
+ */
+export function validarFrase(padrao: string, texto: string): { ok: boolean; faltando: string[]; desconhecidos: string[] } {
+  const t = texto.trim();
+  const esperados = placeholders(padrao);
+  const usados = placeholders(t);
+  const faltando = esperados.filter((p) => !usados.includes(p));
+  const desconhecidos = usados.filter((p) => !esperados.includes(p));
+  return { ok: t !== '' && faltando.length === 0 && desconhecidos.length === 0, faltando, desconhecidos };
+}
+
+/** Só as preferências desta máscara, sem o prefixo (`mini/figado.normal` → `figado.normal`). */
+function escopar(templateId: string, todas: Preferencias): Preferencias {
+  const prefixo = `${templateId}/`;
+  const minhas: Preferencias = {};
+  for (const [k, v] of Object.entries(todas)) if (k.startsWith(prefixo)) minhas[k.slice(prefixo.length)] = v;
+  return minhas;
+}
+
+/** Frase escolhida pelo médico para a chave (variante ou texto livre válido), ou a padrão da máscara. */
 function frase(chave: string, padrao: string | undefined, variantes: Variante[] | undefined, prefs: Preferencias): string | undefined {
-  const id = prefs[chave];
-  const v = id ? variantes?.find((x) => x.id === id) : undefined;
+  const escolha = prefs[chave];
+  if (!escolha) return padrao;
+  if (escolha.startsWith(PREFIXO_TEXTO)) {
+    const t = escolha.slice(PREFIXO_TEXTO.length);
+    return padrao !== undefined && validarFrase(padrao, t).ok ? t.trim() : padrao;
+  }
+  const v = variantes?.find((x) => x.id === escolha);
   return v ? v.texto : padrao;
 }
 
-export function gerar(template: Template, estado: Estado, preferencias: Preferencias = {}): Resultado {
+/** Frase da máscara que o médico pode trocar. */
+export interface FraseEditavel {
+  chave: string;
+  secao: string;
+  rotulo: string;
+  padrao: string;
+  variantes?: Variante[];
+}
+
+/** Lista as frases do laudo (não da impressão) que o médico pode reescrever, na ordem da máscara. */
+export function frasesEditaveis(template: Template): FraseEditavel[] {
+  const lista: FraseEditavel[] = [];
+  for (const s of template.secoes) {
+    for (const c of s.campos) {
+      if (c.tipo === 'seg') {
+        for (const o of c.opcoes ?? []) {
+          if (o.laudo) lista.push({ chave: `${c.id}.${o.valor}`, secao: s.titulo, rotulo: `${c.rotulo}: ${o.rotulo}`, padrao: o.laudo, variantes: o.variantes });
+        }
+      } else if (c.tipo === 'list') {
+        if (c.laudoItem) lista.push({ chave: `${c.id}#item`, secao: s.titulo, rotulo: `${c.rotulo} (cada item)`, padrao: c.laudoItem });
+      } else if (c.laudo) {
+        lista.push({ chave: c.id, secao: s.titulo, rotulo: c.rotulo, padrao: c.laudo, variantes: c.variantes });
+      }
+    }
+  }
+  return lista;
+}
+
+export function gerar(template: Template, estado: Estado, preferenciasConta: Preferencias = {}): Resultado {
+  const preferencias = escopar(template.id, preferenciasConta);
   const { logica, texto, calculos } = montarContextos(template, estado);
   const alertas: Alerta[] = [];
   const impressao: string[] = [];
@@ -302,7 +370,8 @@ export function gerar(template: Template, estado: Estado, preferencias: Preferen
                   mensagem: `${c.rotulo} ${i + 1}: ${sub.rotulo} obrigatória.`,
                 });
             }
-            if (c.laudoItem) frasesSecao.push(interpolar(c.laudoItem, ictx, texto));
+            const fItem = frase(`${c.id}#item`, c.laudoItem, undefined, preferencias);
+            if (fItem) frasesSecao.push(interpolar(fItem, ictx, texto));
             if (c.impressaoItem) impressao.push(interpolar(c.impressaoItem, ictx, texto));
           });
           break;

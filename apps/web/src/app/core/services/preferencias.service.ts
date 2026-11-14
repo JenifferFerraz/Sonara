@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { Preferencias } from '@sonara/laudo-engine';
+import { PREFIXO_TEXTO, Preferencias } from '@sonara/laudo-engine';
 
 const CHAVE = 'sonara.preferencias';
 
@@ -13,6 +13,11 @@ export class PreferenciasService {
   private readonly _frases = signal<Preferencias>(this.carregar());
 
   readonly frases = this._frases.asReadonly();
+
+  /** Frase que o médico escreveu com as próprias palavras; `null` volta ao texto padrão. */
+  definirTexto(chave: string, texto: string | null): void {
+    this.escolher(chave, texto === null ? null : PREFIXO_TEXTO + texto);
+  }
 
   escolher(chave: string, varianteId: string | null): void {
     const proximo = { ...this._frases() };

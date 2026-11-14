@@ -56,6 +56,7 @@
     </button>
   }
   <span class="espaco"></span>
+  <button type="button" class="btn pequeno" (click)="abrirFrases()">Minhas frases</button>
   <label class="versao" title="Versões instaladas da máscara">
     Máscara
     <select (change)="escolherVersao($event)">
@@ -186,3 +187,54 @@
   <button type="button" class="btn" (click)="novoLaudo()">Novo laudo</button>
   <button type="button" class="btn primario" (click)="copiar()">{{ rotuloCopiar() }}</button>
 </footer>
+
+<dialog #dialogoFrases class="dialogo largo" aria-labelledby="titulo-frases">
+  <header>
+    <h2 id="titulo-frases">Minhas frases</h2>
+    <button type="button" class="fechar" aria-label="Fechar" (click)="fecharFrases()">×</button>
+  </header>
+  <p class="intro">
+    Escreva a frase do seu jeito. Mantenha os campos entre chaves, como <code>{{ '{' }}lobo_d.a{{ '}' }}</code>:
+    são eles que trazem as medidas e as escolhas do exame.
+  </p>
+  <input
+    type="search"
+    class="busca"
+    placeholder="Buscar frase"
+    [value]="buscaFrase()"
+    (input)="buscaFrase.set(valorEm($event))" />
+  <div class="lista-frases">
+    @for (g of frasesDisponiveis(); track g.secao) {
+      <h3>{{ g.secao }}</h3>
+      @for (f of g.itens; track f.chave) {
+        <div class="frase" [class.personalizada]="personalizada(f)">
+          <label [for]="'frase-' + f.chave">{{ f.rotulo }}</label>
+          <textarea
+            [id]="'frase-' + f.chave"
+            rows="2"
+            [value]="textoDaFrase(f)"
+            (change)="salvarFrase(f, $event)"></textarea>
+          <div class="linha-frase">
+            <span class="campos-frase">
+              @for (c of camposDaFrase(f); track c) {
+                <code>{{ '{' }}{{ c }}{{ '}' }}</code>
+              }
+            </span>
+            @if (personalizada(f)) {
+              <button type="button" class="link" (click)="restaurarFrase(f)">Restaurar padrão</button>
+            }
+          </div>
+          @if (erroFrase()[f.chave]) {
+            <p class="erro-frase" role="alert">{{ erroFrase()[f.chave] }}</p>
+          }
+        </div>
+      }
+    } @empty {
+      <p class="vazio">Nenhuma frase encontrada.</p>
+    }
+  </div>
+  <footer>
+    <span class="dica">As alterações valem para este exame e ficam salvas no seu login.</span>
+    <button type="button" class="btn primario" (click)="fecharFrases()">Pronto</button>
+  </footer>
+</dialog>
