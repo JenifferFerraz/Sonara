@@ -19,7 +19,8 @@ export class LoginDto {
 }
 
 export class RefreshTokenDto {
-  @IsNotEmpty()
+  /** Só para clientes sem cookie (ex.: app desktop). O navegador usa o cookie httpOnly. */
+  @IsOptional()
   @IsString()
-  refreshToken: string;
+  refreshToken?: string;
 }

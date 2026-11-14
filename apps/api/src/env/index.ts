@@ -11,6 +11,8 @@ const envSchema = z.object({
   EXPIRES_IN_REFRESH_TOKEN: z.string().default('30d'),
   LICENSE_PRIVATE_KEY: z.string(),
   LICENSE_PUBLIC_KEY: z.string(),
+  /** Origens do app web que podem chamar a API com cookie (separadas por vírgula). */
+  WEB_ORIGIN: z.string().default('http://localhost:4200'),
   MASKS_DIR: z.string().default('../../libs/templates/src'),
 });
 

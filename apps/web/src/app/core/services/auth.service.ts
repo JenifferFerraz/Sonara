@@ -32,11 +32,12 @@ export class ApiErro extends Error {
 }
 
 const CHAVES = {
-  acesso: 'sonara.accessToken',
-  renovacao: 'sonara.refreshToken',
   dispositivo: 'sonara.deviceId',
   usuario: 'sonara.usuario'
 } as const;
+
+/** Chaves de versões anteriores, que guardavam tokens no navegador. Removidas ao iniciar. */
+const CHAVES_ANTIGAS = ['sonara.accessToken', 'sonara.refreshToken'];
 
 function ler(chave: string): string | null {
   try {
@@ -51,7 +52,7 @@ function gravar(chave: string, valor: string | null): void {
     if (valor === null) localStorage.removeItem(chave);
     else localStorage.setItem(chave, valor);
   } catch {
-    // Armazenamento bloqueado: a sessão dura só enquanto a aba estiver aberta.
+    // Armazenamento bloqueado: segue só em memória.
   }
 }
 
@@ -86,18 +87,28 @@ function nomeDoAparelho(): string {
 }
 
 /**
- * Sessão do médico: cadastro, login, renovação do token e chamadas à API.
- * Só conta, dispositivos, licença e máscaras passam por aqui; nenhum texto de laudo.
+ * Sessão do médico: cadastro, login, renovação e chamadas à API.
+ *
+ * Os tokens não ficam no armazenamento do navegador:
+ * - o token de renovação vive num cookie `httpOnly` definido pela API (o JavaScript não o lê);
+ * - o token de acesso (curto) fica só em memória e é pedido de novo ao recarregar a página.
+ * Só dados não sensíveis (nome, CRM, ID do aparelho) ficam no `localStorage`.
+ *
+ * Nenhum texto de laudo passa por aqui.
  */
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly _usuario = signal<Usuario | null>(lerUsuario());
-  private readonly _comSessao = signal(Boolean(ler(CHAVES.renovacao)));
+  private _acesso: string | null = null;
   private _renovando: Promise<boolean> | null = null;
 
   readonly usuario = this._usuario.asReadonly();
-  /** Há sessão guardada (token de renovação). Não garante que o servidor ainda a aceite. */
-  readonly logado = computed(() => this._comSessao() && this._usuario() !== null);
+  /** Há conta entrada neste aparelho. O servidor ainda pode recusar a sessão (aí volta para o login). */
+  readonly logado = computed(() => this._usuario() !== null);
+
+  constructor() {
+    for (const chave of CHAVES_ANTIGAS) gravar(chave, null);
+  }
 
   /** ID deste aparelho, devolvido pela API no login e reenviado nos logins seguintes. */
   get dispositivoId(): string | null {
@@ -109,12 +120,7 @@ export class AuthService {
   }
 
   async entrar(email: string, senha: string): Promise<void> {
-    const resposta = await this.chamar<{
-      user: Usuario;
-      deviceId: string;
-      accessToken: string;
-      refreshToken: string;
-    }>(
+    const resposta = await this.chamar<{ user: Usuario; deviceId: string; accessToken: string }>(
       'POST',
       '/auth/login',
       {
@@ -126,7 +132,7 @@ export class AuthService {
       false
     );
     gravar(CHAVES.dispositivo, resposta.deviceId);
-    this.guardarSessao(resposta.accessToken, resposta.refreshToken);
+    this._acesso = resposta.accessToken;
     const usuario = reduzirUsuario(resposta.user);
     gravar(CHAVES.usuario, JSON.stringify(usuario));
     this._usuario.set(usuario);
@@ -134,19 +140,19 @@ export class AuthService {
 
   /** Encerra a sessão neste aparelho. Se estiver sem internet, encerra só aqui. */
   async sair(): Promise<void> {
-    const renovacao = ler(CHAVES.renovacao);
-    if (renovacao) {
-      try {
-        await this.chamar('POST', '/auth/logout', { refreshToken: renovacao }, false);
-      } catch {
-        // Sem rede ou sessão já encerrada no servidor: segue com a saída local.
-      }
+    try {
+      await this.chamar('POST', '/auth/logout', {}, false);
+    } catch {
+      // Sem rede ou sessão já encerrada no servidor: segue com a saída local.
     }
     this.limparSessao();
   }
 
   /** Chama a API com o token; se vier 401, renova a sessão uma vez e tenta de novo. */
   async chamar<T = unknown>(metodo: string, caminho: string, corpo?: unknown, comToken = true): Promise<T> {
+    // Recarregou a página: o token de acesso (em memória) sumiu. Pede outro pelo cookie.
+    if (comToken && !this._acesso && this._usuario()) await this.renovar();
+
     const enviar = () => this.enviar(metodo, caminho, corpo, comToken);
     let resp = await enviar();
     if (resp.status === 401 && comToken && (await this.renovar())) resp = await enviar();
@@ -162,12 +168,13 @@ export class AuthService {
 
   private async enviar(metodo: string, caminho: string, corpo: unknown, comToken: boolean): Promise<Response> {
     const cabecalhos: Record<string, string> = { 'Content-Type': 'application/json' };
-    const token = ler(CHAVES.acesso);
-    if (comToken && token) cabecalhos['Authorization'] = `Bearer ${token}`;
+    if (comToken && this._acesso) cabecalhos['Authorization'] = `Bearer ${this._acesso}`;
     try {
       return await fetch(`${config.apiUrl}${caminho}`, {
         method: metodo,
         headers: cabecalhos,
+        // Leva e recebe o cookie httpOnly do refresh token (o navegador o envia só às rotas /auth).
+        credentials: 'include',
         body: corpo === undefined ? undefined : JSON.stringify(corpo)
       });
     } catch {
@@ -175,21 +182,21 @@ export class AuthService {
     }
   }
 
-  /** Troca o token de renovação por um novo par. Várias chamadas ao mesmo tempo compartilham uma só. */
+  /** Troca o cookie de renovação por um novo token de acesso. Chamadas simultâneas compartilham uma só. */
   private renovar(): Promise<boolean> {
     this._renovando ??= (async () => {
-      const renovacao = ler(CHAVES.renovacao);
-      if (!renovacao) return false;
       try {
-        const resp = await this.enviar('POST', '/auth/refresh', { refreshToken: renovacao }, false);
+        const resp = await this.enviar('POST', '/auth/refresh', {}, false);
         if (!resp.ok) {
-          this.limparSessao();
+          // Sessão recusada pelo servidor (expirada ou aberta em outro aparelho).
+          if (resp.status === 401 || resp.status === 403) this.limparSessao();
           return false;
         }
-        const dados = (await resp.json()) as { accessToken: string; refreshToken: string };
-        this.guardarSessao(dados.accessToken, dados.refreshToken);
+        const dados = (await resp.json()) as { accessToken: string };
+        this._acesso = dados.accessToken;
         return true;
       } catch {
+        // Sem rede: mantém a conta entrada; a licença offline continua valendo.
         return false;
       } finally {
         this._renovando = null;
@@ -198,17 +205,9 @@ export class AuthService {
     return this._renovando;
   }
 
-  private guardarSessao(acesso: string, renovacao: string): void {
-    gravar(CHAVES.acesso, acesso);
-    gravar(CHAVES.renovacao, renovacao);
-    this._comSessao.set(true);
-  }
-
   private limparSessao(): void {
-    gravar(CHAVES.acesso, null);
-    gravar(CHAVES.renovacao, null);
+    this._acesso = null;
     gravar(CHAVES.usuario, null);
-    this._comSessao.set(false);
     this._usuario.set(null);
   }
 }

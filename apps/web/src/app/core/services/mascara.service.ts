@@ -2,6 +2,7 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { Template, verificarMascara } from '@sonara/laudo-engine';
 import { templates } from '@sonara/templates';
 import { config } from '../config';
+import { AuthService } from './auth.service';
 import { LicencaService } from './licenca.service';
 
 /** Versões instaladas de uma máscara. As antigas ficam guardadas: o médico decide quando trocar. */
@@ -26,6 +27,7 @@ export class MascaraService {
   readonly instaladas = this._instaladas.asReadonly();
 
   private readonly _licenca = inject(LicencaService);
+  private readonly _auth = inject(AuthService);
 
   /** Máscaras em uso, uma por exame, só dos módulos que a licença libera. */
   readonly emUso = computed(() => {
@@ -103,19 +105,13 @@ export class MascaraService {
 
   /**
    * Baixa as máscaras assinadas. O app recusa qualquer arquivo cuja assinatura não confira.
-   * Precisa de sessão (token guardado pelo login); sem token ou sem internet, não faz nada.
+   * Precisa de sessão; sem sessão ou sem internet, não faz nada.
    */
   async buscarAtualizacoes(): Promise<void> {
-    const token = this.lerToken();
-    if (!token || !config.chavePublica || !navigator.onLine) return;
+    if (!this._auth.logado() || !config.chavePublica || !navigator.onLine) return;
 
     try {
-      const resp = await fetch(`${config.apiUrl}/masks`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      if (!resp.ok) return;
-      const lista = (await resp.json()) as { json: string; assinatura: string }[];
-
+      const lista = await this._auth.chamar<{ json: string; assinatura: string }[]>('GET', '/masks');
       for (const item of lista) {
         if (await verificarMascara(item.json, item.assinatura, config.chavePublica)) {
           this.registrar(JSON.parse(item.json) as Template);
@@ -123,14 +119,6 @@ export class MascaraService {
       }
     } catch {
       // Sem rede ou API fora do ar: segue com o que já está instalado.
-    }
-  }
-
-  private lerToken(): string | null {
-    try {
-      return localStorage.getItem('sonara.accessToken');
-    } catch {
-      return null;
     }
   }
 
