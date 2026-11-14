@@ -1,5 +1,4 @@
-import { Component, ElementRef, HostListener, computed, inject, signal, viewChild } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Component, ElementRef, HostListener, computed, effect, inject, signal, viewChild } from '@angular/core';
 import {
   Cabecalho,
   Campo,
@@ -26,10 +25,19 @@ import { aplicarMascara, mascaraInteiro } from '../../shared/mascaras';
 export class LaudoPage {
   private readonly _mascaras = inject(MascaraService);
   private readonly _clipboard = inject(ClipboardService);
-  private readonly _sanitizer = inject(DomSanitizer);
   private readonly _preferencias = inject(PreferenciasService);
 
   /** Uma aba por exame; os subtipos (Abdome total, Pelve transvaginal...) ficam dentro da aba. */
+  constructor() {
+    // Enquanto ninguém editou à mão, o papel acompanha o formulário. Escrever o HTML direto
+    // (sem binding) evita que o cursor pule quando a pessoa começa a digitar.
+    effect(() => {
+      const html = formatar(this.resultado(), 'html');
+      const el = this._editor()?.nativeElement;
+      if (el && this.htmlEditado() === null) el.innerHTML = html;
+    });
+  }
+
   readonly abas = computed(() => {
     const grupos = new Map<string, { nome: string; subtipos: { id: string; nome: string }[] }>();
     for (const t of this._mascaras.emUso()) {
@@ -91,9 +99,8 @@ export class LaudoPage {
 
   /** HTML editado à mão: o laudo para de se atualizar sozinho. */
   readonly htmlEditado = signal<string | null>(null);
-  /** Conteúdo inicial do editor; fixo enquanto a pessoa digita, para o cursor não pular. */
-  readonly htmlInicial = signal<SafeHtml>('');
   private _textoEditado = '';
+  private readonly _editor = viewChild<ElementRef<HTMLElement>>('editor');
 
   readonly fontes = ['Times New Roman', 'Arial', 'Calibri', 'Verdana'];
   readonly tamanhos = [
@@ -107,11 +114,6 @@ export class LaudoPage {
   readonly abertas = signal<Record<string, boolean>>({});
 
   readonly textoAutomatico = computed(() => formatar(this.resultado(), 'texto'));
-  readonly htmlLaudo = computed(() =>
-    // O HTML é montado pelo engine com todo texto escapado.
-    this._sanitizer.bypassSecurityTrustHtml(formatar(this.resultado(), 'html'))
-  );
-
   readonly rotuloCopiar = computed(() => {
     const n = this.vazios().length;
     if (n === 0) return 'Copiar laudo';
@@ -286,13 +288,6 @@ export class LaudoPage {
   }
 
   // ----- texto, edição e cópia -----
-
-  editar(): void {
-    const html = formatar(this.resultado(), 'html');
-    this.htmlInicial.set(this._sanitizer.bypassSecurityTrustHtml(html));
-    this.htmlEditado.set(html);
-    this._textoEditado = this.textoAutomatico();
-  }
 
   editando(evento: Event): void {
     const el = evento.target as HTMLElement;
