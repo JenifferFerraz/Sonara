@@ -89,6 +89,7 @@
       </div>
     }
     @for (secao of t.secoes; track secao.id) {
+      @if (campos(secao).length > 0) {
       <section class="secao" [class.alterada]="!normal(secao)">
         <header>
           @if (fixa(secao)) {
@@ -130,6 +131,7 @@
           </div>
         }
       </section>
+      }
     }
   </main>
 
