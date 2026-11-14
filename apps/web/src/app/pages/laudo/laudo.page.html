@@ -82,6 +82,12 @@
 <div class="colunas">
   <!-- Formulário -->
   <main class="formulario">
+    @if (temAchados()) {
+      <div class="barra-achados">
+        <button type="button" class="btn pequeno" (click)="abrirAchados()">+ Adicionar achado</button>
+        <span class="dica">Só o essencial fica na tela. Adicione o que o exame mostrar.</span>
+      </div>
+    }
     @for (secao of t.secoes; track secao.id) {
       <section class="secao" [class.alterada]="!normal(secao)">
         <header>
@@ -104,12 +110,22 @@
         @if (aberta(secao)) {
           <div class="campos">
             @for (campo of campos(secao); track campo.id) {
-              <app-campo
-                [campo]="campo"
-                [valores]="est.valores"
-                [alertas]="resultado().alertas"
-                [volume]="volume(campo.id)"
-                (mudou)="mudou($event)" />
+              <div class="item-campo" [class.com-remover]="campo.achado">
+                <app-campo
+                  [campo]="campo"
+                  [valores]="est.valores"
+                  [alertas]="resultado().alertas"
+                  [volume]="volume(campo.id)"
+                  (mudou)="mudou($event)" />
+                @if (campo.achado) {
+                  <button
+                    type="button"
+                    class="remover"
+                    [attr.aria-label]="'Remover ' + campo.achado"
+                    title="Remover da tela"
+                    (click)="removerAchado(campo)">×</button>
+                }
+              </div>
             }
           </div>
         }
@@ -189,3 +205,44 @@
   <button type="button" class="btn" (click)="novoLaudo()">Novo laudo</button>
   <button type="button" class="btn primario" (click)="copiar()">{{ rotuloCopiar() }}</button>
 </footer>
+
+<dialog #dialogoAchados class="dialogo" aria-labelledby="titulo-achados">
+  <header>
+    <h2 id="titulo-achados">Adicionar achado</h2>
+    <button type="button" class="fechar" aria-label="Fechar" (click)="fecharAchados()">×</button>
+  </header>
+  <input
+    type="search"
+    class="busca"
+    placeholder="Buscar (ex.: cisto, cálculo, pólipo)"
+    [value]="busca()"
+    (input)="busca.set(valorEm($event))" />
+  <div class="lista-achados">
+    @for (g of achadosDisponiveis(); track g.secao.id) {
+      <h3>{{ g.secao.titulo }}</h3>
+      @for (c of g.itens; track c.id) {
+        <div class="linha-achado">
+          <span class="nome">{{ c.achado }}</span>
+          <button
+            type="button"
+            class="estrela"
+            [class.ligada]="favorito(c)"
+            [attr.aria-pressed]="favorito(c)"
+            [title]="favorito(c) ? 'Não mostrar sempre' : 'Sempre mostrar na tela'"
+            (click)="alternarFavorito(c)">★</button>
+          @if (achadoNaTela(c)) {
+            <span class="ok">na tela</span>
+          } @else {
+            <button type="button" class="btn pequeno" (click)="adicionarAchado(g.secao, c)">Adicionar</button>
+          }
+        </div>
+      }
+    } @empty {
+      <p class="vazio">Nenhum achado encontrado.</p>
+    }
+  </div>
+  <footer>
+    <span class="dica">★ deixa o achado sempre na tela, no seu login.</span>
+    <button type="button" class="btn primario" (click)="fecharAchados()">Pronto</button>
+  </footer>
+</dialog>
