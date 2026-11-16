@@ -1,0 +1,16 @@
+:host { display: inline-flex; align-items: center; gap: 10px; }
+.botao {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1.5px solid var(--sn-primaria);
+  background: var(--sn-superficie);
+  color: var(--sn-primaria);
+  border-radius: var(--sn-raio);
+  padding: 7px 14px;
+  font-weight: 700;
+  transition: background 0.15s, color 0.15s;
+  &:hover { background: var(--sn-primaria); color: #fff; }
+  &:focus-visible { outline: 3px solid var(--sn-secundaria); outline-offset: 2px; }
+}
+.dica { font-size: 12px; color: var(--sn-texto-suave); max-width: 260px; }

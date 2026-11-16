@@ -13,44 +13,8 @@ const UMA_HORA = 60 * 60 * 1000;
  */
 @Component({
   selector: 'app-atualizacao',
-  template: `
-    @if (pronta()) {
-      <div class="aviso" role="status">
-        <span>Há uma nova versão do Sonara. Copie o laudo em andamento antes de atualizar.</span>
-        <button type="button" (click)="atualizar()">Atualizar agora</button>
-      </div>
-    }
-  `,
-  styles: `
-    .aviso {
-      position: fixed;
-      left: 50%;
-      bottom: 16px;
-      transform: translateX(-50%);
-      z-index: 50;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      max-width: min(560px, calc(100vw - 24px));
-      padding: 10px 14px;
-      border-radius: 10px;
-      background: var(--sn-profunda);
-      color: #fff;
-      font-size: 13px;
-      box-shadow: 0 10px 28px -10px rgba(0, 0, 0, 0.5);
-    }
-    button {
-      flex: none;
-      border: 0;
-      border-radius: 8px;
-      padding: 6px 12px;
-      background: var(--sn-secundaria);
-      color: var(--sn-profunda);
-      font-weight: 700;
-      &:hover { background: #fff; }
-      &:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
-    }
-  `
+  templateUrl: './atualizacao.component.html',
+  styleUrl: './atualizacao.component.scss'
 })
 export class AtualizacaoComponent {
   private readonly _sw = inject(SwUpdate);

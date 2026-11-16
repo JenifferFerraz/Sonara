@@ -8,66 +8,8 @@ import { MascaraService } from '../../core/services/mascara.service';
 @Component({
   selector: 'app-shell',
   imports: [RouterOutlet, RouterLink],
-  template: `
-    <header class="topo">
-      <img src="logo-icone.svg" alt="" width="38" height="34" />
-      <span class="marca">sonara</span>
-      <span class="aviso-legal">
-        O sistema só redige. Quem interpreta o exame e responde pelo laudo é o médico.
-      </span>
-      @if (modoTeste) {
-        <span class="chip" title="O login está desligado nesta versão">Modo de teste</span>
-      }
-      @if (!online()) {
-        <span class="chip alerta" role="status" title="O Sonara continua funcionando sem internet">Sem conexão</span>
-      }
-      @if (!modoTeste) {
-        @if (medico(); as m) {
-          <span class="medico" title="Médico da licença">{{ m.nome }} · CRM {{ m.crm }}</span>
-        }
-        @if (auth.logado()) {
-          <a routerLink="/dispositivos" class="link">Dispositivos</a>
-        }
-        <button type="button" class="link" (click)="sair()">Sair</button>
-      }
-    </header>
-
-    @if (!modoTeste && licenca.aviso(); as aviso) {
-      <div class="faixa" role="status">
-        {{ aviso }}
-        @if (!auth.logado()) {
-          <a routerLink="/entrar">Entrar</a>
-        }
-      </div>
-    }
-
-    <router-outlet />
-  `,
-  styles: `
-    :host { display: flex; flex-direction: column; height: 100vh; height: 100dvh; }
-    .topo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 16px;
-      background: var(--sn-superficie);
-      border-bottom: 1px solid var(--sn-borda);
-    }
-    .marca { font-size: 24px; font-weight: 600; color: var(--sn-primaria); letter-spacing: -0.6px; line-height: 1; }
-    .aviso-legal { margin-left: auto; font-size: 12px; color: var(--sn-texto-suave); }
-    .chip {
-      font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
-      padding: 3px 10px; border-radius: 999px; background: #e3f6f3; color: var(--sn-primaria);
-      &.alerta { background: var(--sn-aviso-fundo); color: var(--sn-aviso); }
-    }
-    .medico { font-weight: 600; font-size: 13px; }
-    .link { border: 0; background: none; color: var(--sn-primaria); font-weight: 600; text-decoration: underline; padding: 0; }
-    .faixa {
-      padding: 6px 16px; background: var(--sn-aviso-fundo); color: var(--sn-aviso); font-size: 13px;
-      a, .link { margin-left: 8px; color: inherit; }
-    }
-    @media (max-width: 900px) { .aviso-legal { display: none; } .chip:first-of-type, .medico { margin-left: auto; } }
-  `
+  templateUrl: './shell.component.html',
+  styleUrl: './shell.component.scss'
 })
 export class ShellComponent implements OnInit {
   private readonly _mascaras = inject(MascaraService);

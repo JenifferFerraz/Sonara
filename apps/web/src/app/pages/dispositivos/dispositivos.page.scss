@@ -1,0 +1,13 @@
+.pagina { max-width: 640px; margin: 0 auto; padding: 24px 16px; }
+.voltar { color: var(--sn-primaria); font-weight: 600; text-decoration: none; }
+h1 { margin: 12px 0 4px; color: var(--sn-primaria); }
+.intro, .suave { color: var(--sn-texto-suave); font-size: 13px; }
+.contagem { font-weight: 600; margin: 14px 0 6px; }
+.lista { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+li {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  background: var(--sn-superficie); border: 1px solid var(--sn-borda);
+  border-radius: var(--sn-raio); padding: 10px 14px;
+}
+.selo { margin-left: 8px; font-size: 11px; background: #e3f6f3; color: var(--sn-primaria); border-radius: 999px; padding: 1px 8px; }
+.erro { padding: 8px 10px; border-radius: 6px; background: var(--sn-alerta-fundo); color: var(--sn-alerta); }

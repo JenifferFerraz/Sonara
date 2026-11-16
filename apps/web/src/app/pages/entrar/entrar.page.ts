@@ -8,70 +8,8 @@ import { InstalarComponent } from '../../shared/instalar/instalar.component';
 @Component({
   selector: 'app-entrar-page',
   imports: [RouterLink, AuthLayoutComponent, InstalarComponent],
-  template: `
-    <app-auth-layout>
-      <span class="selo">Acesso ao Sonara</span>
-      <h2 class="titulo">Entrar</h2>
-      <p class="sub">
-        Ainda não tem conta? <a routerLink="/cadastro">Criar conta</a>
-      </p>
-
-      @if (aviso()) {
-        <p class="aviso" role="status">{{ aviso() }}</p>
-      }
-
-      <form (submit)="entrar($event)">
-        <label>
-          E-mail
-          <input
-            type="email"
-            name="email"
-            autocomplete="username"
-            placeholder="voce@clinica.com.br"
-            required
-            [value]="email()"
-            (input)="email.set(valor($event))" />
-        </label>
-
-        <label>
-          Senha
-          <span class="campo-senha">
-            <input
-              [type]="mostrar() ? 'text' : 'password'"
-              name="senha"
-              autocomplete="current-password"
-              placeholder="Sua senha"
-              required
-              [value]="senha()"
-              (input)="senha.set(valor($event))" />
-            <button
-              type="button"
-              class="mostrar"
-              [attr.aria-pressed]="mostrar()"
-              (click)="mostrar.set(!mostrar())">
-              {{ mostrar() ? 'Ocultar' : 'Mostrar' }}
-            </button>
-          </span>
-        </label>
-
-        @if (erro()) {
-          <p class="erro" role="alert">{{ erro() }}</p>
-        }
-
-        <button type="submit" class="acao" [disabled]="carregando()">
-          {{ carregando() ? 'Entrando...' : 'Entrar' }}
-          @if (!carregando()) {
-            <span class="seta" aria-hidden="true">→</span>
-          }
-        </button>
-      </form>
-
-      <div class="instalar-login">
-        <app-instalar />
-      </div>
-    </app-auth-layout>
-  `,
-  styleUrl: '../auth.scss'
+  templateUrl: './entrar.page.html',
+  styleUrl: './entrar.page.scss'
 })
 export class EntrarPage {
   private readonly _auth = inject(AuthService);
