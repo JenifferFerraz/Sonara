@@ -101,12 +101,40 @@ label span { font-size: 12px; color: var(--sn-texto-suave); }
 
   h2 { margin: 0; font-size: 14px; color: var(--sn-primaria); }
 
-  .normal {
+  > header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  /* Um clique no título abre ou fecha a seção. */
+  .cabecalho {
+    flex: 1;
     display: flex;
     align-items: center;
     gap: 8px;
+    padding: 2px 0;
+    border: 0;
+    background: none;
+    text-align: left;
     cursor: pointer;
+    color: inherit;
+
+    &:focus-visible { outline: 2px solid var(--sn-secundaria); outline-offset: 2px; border-radius: 6px; }
   }
+
+  .seta {
+    display: inline-block;
+    width: 14px;
+    color: var(--sn-primaria);
+    transition: transform 0.15s;
+    &.aberta { transform: rotate(90deg); }
+  }
+
+  .voltar { font-size: 12px; white-space: nowrap; }
+
+  .selo.alterado { background: var(--sn-aviso-fundo); color: var(--sn-aviso); }
 
   .selo {
     background: #e3f6f3;

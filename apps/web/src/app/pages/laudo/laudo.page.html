@@ -88,18 +88,32 @@
       <section class="secao" [class.alterada]="!normal(secao)">
         <header>
           @if (fixa(secao)) {
+            <!-- Seção com medida obrigatória visível: fica aberta, mas dá para voltar ao normal. -->
             <h2>{{ secao.titulo }}</h2>
+            @if (!normal(secao)) {
+              <button type="button" class="link voltar" (click)="alternarNormal(secao, true)">
+                Voltar ao normal
+              </button>
+            }
           } @else {
-            <label class="normal">
-              <input
-                type="checkbox"
-                [checked]="normal(secao)"
-                (change)="alternarNormal(secao, $any($event.target).checked)" />
+            <button
+              type="button"
+              class="cabecalho"
+              [attr.aria-expanded]="aberta(secao)"
+              (click)="alterarSecaoAberta(secao)">
+              <span class="seta" [class.aberta]="aberta(secao)" aria-hidden="true">▸</span>
               <h2>{{ secao.titulo }}</h2>
               @if (normal(secao)) {
                 <span class="selo">normal</span>
+              } @else {
+                <span class="selo alterado">alterado</span>
               }
-            </label>
+            </button>
+            @if (!normal(secao)) {
+              <button type="button" class="link voltar" (click)="alternarNormal(secao, true)">
+                Voltar ao normal
+              </button>
+            }
           }
         </header>
 
