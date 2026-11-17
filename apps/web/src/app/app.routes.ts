@@ -1,21 +1,25 @@
 import { Routes } from '@angular/router';
-import { licencaGuard } from './core/guards/licenca.guard';
+import { authGuardActivate, authGuardActivateChild } from './core/guards/auth.guard';
+import { noAuthGuardActivate } from './core/guards/no-auth.guard';
 import { sessaoGuard } from './core/guards/sessao.guard';
 import { ShellComponent } from './layouts/shell/shell.component';
 
 export const routes: Routes = [
   {
     path: 'entrar',
+    canActivate: [noAuthGuardActivate],
     loadComponent: () => import('./pages/entrar/entrar.page').then(m => m.EntrarPage)
   },
   {
     path: 'cadastro',
+    canActivate: [noAuthGuardActivate],
     loadComponent: () => import('./pages/cadastro/cadastro.page').then(m => m.CadastroPage)
   },
   {
     path: '',
     component: ShellComponent,
-    canActivate: [licencaGuard],
+    canActivate: [authGuardActivate],
+    canActivateChild: [authGuardActivateChild],
     children: [
       {
         path: '',

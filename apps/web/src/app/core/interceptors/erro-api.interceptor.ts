@@ -18,7 +18,13 @@ export const erroApiInterceptor: HttpInterceptorFn = (req, next) =>
       }
       const msg = erro.error?.userMessage;
       return throwError(
-        () => new ApiErro(msg?.description ?? 'Não foi possível concluir a operação.', erro.status, msg?.title ?? '')
+        () =>
+          new ApiErro(
+            msg?.description ?? 'Não foi possível concluir a operação.',
+            erro.status,
+            msg?.title ?? '',
+            erro.error?.code ?? ''
+          )
       );
     })
   );

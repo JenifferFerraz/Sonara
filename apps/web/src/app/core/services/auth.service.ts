@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
+import { Subject, firstValueFrom } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { semToken } from '../interceptors/contexto-http';
 import { DadosCadastro } from '../models/usuario.model';
@@ -11,6 +11,13 @@ import { noNavegador } from '../utils/plataforma';
 
 /** Chaves de versões anteriores, que guardavam tokens no navegador. Removidas ao iniciar. */
 const CHAVES_ANTIGAS = ['sonara.accessToken', 'sonara.refreshToken', 'sonara.usuario'];
+
+export type MotivoSaida = 'outro-aparelho' | 'expirou';
+
+const MENSAGENS_SAIDA: Record<MotivoSaida, string> = {
+  'outro-aparelho': 'Sua conta foi aberta em outro aparelho. Entre novamente para continuar neste.',
+  expirou: 'Sua sessão expirou. Entre novamente.'
+};
 
 interface RespostaLogin {
   deviceId: string;
@@ -48,6 +55,11 @@ export class AuthService {
   /** Há conta entrada neste aparelho. O servidor ainda pode recusar a sessão (aí volta para o login). */
   readonly logado = computed(() => this._sessao());
 
+  /** Por que a sessão acabou, para a tela de login explicar. Vazio se a pessoa saiu por conta própria. */
+  readonly motivoSaida = signal('');
+  /** Avisa quem precisa reagir (limpar a licença, ir para o login) quando o servidor encerra a sessão. */
+  readonly sessaoEncerrada = new Subject<MotivoSaida>();
+
   constructor() {
     this.apagarChavesAntigas();
   }
@@ -79,6 +91,7 @@ export class AuthService {
         { context: semToken() }
       )
     );
+    this.motivoSaida.set('');
     this._dispositivo.gravar(resposta.deviceId);
     this._token.gravar(resposta.accessToken);
     this._sessaoStorage.gravar(true);
@@ -111,13 +124,29 @@ export class AuthService {
         // 401 e 403: sessão expirada ou aberta em outro aparelho. Sem rede mantém a conta entrada;
         // a licença offline continua valendo.
         const status = (erro as { status?: number }).status;
-        if (status === 401 || status === 403) this.limparSessao();
+        if (status === 401 || status === 403) this.encerrarSessaoRemota('expirou');
         return false;
       } finally {
         this._renovando = null;
       }
     })();
     return this._renovando;
+  }
+
+  /**
+   * Confere no servidor se a sessão continua valendo. O app chama de tempos em tempos para descobrir
+   * logo que o médico entrou em outro aparelho (aí o interceptor encerra a sessão aqui).
+   */
+  async conferirSessao(): Promise<void> {
+    await firstValueFrom(this._http.get(`${environment.apiUrl}/auth/session`));
+  }
+
+  /** O servidor encerrou a sessão (outro aparelho entrou, ou ela venceu): desconecta aqui. */
+  encerrarSessaoRemota(motivo: MotivoSaida): void {
+    if (!this._sessao()) return;
+    this.limparSessao();
+    this.motivoSaida.set(MENSAGENS_SAIDA[motivo]);
+    this.sessaoEncerrada.next(motivo);
   }
 
   private limparSessao(): void {

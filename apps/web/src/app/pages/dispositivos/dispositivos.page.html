@@ -5,6 +5,9 @@
     Sua conta pode ter até {{ max }} dispositivos ativos, e até 3 trocas a cada 30 dias.
     Desative um para liberar o lugar de outro aparelho.
   </p>
+  <p class="intro">
+    Só um aparelho usa a conta online por vez: ao entrar em outro, o anterior é desconectado.
+  </p>
 
   @if (erro()) {
     <p class="erro" role="alert">{{ erro() }}</p>
@@ -13,7 +16,7 @@
   @if (carregando()) {
     <p class="suave">Carregando...</p>
   } @else {
-    <p class="contagem">{{ lista().length }} de {{ max }} dispositivos ativos</p>
+    <p class="contagem">{{ lista().length }} de {{ max }} dispositivos ativos · {{ sessoesEmUso() }} {{ sessoesEmUso() === 1 ? 'sessão' : 'sessões' }} em uso</p>
     <ul class="lista">
       @for (d of lista(); track d.id) {
         <li>
@@ -21,6 +24,9 @@
             <strong>{{ d.name }}</strong>
             @if (d.id === atual()) {
               <span class="selo">este aparelho</span>
+            }
+            @if (d.sessaoAtiva) {
+              <span class="selo ativa">sessão em uso</span>
             }
             <div class="suave">Último acesso: {{ quando(d.lastSeenAt) }}</div>
           </div>

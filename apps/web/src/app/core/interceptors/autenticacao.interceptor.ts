@@ -4,6 +4,7 @@ import { catchError, from, of, switchMap, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../services/auth.service';
 import { TokenAcessoStorage } from '../storage/token-acesso.storage';
+import { CODIGO_SESSAO_ENCERRADA } from '../models/api-erro.model';
 import { SEM_TOKEN } from './contexto-http';
 
 /**
@@ -28,6 +29,11 @@ export const autenticacaoInterceptor: HttpInterceptorFn = (req, next) => {
     switchMap(() => next(comToken(req))),
     catchError((erro: unknown) => {
       if (!(erro instanceof HttpErrorResponse) || erro.status !== 401) return throwError(() => erro);
+      // Entrou em outro aparelho: a sessão acabou, não adianta renovar.
+      if (erro.error?.code === CODIGO_SESSAO_ENCERRADA) {
+        auth.encerrarSessaoRemota('outro-aparelho');
+        return throwError(() => erro);
+      }
       return from(auth.renovarSessao()).pipe(
         switchMap(renovou => (renovou ? next(comToken(req)) : throwError(() => erro)))
       );

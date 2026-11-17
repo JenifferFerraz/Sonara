@@ -11,3 +11,4 @@ li {
 }
 .selo { margin-left: 8px; font-size: 11px; background: #e3f6f3; color: var(--sn-primaria); border-radius: 999px; padding: 1px 8px; }
 .erro { padding: 8px 10px; border-radius: 6px; background: var(--sn-alerta-fundo); color: var(--sn-alerta); }
+.selo.ativa { background: var(--sn-aviso-fundo); color: var(--sn-aviso); }

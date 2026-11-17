@@ -20,6 +20,8 @@ export class DispositivosPage implements OnInit {
   readonly erro = signal('');
   readonly desativando = signal('');
   readonly atual = computed(() => this._auth.dispositivoId);
+  /** Quantas sessões online estão abertas agora (a regra é uma por conta). */
+  readonly sessoesEmUso = computed(() => this.lista().filter(d => d.sessaoAtiva).length);
 
   async ngOnInit(): Promise<void> {
     await this.carregar();

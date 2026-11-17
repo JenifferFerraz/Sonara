@@ -4,6 +4,8 @@ export interface Dispositivo {
   active: boolean;
   lastSeenAt: string;
   createdAt: string;
+  /** Este aparelho tem a sessão online em uso agora (só uma por conta). */
+  sessaoAtiva?: boolean;
 }
 
 /** Limite de dispositivos ativos por conta. */

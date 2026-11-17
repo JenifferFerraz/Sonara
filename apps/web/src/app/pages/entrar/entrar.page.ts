@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { LicencaService } from '../../core/services/licenca.service';
@@ -22,7 +22,7 @@ export class EntrarPage {
   readonly carregando = signal(false);
   readonly mostrar = signal(false);
   /** Motivo de ter caído aqui: licença vencida, relógio voltado etc. */
-  readonly aviso = this._licenca.aviso;
+  readonly aviso = computed(() => this._auth.motivoSaida() || this._licenca.aviso());
 
   valor(evento: Event): string {
     return (evento.target as HTMLInputElement).value;
