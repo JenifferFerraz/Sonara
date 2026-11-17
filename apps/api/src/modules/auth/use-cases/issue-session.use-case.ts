@@ -42,7 +42,8 @@ export class IssueSessionUseCase {
       expiresAt: new Date(Date.now() + duracaoEmMs(env.EXPIRES_IN_REFRESH_TOKEN)),
     });
 
-    const accessToken = await this._jwt.signAsync({ sub: userId, deviceId });
+    // `sid` liga o token de acesso a esta sessão: se ela for encerrada, o token deixa de valer na hora.
+    const accessToken = await this._jwt.signAsync({ sub: userId, deviceId, sid: id });
     return { accessToken, refreshToken: `${id}.${secret}` };
   }
 }

@@ -22,7 +22,7 @@ export const autenticacaoInterceptor: HttpInterceptorFn = (req, next) => {
     return t ? r.clone({ setHeaders: { Authorization: `Bearer ${t}` } }) : r;
   };
 
-  const pronto$ = !token.obter() && auth.temUsuario() ? from(auth.renovarSessao()) : of(true);
+  const pronto$ = !token.obter() && auth.temSessao() ? from(auth.renovarSessao()) : of(true);
 
   return pronto$.pipe(
     switchMap(() => next(comToken(req))),

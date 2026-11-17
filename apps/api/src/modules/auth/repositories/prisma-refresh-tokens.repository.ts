@@ -21,6 +21,19 @@ export class PrismaRefreshTokensRepository implements RefreshTokensRepository {
     });
   }
 
+  async revokeAllByDevice(deviceId: string): Promise<void> {
+    await this._prisma.refreshToken.updateMany({
+      where: { deviceId, revokedAt: null },
+      data: { revokedAt: new Date() },
+    });
+  }
+
+  listActiveByUser(userId: string): Promise<RefreshTokenEntity[]> {
+    return this._prisma.refreshToken.findMany({
+      where: { userId, revokedAt: null, expiresAt: { gt: new Date() } },
+    });
+  }
+
   async revokeAllByUser(userId: string): Promise<void> {
     await this._prisma.refreshToken.updateMany({
       where: { userId, revokedAt: null },

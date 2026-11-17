@@ -80,6 +80,15 @@ export class AuthController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Confere se a sessão continua valendo (o app chama de tempos em tempos)' })
+  @Get('session')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  session(): void {
+    // O AuthGuard já fez a conferência: chegou aqui, a sessão vale.
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Dados do médico logado' })
   @Get('me')
   me(@Req() req: Request) {

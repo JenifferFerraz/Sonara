@@ -16,6 +16,18 @@ export class InMemoryRefreshTokensRepository implements RefreshTokensRepository 
     if (token) token.revokedAt = new Date();
   }
 
+  async revokeAllByDevice(deviceId: string) {
+    this.items
+      .filter(item => item.deviceId === deviceId && !item.revokedAt)
+      .forEach(item => (item.revokedAt = new Date()));
+  }
+
+  async listActiveByUser(userId: string) {
+    return this.items.filter(
+      item => item.userId === userId && !item.revokedAt && item.expiresAt > new Date(),
+    );
+  }
+
   async revokeAllByUser(userId: string) {
     this.items
       .filter(item => item.userId === userId && !item.revokedAt)

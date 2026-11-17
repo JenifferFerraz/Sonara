@@ -13,4 +13,8 @@ export abstract class RefreshTokensRepository {
   abstract revoke(id: string): Promise<void>;
   /** Uma sessão online por vez: um login novo encerra as anteriores. */
   abstract revokeAllByUser(userId: string): Promise<void>;
+  /** Desativar um aparelho encerra as sessões dele. */
+  abstract revokeAllByDevice(deviceId: string): Promise<void>;
+  /** Sessões que ainda valem (não revogadas e não vencidas). */
+  abstract listActiveByUser(userId: string): Promise<RefreshTokenEntity[]>;
 }

@@ -1,4 +1,5 @@
 import { ForbiddenException, NotFoundException } from '@errors/exceptions';
+import { RefreshTokensRepository } from '@modules/auth/repositories/refresh-tokens.repository';
 import { Injectable } from '@nestjs/common';
 import { MAX_TROCAS_POR_MES } from '../entities/device.entity';
 import { DevicesRepository } from '../repositories/devices.repository';
@@ -7,7 +8,10 @@ const DIAS_30_MS = 30 * 24 * 60 * 60 * 1000;
 
 @Injectable()
 export class DeactivateDeviceUseCase {
-  constructor(private readonly _repository: DevicesRepository) {}
+  constructor(
+    private readonly _repository: DevicesRepository,
+    private readonly _sessoes: RefreshTokensRepository,
+  ) {}
 
   async execute({ userId, deviceId }: { userId: string; deviceId: string }): Promise<void> {
     const device = await this._repository.findById(deviceId);
@@ -27,5 +31,7 @@ export class DeactivateDeviceUseCase {
     }
 
     await this._repository.deactivate(deviceId);
+    // O aparelho desativado é desconectado na hora.
+    await this._sessoes.revokeAllByDevice(deviceId);
   }
 }

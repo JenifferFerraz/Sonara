@@ -52,3 +52,21 @@ export class ForbiddenException extends DefaultException {
     );
   }
 }
+
+/** A sessão foi encerrada: o médico entrou em outro aparelho ou o aparelho foi desativado. */
+export const CODIGO_SESSAO_ENCERRADA = 'SESSAO_ENCERRADA';
+
+export class SessionEndedException extends DefaultException {
+  constructor() {
+    super(
+      {
+        title: 'Sessão encerrada',
+        description: 'Sua conta foi aberta em outro aparelho. Entre novamente para continuar neste.',
+        actionButtonLabel: 'Entrar',
+        type: MessageType.WARNING,
+      },
+      HttpStatus.UNAUTHORIZED,
+      CODIGO_SESSAO_ENCERRADA,
+    );
+  }
+}

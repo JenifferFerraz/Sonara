@@ -48,7 +48,7 @@ describe('Auth flow', () => {
       new FindActiveDeviceUseCase(devices),
       issue,
     );
-    deactivate = new DeactivateDeviceUseCase(devices);
+    deactivate = new DeactivateDeviceUseCase(devices, tokens);
   });
 
   it('rejects a wrong password', async () => {

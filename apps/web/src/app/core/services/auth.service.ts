@@ -3,17 +3,16 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { semToken } from '../interceptors/contexto-http';
-import { DadosCadastro, reduzirUsuario, Usuario } from '../models/usuario.model';
+import { DadosCadastro } from '../models/usuario.model';
 import { DispositivoStorage } from '../storage/dispositivo.storage';
+import { SessaoStorage } from '../storage/sessao.storage';
 import { TokenAcessoStorage } from '../storage/token-acesso.storage';
-import { UsuarioStorage } from '../storage/usuario.storage';
 import { noNavegador } from '../utils/plataforma';
 
 /** Chaves de versões anteriores, que guardavam tokens no navegador. Removidas ao iniciar. */
-const CHAVES_ANTIGAS = ['sonara.accessToken', 'sonara.refreshToken'];
+const CHAVES_ANTIGAS = ['sonara.accessToken', 'sonara.refreshToken', 'sonara.usuario'];
 
 interface RespostaLogin {
-  user: Usuario;
   deviceId: string;
   accessToken: string;
 }
@@ -40,15 +39,14 @@ function nomeDoAparelho(): string {
 export class AuthService {
   private readonly _http = inject(HttpClient);
   private readonly _token = inject(TokenAcessoStorage);
-  private readonly _usuarioStorage = inject(UsuarioStorage);
+  private readonly _sessaoStorage = inject(SessaoStorage);
   private readonly _dispositivo = inject(DispositivoStorage);
 
-  private readonly _usuario = signal<Usuario | null>(this._usuarioStorage.obter());
+  private readonly _sessao = signal(this._sessaoStorage.obter());
   private _renovando: Promise<boolean> | null = null;
 
-  readonly usuario = this._usuario.asReadonly();
   /** Há conta entrada neste aparelho. O servidor ainda pode recusar a sessão (aí volta para o login). */
-  readonly logado = computed(() => this._usuario() !== null);
+  readonly logado = computed(() => this._sessao());
 
   constructor() {
     this.apagarChavesAntigas();
@@ -59,8 +57,8 @@ export class AuthService {
     return this._dispositivo.obter();
   }
 
-  temUsuario(): boolean {
-    return this._usuario() !== null;
+  temSessao(): boolean {
+    return this._sessao();
   }
 
   async cadastrar(dados: DadosCadastro): Promise<void> {
@@ -83,9 +81,8 @@ export class AuthService {
     );
     this._dispositivo.gravar(resposta.deviceId);
     this._token.gravar(resposta.accessToken);
-    const usuario = reduzirUsuario(resposta.user);
-    this._usuarioStorage.gravar(usuario);
-    this._usuario.set(usuario);
+    this._sessaoStorage.gravar(true);
+    this._sessao.set(true);
   }
 
   /** Encerra a sessão neste aparelho. Se estiver sem internet, encerra só aqui. */
@@ -125,8 +122,8 @@ export class AuthService {
 
   private limparSessao(): void {
     this._token.limpar();
-    this._usuarioStorage.limpar();
-    this._usuario.set(null);
+    this._sessaoStorage.limpar();
+    this._sessao.set(false);
   }
 
   private apagarChavesAntigas(): void {
