@@ -4,7 +4,12 @@ import { UsersModule } from '@modules/users/users.module';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { env } from '../../env';
-import { AuthController } from './controllers/auth.controller';
+import { CheckSessionController } from './controllers/check-session.controller';
+import { LoginController } from './controllers/login.controller';
+import { LogoutController } from './controllers/logout.controller';
+import { MeController } from './controllers/me.controller';
+import { RefreshTokenController } from './controllers/refresh-token.controller';
+import { RegisterController } from './controllers/register.controller';
 import { IssueSessionUseCase } from './use-cases/issue-session.use-case';
 import { LoginUseCase } from './use-cases/login.use-case';
 import { LogoutUseCase } from './use-cases/logout.use-case';
@@ -33,6 +38,13 @@ import { SessionsModule } from './sessions.module';
     MeUseCase,
     AuthGuard,
   ],
-  controllers: [AuthController],
+  controllers: [
+    RegisterController,
+    LoginController,
+    RefreshTokenController,
+    LogoutController,
+    CheckSessionController,
+    MeController,
+  ],
 })
 export class AuthModule {}
