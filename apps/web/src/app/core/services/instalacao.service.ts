@@ -1,4 +1,5 @@
 import { Injectable, signal } from '@angular/core';
+import { noNavegador } from '../utils/plataforma';
 
 /** Evento do navegador que oferece a instalação do app (Chrome, Edge, Android). */
 interface EventoInstalacao extends Event {
@@ -14,6 +15,7 @@ declare global {
 }
 
 function emModoApp(): boolean {
+  if (!noNavegador()) return false;
   return (
     matchMedia('(display-mode: standalone)').matches ||
     (navigator as Navigator & { standalone?: boolean }).standalone === true
@@ -21,6 +23,7 @@ function emModoApp(): boolean {
 }
 
 function ehIos(): boolean {
+  if (!noNavegador()) return false;
   return (
     /iPad|iPhone|iPod/.test(navigator.userAgent) ||
     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
@@ -33,11 +36,12 @@ export class InstalacaoService {
   /** Já está rodando como app instalado. */
   readonly instalado = signal(emModoApp());
   /** O navegador ofereceu a instalação: o botão pode abrir o diálogo do sistema. */
-  readonly podeInstalar = signal(Boolean(window.__sonaraInstalar) && !emModoApp());
+  readonly podeInstalar = signal(noNavegador() && Boolean(window.__sonaraInstalar) && !emModoApp());
   /** iPhone e iPad não têm o diálogo: a pessoa instala pelo menu Compartilhar. */
   readonly instrucoesIos = signal(ehIos() && !emModoApp());
 
   constructor() {
+    if (!noNavegador()) return;
     window.addEventListener('sonara:instalavel', () => this.podeInstalar.set(!this.instalado()));
     window.addEventListener('appinstalled', () => {
       window.__sonaraInstalar = undefined;

@@ -1,40 +1,38 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { Template, verificarMascara } from '@sonara/laudo-engine';
 import { templates } from '@sonara/templates';
-import { config } from '../config';
+import { firstValueFrom } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { CacheService } from '../cache/cache.service';
+import { MascaraInstalada, MascarasInstaladas } from '../models/mascara-instalada.model';
+import { MascarasStorage } from '../storage/mascaras.storage';
 import { AuthService } from './auth.service';
 import { LicencaService } from './licenca.service';
 
-/** Versões instaladas de uma máscara. As antigas ficam guardadas: o médico decide quando trocar. */
-export interface MascaraInstalada {
-  emUso: string;
-  versoes: Record<string, Template>;
-  /** Versão nova baixada, aguardando a decisão do médico. */
-  pendente: string | null;
-  /** Versões novas que o médico já recusou (não avisa de novo). */
-  recusadas: string[];
-}
+export type { MascaraInstalada } from '../models/mascara-instalada.model';
 
-type Instaladas = Record<string, MascaraInstalada>;
-
-// v2: descarta máscaras instaladas com ids antigos (ex.: pelve-suprapubica, hoje pelvico).
-const CHAVE = 'sonara.mascaras.v2';
+/** Não pergunta ao servidor por máscaras novas mais de uma vez por hora. */
+const VALIDADE_BUSCA_MS = 60 * 60 * 1000;
 
 @Injectable({ providedIn: 'root' })
 export class MascaraService {
-  private readonly _instaladas = signal<Instaladas>(this.carregar());
-
-  readonly instaladas = this._instaladas.asReadonly();
-
+  private readonly _http = inject(HttpClient);
+  private readonly _armazenamento = inject(MascarasStorage);
+  private readonly _cache = inject(CacheService);
   private readonly _licenca = inject(LicencaService);
   private readonly _auth = inject(AuthService);
+
+  private readonly _instaladas = signal<MascarasInstaladas>(this._armazenamento.obter());
+
+  readonly instaladas = this._instaladas.asReadonly();
 
   /** Máscaras em uso, uma por exame, só dos módulos que a licença libera. */
   readonly emUso = computed(() => {
     const modulos = this._licenca.modulos();
     return Object.values(this._instaladas())
-      .map(m => m.versoes[m.emUso])
-      .filter(t => !config.exigirLogin || !t.modulo || modulos.includes(t.modulo));
+      .map((m: MascaraInstalada) => m.versoes[m.emUso])
+      .filter(t => !environment.exigirLogin || !t.modulo || modulos.includes(t.modulo));
   });
 
   /** Máscaras com versão nova esperando decisão. */
@@ -105,15 +103,17 @@ export class MascaraService {
 
   /**
    * Baixa as máscaras assinadas. O app recusa qualquer arquivo cuja assinatura não confira.
-   * Precisa de sessão; sem sessão ou sem internet, não faz nada.
+   * Precisa de sessão; sem sessão ou sem internet, não faz nada. Repete no máximo a cada hora.
    */
   async buscarAtualizacoes(): Promise<void> {
-    if (!this._auth.logado() || !config.chavePublica || !navigator.onLine) return;
+    if (!this._auth.logado() || !environment.chavePublica || !navigator.onLine) return;
 
     try {
-      const lista = await this._auth.chamar<{ json: string; assinatura: string }[]>('GET', '/masks');
+      const lista = await this._cache.obterOuBuscar('mascaras', VALIDADE_BUSCA_MS, () =>
+        firstValueFrom(this._http.get<{ json: string; assinatura: string }[]>(`${environment.apiUrl}/masks`))
+      );
       for (const item of lista) {
-        if (await verificarMascara(item.json, item.assinatura, config.chavePublica)) {
+        if (await verificarMascara(item.json, item.assinatura, environment.chavePublica)) {
           this.registrar(JSON.parse(item.json) as Template);
         }
       }
@@ -122,20 +122,8 @@ export class MascaraService {
     }
   }
 
-  private carregar(): Instaladas {
-    try {
-      return JSON.parse(localStorage.getItem(CHAVE) ?? '{}') as Instaladas;
-    } catch {
-      return {};
-    }
-  }
-
-  private salvar(valor: Instaladas): void {
+  private salvar(valor: MascarasInstaladas): void {
     this._instaladas.set(valor);
-    try {
-      localStorage.setItem(CHAVE, JSON.stringify(valor));
-    } catch {
-      // Armazenamento bloqueado: continua só em memória.
-    }
+    this._armazenamento.gravar(valor);
   }
 }

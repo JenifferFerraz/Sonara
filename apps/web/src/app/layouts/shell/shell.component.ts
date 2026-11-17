@@ -1,6 +1,6 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
-import { config } from '../../core/config';
+import { environment } from '../../../environments/environment';
 import { AuthService } from '../../core/services/auth.service';
 import { LicencaService } from '../../core/services/licenca.service';
 import { MascaraService } from '../../core/services/mascara.service';
@@ -18,7 +18,7 @@ export class ShellComponent implements OnInit {
   readonly licenca = inject(LicencaService);
 
   /** Login desligado (config.exigirLogin = false): o app abre direto no laudo. */
-  readonly modoTeste = !config.exigirLogin;
+  readonly modoTeste = !environment.exigirLogin;
   readonly online = signal(navigator.onLine);
 
   /** Nome e CRM vêm da licença assinada, então aparecem mesmo sem internet. */

@@ -1,16 +1,8 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { Dispositivo, MAX_DISPOSITIVOS_ATIVOS } from '../../core/models/dispositivo.model';
 import { AuthService } from '../../core/services/auth.service';
-
-interface Dispositivo {
-  id: string;
-  name: string;
-  active: boolean;
-  lastSeenAt: string;
-  createdAt: string;
-}
-
-const MAX_ATIVOS = 2;
+import { DispositivosService } from '../../core/services/dispositivos.service';
 
 @Component({
   selector: 'app-dispositivos-page',
@@ -20,8 +12,9 @@ const MAX_ATIVOS = 2;
 })
 export class DispositivosPage implements OnInit {
   private readonly _auth = inject(AuthService);
+  private readonly _dispositivos = inject(DispositivosService);
 
-  readonly max = MAX_ATIVOS;
+  readonly max = MAX_DISPOSITIVOS_ATIVOS;
   readonly lista = signal<Dispositivo[]>([]);
   readonly carregando = signal(true);
   readonly erro = signal('');
@@ -41,7 +34,7 @@ export class DispositivosPage implements OnInit {
     this.erro.set('');
     this.desativando.set(d.id);
     try {
-      await this._auth.chamar('DELETE', `/devices/${d.id}`);
+      await this._dispositivos.desativar(d.id);
       await this.carregar();
     } catch (e) {
       this.erro.set(e instanceof Error ? e.message : 'Não foi possível desativar.');
@@ -54,7 +47,7 @@ export class DispositivosPage implements OnInit {
     this.carregando.set(true);
     this.erro.set('');
     try {
-      this.lista.set(await this._auth.chamar<Dispositivo[]>('GET', '/devices'));
+      this.lista.set(await this._dispositivos.listar());
     } catch (e) {
       this.erro.set(e instanceof Error ? e.message : 'Não foi possível carregar os dispositivos.');
     } finally {

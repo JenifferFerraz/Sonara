@@ -1,31 +1,15 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { LicencaPayload, StatusLicenca, verificarLicenca } from '@sonara/laudo-engine';
-import { config } from '../config';
+import { firstValueFrom } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { LicencaStorage, UltimaDataStorage } from '../storage/licenca.storage';
 import { AuthService } from './auth.service';
 
 export type EstadoLicenca = StatusLicenca | { status: 'sem-licenca' };
 
-const CHAVE_TOKEN = 'sonara.licenca';
-const CHAVE_ULTIMA_DATA = 'sonara.ultimaData';
 /** Renova com antecedência: o médico quase nunca vê a licença vencer. */
 const RENOVAR_COM_ATE_DIAS = 25;
-
-function ler(chave: string): string | null {
-  try {
-    return localStorage.getItem(chave);
-  } catch {
-    return null;
-  }
-}
-
-function gravar(chave: string, valor: string | null): void {
-  try {
-    if (valor === null) localStorage.removeItem(chave);
-    else localStorage.setItem(chave, valor);
-  } catch {
-    // Armazenamento bloqueado: a licença vale só nesta sessão do navegador.
-  }
-}
 
 /**
  * Licença offline: o servidor assina um token de 30 dias e o app confere a assinatura sem internet.
@@ -33,7 +17,10 @@ function gravar(chave: string, valor: string | null): void {
  */
 @Injectable({ providedIn: 'root' })
 export class LicencaService {
+  private readonly _http = inject(HttpClient);
   private readonly _auth = inject(AuthService);
+  private readonly _token = inject(LicencaStorage);
+  private readonly _ultimaData = inject(UltimaDataStorage);
   private _iniciado = false;
 
   readonly estado = signal<EstadoLicenca>({ status: 'sem-licenca' });
@@ -93,29 +80,31 @@ export class LicencaService {
 
   /** Pede uma licença nova ao servidor (precisa de sessão) e a confere. */
   async renovar(): Promise<void> {
-    const { token } = await this._auth.chamar<{ token: string; validoAte: number }>('POST', '/licenses/renew');
-    gravar(CHAVE_TOKEN, token);
+    const { token } = await firstValueFrom(
+      this._http.post<{ token: string; validoAte: number }>(`${environment.apiUrl}/licenses/renew`, {})
+    );
+    this._token.gravar(token);
     await this.avaliar();
   }
 
   /** Remove a licença deste aparelho (sair da conta). */
   esquecer(): void {
-    gravar(CHAVE_TOKEN, null);
+    this._token.limpar();
     this.estado.set({ status: 'sem-licenca' });
   }
 
   private async avaliar(): Promise<void> {
-    const token = ler(CHAVE_TOKEN);
+    const token = this._token.obter();
     const dispositivo = this._auth.dispositivoId;
-    if (!token || !dispositivo || !config.chavePublica) {
+    if (!token || !dispositivo || !environment.chavePublica) {
       this.estado.set({ status: 'sem-licenca' });
       return;
     }
     const agora = Date.now();
-    const ultima = Number(ler(CHAVE_ULTIMA_DATA)) || 0;
-    const resultado = await verificarLicenca(token, config.chavePublica, dispositivo, agora, ultima);
+    const ultima = this._ultimaData.obter();
+    const resultado = await verificarLicenca(token, environment.chavePublica, dispositivo, agora, ultima);
     // Guarda a maior data já vista: voltar o relógio passa a ser detectado.
-    if (resultado.status !== 'relogio') gravar(CHAVE_ULTIMA_DATA, String(Math.max(ultima, agora)));
+    if (resultado.status !== 'relogio') this._ultimaData.gravar(Math.max(ultima, agora));
     this.estado.set(resultado);
   }
 }

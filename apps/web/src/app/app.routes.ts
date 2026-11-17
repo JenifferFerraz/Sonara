@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
-import { licencaGuard, semLoginGuard, sessaoGuard } from './core/guards';
+import { licencaGuard } from './core/guards/licenca.guard';
+import { semLoginGuard } from './core/guards/sem-login.guard';
+import { sessaoGuard } from './core/guards/sessao.guard';
 import { ShellComponent } from './layouts/shell/shell.component';
 
 export const routes: Routes = [
