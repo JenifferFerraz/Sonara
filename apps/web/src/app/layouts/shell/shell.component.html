@@ -4,24 +4,19 @@
   <span class="aviso-legal">
     O sistema só redige. Quem interpreta o exame e responde pelo laudo é o médico.
   </span>
-  @if (modoTeste) {
-    <span class="chip" title="O login está desligado nesta versão">Modo de teste</span>
-  }
   @if (!online()) {
     <span class="chip alerta" role="status" title="O Sonara continua funcionando sem internet">Sem conexão</span>
   }
-  @if (!modoTeste) {
-    @if (medico(); as m) {
-      <span class="medico" title="Médico da licença">{{ m.nome }} · CRM {{ m.crm }}</span>
-    }
-    @if (auth.logado()) {
-      <a routerLink="/dispositivos" class="link">Dispositivos</a>
-    }
-    <button type="button" class="link" (click)="sair()">Sair</button>
+  @if (medico(); as m) {
+    <span class="medico" title="Médico da licença">{{ m.nome }} · CRM {{ m.crm }}</span>
   }
+  @if (auth.logado()) {
+    <a routerLink="/dispositivos" class="link">Dispositivos</a>
+  }
+  <button type="button" class="link" (click)="sair()">Sair</button>
 </header>
 
-@if (!modoTeste && licenca.aviso(); as aviso) {
+@if (licenca.aviso(); as aviso) {
   <div class="faixa" role="status">
     {{ aviso }}
     @if (!auth.logado()) {

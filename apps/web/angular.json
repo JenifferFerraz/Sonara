@@ -64,19 +64,8 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
-            },
-            "com-login": {
-              "optimization": false,
-              "extractLicenses": false,
-              "sourceMap": true,
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.com-login.ts"
-                }
-              ]
             }
-          },
+            },
           "defaultConfiguration": "production"
         },
         "serve": {
@@ -87,9 +76,6 @@
             },
             "development": {
               "buildTarget": "web:build:development"
-            },
-            "com-login": {
-              "buildTarget": "web:build:com-login"
             }
           },
           "defaultConfiguration": "development"

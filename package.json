@@ -7,7 +7,6 @@
     "templates": "node libs/templates/scripts/gerar-todos.mjs",
     "test:engine": "npm run test -w @sonara/laudo-engine",
     "dev:web": "npm run start -w web",
-    "dev:web:login": "npm run start:login -w web",
     "dev:api": "npm run start:dev -w api",
     "build:web": "npm run build -w web",
     "build:api": "npm run build -w api"
