@@ -1,0 +1,209 @@
+<main class="site">
+  <section class="topo">
+    <div class="miolo">
+      <nav class="menu">
+        <a class="marca" href="#" aria-label="Sonara">
+          <svg width="36" height="30" viewBox="0 0 48 40" fill="none" aria-hidden="true">
+            <path d="M7.5 15.5 A23 23 0 0 1 40.5 15.5" stroke="#FFFFFF" stroke-width="3.44" stroke-linecap="round" />
+            <path d="M12.2 20 A16.5 16.5 0 0 1 35.8 20" stroke="#48B39A" stroke-width="3.44" stroke-linecap="round" />
+            <path d="M31.6 24.6 A10.6 10.6 0 0 0 16.2 24 L24.4 32.4" stroke="#FFFFFF" stroke-width="3.44" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M20.8 28 A4.6 4.6 0 0 1 27.6 29.4" stroke="#FFFFFF" stroke-width="3.44" stroke-linecap="round" />
+            <path d="M21.6 39 V34.4 A2.8 2.8 0 0 1 27.2 34.4 V39 Z" fill="#FFFFFF" />
+          </svg>
+          <span>sonara</span>
+        </a>
+        <div class="links">
+          <a href="#como">Como funciona</a>
+          <a href="#offline">Offline</a>
+          <a href="#exames">Exames</a>
+          <a href="#planos">Planos</a>
+          <a href="#perguntas">Perguntas</a>
+        </div>
+        <div class="acoes">
+          <a class="entrar" routerLink="/entrar">Entrar</a>
+          <a class="btn-claro" routerLink="/cadastro">Criar conta</a>
+        </div>
+      </nav>
+
+      <div class="heroi">
+        <div class="heroi-texto">
+          <span class="rotulo claro">LAUDOS DE ULTRASSONOGRAFIA</span>
+          <h1>Marque o que mudou.<br /><span>O laudo fica pronto.</span><br />Até sem internet.</h1>
+          <p>Laudo completo, com conclusão, no seu padrão. Funciona no computador e no celular, com ou sem sinal.</p>
+          <div class="botoes">
+            <a class="btn-branco" routerLink="/cadastro">Começar a laudar</a>
+            <a class="btn-contorno" href="#como">Ver como funciona</a>
+          </div>
+        </div>
+
+        <div class="demo" aria-hidden="true">
+          <div class="janela">
+            <div class="barra">
+              <b>sonara</b>
+              <span class="aba ativa">Abdome total</span>
+              <span class="aba">Tireoide</span>
+              <span class="pilula">Offline · salvo</span>
+            </div>
+            <div class="corpo">
+              <div class="form">
+                <img src="ultrassom.jpg" alt="" />
+                <strong>Fígado</strong>
+                <div class="chips">
+                  <span>Homogêneo</span>
+                  <span class="on">Esteatose leve</span>
+                </div>
+                <strong>Vesícula biliar</strong>
+                <span class="linha-on">Cálculo único <b>1,0 cm</b></span>
+              </div>
+              <div class="papel">
+                <span class="titulo-papel">ULTRASSONOGRAFIA DO ABDOME TOTAL</span>
+                <p>Fígado com dimensões normais, contornos regulares e bordas finas. <mark>Aumento difuso e discreto da ecogenicidade hepática.</mark></p>
+                <p>Vesícula biliar normodistendida, <mark>com cálculo único no seu interior medindo 1,0 cm.</mark></p>
+                <p class="suave">Vias biliares sem dilatação. Pâncreas, baço e rins sem alterações…</p>
+                <b>Conclusão:</b>
+                <p class="forte">Sinais de esteatose hepática leve.<br />Colecistolitíase.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="exames" class="faixa">
+    <div class="miolo linha-exames">
+      <span class="rotulo cinza">EXAMES DISPONÍVEIS</span>
+      @for (e of exames; track e) {
+        <span class="pilula-exame">{{ e }}</span>
+      }
+    </div>
+  </section>
+
+  <section id="como" class="secao">
+    <div class="miolo">
+      <div class="cabeca">
+        <span class="rotulo verde">COMO FUNCIONA</span>
+        <h2>Do exame ao laudo em três passos.</h2>
+      </div>
+      <div class="grade tres">
+        @for (p of passos; track p.n) {
+          <article class="cartao">
+            <span class="num">{{ p.n }}</span>
+            <h3>{{ p.titulo }}</h3>
+            <p>{{ p.texto }}</p>
+          </article>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="offline" class="secao sem-topo">
+    <div class="miolo">
+      <div class="bloco-offline">
+        <div class="offline-texto">
+          <span class="rotulo claro">OFFLINE DE VERDADE</span>
+          <h2>A sala de exame sem sinal não para o seu dia.</h2>
+          <p>O Sonara é instalado no aparelho e guarda os modelos nele. O laudo é montado ali mesmo, com ou sem conexão. A licença é conferida quando há internet e tem um período de carência.</p>
+          <ul>
+            <li>Modelos e frases disponíveis sem conexão</li>
+            <li>Aviso quando existe uma versão nova</li>
+            <li>Instalação pelo navegador, sem loja de aplicativos</li>
+          </ul>
+        </div>
+        <div class="offline-visual" aria-hidden="true">
+          <div class="estado">
+            <span class="ponto sem"></span>
+            <div><b>Sem conexão</b><small>Você continua laudando normalmente</small></div>
+          </div>
+          <div class="estado">
+            <span class="ponto com"></span>
+            <div><b>De volta online</b><small>A licença é renovada sozinha</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao sem-topo">
+    <div class="miolo">
+      <div class="cabeca larga">
+        <div>
+          <span class="rotulo verde">POR QUE O SONARA</span>
+          <h2>Rápido como um modelo. Preciso como você escreveria.</h2>
+        </div>
+        <p>Cada frase sai de uma regra, a partir do que você marcou e mediu. Quem revisa e assume o laudo é você.</p>
+      </div>
+      <div class="grade tres">
+        @for (r of recursos; track r.tag) {
+          <article class="cartao menor">
+            <span class="rotulo verde pequeno">{{ r.tag }}</span>
+            <h3>{{ r.titulo }}</h3>
+            <p>{{ r.texto }}</p>
+          </article>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="planos" class="secao planos">
+    <div class="miolo">
+      <div class="cabeca centro">
+        <span class="rotulo verde">PLANOS</span>
+        <h2>Para quem lauda sozinho e para clínicas.</h2>
+        <p>Valores e condições são combinados direto com a equipe do Sonara.</p>
+      </div>
+      <div class="grade dois">
+        @for (p of planos; track p.nome) {
+          <article class="plano" [class.destaque]="p.destaque">
+            <span class="tipo">{{ p.tipo }}</span>
+            <h3>{{ p.nome }}</h3>
+            <ul>
+              @for (i of p.itens; track i) {
+                <li>{{ i }}</li>
+              }
+            </ul>
+            <a class="plano-acao" [routerLink]="p.rota">{{ p.acao }}</a>
+          </article>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="perguntas" class="secao">
+    <div class="miolo duas-colunas">
+      <div class="cabeca">
+        <span class="rotulo verde">PERGUNTAS</span>
+        <h2>O que todo médico pergunta antes de começar.</h2>
+      </div>
+      <div class="perguntas">
+        @for (q of perguntas; track q.pergunta) {
+          <details>
+            <summary>{{ q.pergunta }}<span aria-hidden="true">+</span></summary>
+            <p>{{ q.resposta }}</p>
+          </details>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="secao sem-topo">
+    <div class="miolo">
+      <div class="chamada">
+        <h2>Mais tempo para olhar o exame.</h2>
+        <p>Experimente o Sonara nos seus próximos exames, no computador ou no celular.</p>
+        <a class="btn-claro" routerLink="/cadastro">Criar conta</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="rodape">
+    <div class="miolo rodape-linha">
+      <div>
+        <b>sonara</b>
+        <p>Ferramenta de apoio à elaboração de laudos. A interpretação do exame e o conteúdo final são de responsabilidade do médico.</p>
+        <p>© {{ ano }} Sonara</p>
+      </div>
+      <a routerLink="/entrar">Entrar</a>
+    </div>
+  </footer>
+</main>

@@ -6,6 +6,10 @@ import { ShellComponent } from './layouts/shell/shell.component';
 
 export const routes: Routes = [
   {
+    path: 'inicio',
+    loadComponent: () => import('./pages/inicio/inicio.page').then(m => m.InicioPage)
+  },
+  {
     path: 'entrar',
     canActivate: [noAuthGuardActivate],
     loadComponent: () => import('./pages/entrar/entrar.page').then(m => m.EntrarPage)
