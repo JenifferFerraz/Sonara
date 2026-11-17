@@ -4,11 +4,10 @@ import { AuthService } from './auth.service';
 import { LicencaService } from './licenca.service';
 import { noNavegador } from '../utils/plataforma';
 
-const A_CADA = 60 * 1000;
-
 /**
  * Cuida de uma sessão online por vez:
- * - de minuto em minuto (e ao voltar para a janela), pergunta ao servidor se a sessão continua valendo;
+ * - não há polling: o servidor valida a sessão em toda requisição (AuthGuard) e responde 401 SESSAO_ENCERRADA;
+ * - só ao voltar para a janela ou ao reconectar (eventos, não timer) o app confere uma vez;
  * - se o médico entrou em outro aparelho, este é desconectado: a licença deste aparelho sai e a tela
  *   volta para o login com a explicação.
  * Sem internet não há o que conferir: o app segue com a licença, e a conferência acontece ao reconectar.
@@ -26,7 +25,6 @@ export class SessaoMonitorService {
     });
 
     if (!noNavegador()) return;
-    setInterval(() => this.conferir(), A_CADA);
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden) this.conferir();
     });
